@@ -1,0 +1,56 @@
+@startuml
+class ZCL_ABAK_UTIL {
+  +check_table()
+}
+
+interface ZIF_ABAK_SOURCE {
+  +get_data()
+  +get_name()
+  +invalidate()
+}
+
+class ZCL_ABAK_SOURCE_DB
+ZCL_ABAK_SOURCE_DB ..|> ZIF_ABAK_SOURCE
+ZCL_ABAK_SOURCE_DB *-- ZCL_ABAK_UTIL
+
+class ZCL_ABAK_SHM_AREA
+ZCL_ABAK_SHM_AREA --|> CL_SHM_AREA
+
+class ZCL_ABAK_SOURCE_SHM
+ZCL_ABAK_SOURCE_SHM ..|> ZIF_ABAK_SOURCE
+ZCL_ABAK_SOURCE_SHM *-- ZCL_ABAK_SHM_AREA
+ZCL_ABAK_SOURCE_DB *-- ZCL_ABAK_UTIL
+
+interface ZIF_ABAK_DATA {
+  +read()
+  +get_name()
+  +invalidate()
+}
+
+class ZCL_ABAK_DATA
+ZCL_ABAK_DATA ..|> ZIF_ABAK_DATA
+
+interface ZIF_ABAK {
+  +get_value()
+  +get_value_if_exists()
+  +get_range()
+  +get_range_if_exists()
+  +check_value()
+  +check_value_if_exists()
+  +invalidate()
+}
+
+class ZCL_ABAK
+ZCL_ABAK ..|> ZIF_ABAK
+ZCL_ABAK o-- ZIF_ABAK_DATA
+
+class ZCL_ABAK_FACTORY {
+  +get_instance()
+}
+ZCL_ABAK_FACTORY --> ZIF_ABAK_SOURCE
+ZCL_ABAK_FACTORY o-- ZCL_ABAK_SOURCE_DB
+ZCL_ABAK_FACTORY o-- ZCL_ABAK_SOURCE_SHM
+ZCL_ABAK_FACTORY o-- ZCL_ABAK_DATA
+ZCL_ABAK_FACTORY o-- ZCL_ABAK
+ZCL_ABAK_FACTORY --> ZIF_ABAK
+@enduml
