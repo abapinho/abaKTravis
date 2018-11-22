@@ -3,6 +3,7 @@ class ZCL_ABAK_UTIL {
   +check_table()
 }
 
+package "Sources" {
 interface ZIF_ABAK_SOURCE {
   +get_data()
   +get_name()
@@ -20,6 +21,7 @@ class ZCL_ABAK_SOURCE_SHM
 ZCL_ABAK_SOURCE_SHM ..|> ZIF_ABAK_SOURCE
 ZCL_ABAK_SOURCE_SHM *-- ZCL_ABAK_SHM_AREA
 ZCL_ABAK_SOURCE_SHM *-- ZCL_ABAK_UTIL
+}
 
 interface ZIF_ABAK_DATA {
   +read()
