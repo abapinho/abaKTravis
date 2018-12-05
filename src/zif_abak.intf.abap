@@ -52,5 +52,5 @@ interface ZIF_ABAK
       !I_VALUE type ANY
     returning
       value(R_RESULT) type FLAG .
-  methods INVALIDATE_CACHE .
+  methods INVALIDATE .
 endinterface.

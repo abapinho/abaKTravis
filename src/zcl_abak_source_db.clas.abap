@@ -17,9 +17,6 @@ protected section.
 private section.
 
   data G_TABLENAME type TABNAME .
-  data GT_DATA type ZABAK_DATA_T .
-
-  methods LOAD_DATA .
 ENDCLASS.
 
 
@@ -39,28 +36,13 @@ METHOD constructor.
 ENDMETHOD.
 
 
-method LOAD_DATA.
-
-  if gt_data[] is not initial.
-    return.
-  endif.
-
-  LOG-POINT ID zabak SUBKEY 'source_db.load_data' FIELDS g_tablename.
-
-  SELECT *
-    FROM (g_tablename)
-    INTO TABLE gt_data.
-
-endmethod.
-
-
-METHOD ZIF_ABAK_SOURCE~GET_DATA.
+METHOD zif_abak_source~get_data.
 
   LOG-POINT ID zabak SUBKEY 'source_db.get_data' FIELDS g_tablename.
 
-  load_data( ).
-
-  rt_data = gt_data.
+  SELECT *
+    FROM (g_tablename)
+    INTO TABLE rt_data.
 
 ENDMETHOD.
 
@@ -71,6 +53,6 @@ endmethod.
 
 
 METHOD ZIF_ABAK_SOURCE~INVALIDATE.
-  CLEAR gt_data[].
+  RETURN. " Nothing to invalidate in this case
 ENDMETHOD.
 ENDCLASS.

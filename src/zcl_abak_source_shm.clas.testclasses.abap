@@ -74,23 +74,30 @@ CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD invalidate.
 
+    DATA: instance_name TYPE shm_inst_name.
+
     CREATE OBJECT f_cut
       EXPORTING
         i_tablename = gc_tablename-valid.
 
     f_cut->zif_abak_source~get_data( ).
 
-    cl_abap_unit_assert=>assert_differs(
-      exp = 0
-      act = lines( f_cut->gt_data )
-      msg = 'Resulting table should have more than one line' ).
+    instance_name = gc_tablename-valid.
+
+    zcl_abak_shm_area=>attach_for_read( instance_name ).
+
+*  If we got here there is currently a shared memory instance as it should
+*  Now let's invalidate it and check again
 
     f_cut->zif_abak_source~invalidate( ).
 
-    cl_abap_unit_assert=>assert_equals(
-      exp = 0
-      act = lines( f_cut->gt_data )
-      msg = 'Resulting table should have ZERO lines' ).
+    TRY.
+        zcl_abak_shm_area=>attach_for_read( instance_name ).
+        cl_abap_unit_assert=>fail( msg = 'If we got here the instance was not invalidated' ).
+
+      CATCH cx_root.
+        RETURN.
+    ENDTRY.
 
   ENDMETHOD.
 

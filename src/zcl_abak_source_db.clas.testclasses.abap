@@ -17,7 +17,6 @@ CLASS lcl_unittest DEFINITION FOR TESTING
     METHODS: check_table_invalid FOR TESTING.
     METHODS: get_data FOR TESTING RAISING zcx_abak.
     METHODS: get_name FOR TESTING RAISING zcx_abak.
-    methods: invalidate for testing raising zcx_abak.
 ENDCLASS.       "lcl_Unittest
 
 
@@ -69,28 +68,6 @@ CLASS lcl_unittest IMPLEMENTATION.
       exp = |DB:{ gc_tablename-valid }|
       act = f_cut->zif_abak_source~get_name( )
       msg = 'Name different from what was expected' ).
-
-  ENDMETHOD.
-
-  METHOD invalidate.
-
-    CREATE OBJECT f_cut
-      EXPORTING
-        i_tablename = gc_tablename-valid.
-
-    f_cut->zif_abak_source~get_data( ).
-
-    cl_abap_unit_assert=>assert_differs(
-      exp = 0
-      act = lines( f_cut->gt_data )
-      msg = 'Resulting table should have more than one line' ).
-
-    f_cut->zif_abak_source~invalidate( ).
-
-    cl_abap_unit_assert=>assert_equals(
-      exp = 0
-      act = lines( f_cut->gt_data )
-      msg = 'Resulting table should have ZERO lines' ).
 
   ENDMETHOD.
 

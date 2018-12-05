@@ -17,18 +17,17 @@ public section.
 protected section.
 private section.
 
-  data GT_DATA type ZABAK_DATA_T .
-  data G_DATA_LOADED type FLAG .
   data G_TABLENAME type TABNAME .
 
   methods READ_SHM
+    returning
+      value(RT_DATA) type ZABAK_DATA_T
     raising
       ZCX_ABAK
       CX_SHM_NO_ACTIVE_VERSION .
   methods WRITE_SHM
-    raising
-      ZCX_ABAK .
-  methods LOAD_DATA
+    returning
+      value(RT_DATA) type ZABAK_DATA_T
     raising
       ZCX_ABAK .
   methods INVALIDATE_SHM .
@@ -74,26 +73,6 @@ METHOD INVALIDATE_SHM.
 ENDMETHOD.
 
 
-METHOD LOAD_DATA.
-
-  IF g_data_loaded = abap_true.
-    RETURN.
-  ENDIF.
-
-  TRY.
-      read_shm( ).
-
-    CATCH cx_shm_no_active_version.
-
-      write_shm( ).
-
-  ENDTRY.
-
-  g_data_loaded = abap_true.
-
-ENDMETHOD.
-
-
 METHOD READ_SHM.
 * Code partially copied from book "ABAP to the Future"
 
@@ -111,7 +90,7 @@ METHOD READ_SHM.
       o_broker = zcl_abak_shm_area=>attach_for_read( instance_name ).
 
       "The root class contains our custom methods
-      gt_data = o_broker->root->zif_abak_source~get_data( ).
+      rt_data = o_broker->root->zif_abak_source~get_data( ).
 
       "Release read lock ; ending the transaction would
       "have the same result
@@ -156,7 +135,7 @@ METHOD write_shm.
 
           o_broker->set_root( o_root ).
 
-          gt_data = o_root->zif_abak_source~get_data( ).
+          rt_data = o_root->zif_abak_source~get_data( ).
 
           o_broker->detach_commit( ).
 
@@ -183,9 +162,14 @@ METHOD zif_abak_source~get_data.
 
   LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS zif_abak_source~get_name( ).
 
-  load_data( ).
+  TRY.
+      rt_data = read_shm( ).
 
-  rt_data = gt_data.
+    CATCH cx_shm_no_active_version.
+
+      rt_data = write_shm( ).
+
+  ENDTRY.
 
 ENDMETHOD.
 
@@ -198,10 +182,6 @@ endmethod.
 METHOD zif_abak_source~invalidate.
 
   LOG-POINT ID zabak SUBKEY 'source_shm.invalidate' FIELDS me->zif_abak_source~get_name( ).
-
-  CLEAR gt_data[].
-
-  g_data_loaded = abap_false.
 
   invalidate_shm( ).
 
