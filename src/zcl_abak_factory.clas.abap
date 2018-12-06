@@ -106,13 +106,25 @@ ENDMETHOD.
 
 
 METHOD get_source.
+  DATA: tablename TYPE tabname,
+        xml       TYPE string.
+
   CASE is_config-source.
     WHEN 'DB'.
+      tablename = is_config-content.
       CREATE OBJECT ro_object TYPE zcl_abak_source_db
         EXPORTING
-          i_tablename = is_config-tablename.
+          i_tablename = tablename.
+
+    WHEN 'XML'.
+      xml = is_config-content.
+      CREATE OBJECT ro_object TYPE zcl_abak_source_xml
+        EXPORTING
+          i_xml = xml.
+
     WHEN OTHERS.
       RAISE EXCEPTION TYPE zcx_abak. " TODO invalid source
+
   ENDCASE.
 ENDMETHOD.
 
