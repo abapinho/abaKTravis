@@ -1,6 +1,6 @@
 *---------------------------------------------------------------------*
 *    program for:   TABLEPROC_ZABAK_MAINT
-*   generation date: 06.12.2018 at 19:38:40
+*   generation date: 07.12.2018 at 16:25:33
 *   view maintenance generator version: #001407#
 *---------------------------------------------------------------------*
 FUNCTION TABLEPROC_ZABAK_MAINT         .

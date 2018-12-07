@@ -435,7 +435,7 @@
        <CONT_TYPE>TABLE_CTRL</CONT_TYPE>
        <CONT_NAME>TCTRL_ZABAK</CONT_NAME>
        <TYPE>TEXT</TYPE>
-       <NAME>*ZABAK-SOURCE</NAME>
+       <NAME>*ZABAK-SOURCE_TYPE</NAME>
        <TEXT>Source__________________________________</TEXT>
        <LINE>001</LINE>
        <COLUMN>003</COLUMN>
@@ -521,7 +521,7 @@
        <CONT_TYPE>TABLE_CTRL</CONT_TYPE>
        <CONT_NAME>TCTRL_ZABAK</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
-       <NAME>ZABAK-SOURCE</NAME>
+       <NAME>ZABAK-SOURCE_TYPE</NAME>
        <TEXT>__________</TEXT>
        <DROPDOWN>L</DROPDOWN>
        <LINE>001</LINE>
@@ -604,7 +604,7 @@
        <LINE>FIELD ZABAK-NAME .</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>FIELD ZABAK-SOURCE .</LINE>
+       <LINE>FIELD ZABAK-SOURCE_TYPE .</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
        <LINE>FIELD ZABAK-CONTENT .</LINE>

@@ -13,50 +13,50 @@ public section.
     raising
       ZCX_ABAK .
 protected section.
-PRIVATE SECTION.
+private section.
 
-  TYPES:
+  types:
     BEGIN OF ty_s_instance,
       id TYPE zabak_id,
       o_instance TYPE REF TO zif_abak,
     END OF ty_s_instance .
-  TYPES:
+  types:
     ty_t_instance TYPE SORTED TABLE OF ty_s_instance WITH UNIQUE KEY id .
 
-  CLASS-DATA gt_instance TYPE ty_t_instance.
+  class-data GT_INSTANCE type TY_T_INSTANCE .
 
-  CLASS-METHODS get_config
-    IMPORTING
-      !i_id TYPE zabak_id
-    RETURNING
-      value(rs_config) TYPE zabak
-    RAISING
-      zcx_abak .
-  CLASS-METHODS get_source
-    IMPORTING
-      !is_config TYPE zabak
-    RETURNING
-      value(ro_object) TYPE REF TO zif_abak_source
-    RAISING
-      zcx_abak .
-  CLASS-METHODS create_instance
-    IMPORTING
-      !i_id TYPE zabak_id
-    RETURNING
-      value(ro_instance) TYPE REF TO zif_abak
-    RAISING
-      zcx_abak .
-  CLASS-METHODS read_cache
-    IMPORTING
-      !i_id TYPE zabak_id
-    RETURNING
-      value(ro_instance) TYPE REF TO zif_abak
-    RAISING
-      zcx_abak .
-  CLASS-METHODS write_cache
-    IMPORTING
-      !i_id TYPE zabak_id
-      value(io_instance) TYPE REF TO zif_abak .
+  class-methods GET_CONFIG
+    importing
+      !I_ID type ZABAK_ID
+    returning
+      value(RS_CONFIG) type ZABAK
+    raising
+      ZCX_ABAK .
+  class-methods CREATE_SOURCE
+    importing
+      !IS_CONFIG type ZABAK
+    returning
+      value(RO_OBJECT) type ref to ZIF_ABAK_SOURCE
+    raising
+      ZCX_ABAK .
+  class-methods CREATE_INSTANCE
+    importing
+      !I_ID type ZABAK_ID
+    returning
+      value(RO_INSTANCE) type ref to ZIF_ABAK
+    raising
+      ZCX_ABAK .
+  class-methods READ_CACHE
+    importing
+      !I_ID type ZABAK_ID
+    returning
+      value(RO_INSTANCE) type ref to ZIF_ABAK
+    raising
+      ZCX_ABAK .
+  class-methods WRITE_CACHE
+    importing
+      !I_ID type ZABAK_ID
+      value(IO_INSTANCE) type ref to ZIF_ABAK .
 ENDCLASS.
 
 
@@ -72,12 +72,43 @@ METHOD create_instance.
 
   CREATE OBJECT o_data TYPE zcl_abak_data
     EXPORTING
-      io_source = get_source( get_config( i_id ) ).
+      io_source = create_source( get_config( i_id ) ).
 
   CREATE OBJECT ro_instance TYPE zcl_abak
     EXPORTING
       io_data = o_data.
 
+ENDMETHOD.
+
+
+METHOD create_source.
+  DATA: tablename TYPE tabname,
+        str       TYPE string,
+        o_util    TYPE REF TO zcl_abak_util.
+
+  CASE is_config-source_type.
+    WHEN zif_abak_source=>source_type-database.
+      tablename = is_config-content.
+      CREATE OBJECT ro_object TYPE zcl_abak_source_db
+        EXPORTING
+          i_tablename = tablename.
+
+    WHEN zif_abak_source=>source_type-xml.
+      str = is_config-content.
+      CREATE OBJECT ro_object TYPE zcl_abak_source_xml
+        EXPORTING
+          i_xml = str.
+
+    WHEN zif_abak_source=>source_type-xml_url.
+      CREATE OBJECT o_util.
+      CREATE OBJECT ro_object TYPE zcl_abak_source_xml_url
+        EXPORTING
+          i_url = str.
+
+    WHEN OTHERS.
+      RAISE EXCEPTION TYPE zcx_abak. " TODO invalid source
+
+  ENDCASE.
 ENDMETHOD.
 
 
@@ -102,30 +133,6 @@ METHOD get_instance.
                  io_instance = ro_instance ).
   ENDIF.
 
-ENDMETHOD.
-
-
-METHOD get_source.
-  DATA: tablename TYPE tabname,
-        xml       TYPE string.
-
-  CASE is_config-source.
-    WHEN 'DB'.
-      tablename = is_config-content.
-      CREATE OBJECT ro_object TYPE zcl_abak_source_db
-        EXPORTING
-          i_tablename = tablename.
-
-    WHEN 'XML'.
-      xml = is_config-content.
-      CREATE OBJECT ro_object TYPE zcl_abak_source_xml
-        EXPORTING
-          i_xml = xml.
-
-    WHEN OTHERS.
-      RAISE EXCEPTION TYPE zcx_abak. " TODO invalid source
-
-  ENDCASE.
 ENDMETHOD.
 
 
