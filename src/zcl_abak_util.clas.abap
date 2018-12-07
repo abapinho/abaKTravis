@@ -76,7 +76,9 @@ method FETCH_CONTENT_FROM_URL.
       internal_error     = 3
       OTHERS             = 4 ).
   IF sy-subrc <> 0.
-    RAISE EXCEPTION TYPE zcx_abak. " TODO
+    RAISE EXCEPTION TYPE ZCX_ABAK
+      EXPORTING
+        previous_from_syst = abap_true.
   ENDIF.
 
   o_http_client->send(
@@ -87,7 +89,9 @@ method FETCH_CONTENT_FROM_URL.
       http_invalid_timeout       = 4
       OTHERS                     = 5 ).
   IF sy-subrc <> 0.
-    RAISE EXCEPTION TYPE zcx_abak. " TODO
+    RAISE EXCEPTION TYPE ZCX_ABAK
+      EXPORTING
+        previous_from_syst = abap_true.
   ENDIF.
 
   o_http_client->receive(
@@ -97,7 +101,9 @@ method FETCH_CONTENT_FROM_URL.
       http_processing_failed     = 3
       OTHERS                     = 4 ).
   IF sy-subrc <> 0.
-    RAISE EXCEPTION TYPE zcx_abak.
+    RAISE EXCEPTION TYPE ZCX_ABAK
+      EXPORTING
+        previous_from_syst = abap_true.
   ENDIF.
 
   r_content = o_http_client->response->get_cdata( ).
