@@ -1,21 +1,34 @@
 <?sap.transform simple?>
 <tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary" xmlns:def="http://www.sap.com/abapxml/types/defined">
+  <tt:root name="NAME" type="ddic:NAME1"/>
   <tt:root name="CONSTANTS" type="ddic:ZABAK_XML_CONSTANT_T"/>
   <tt:template>
     <abak>
+      <tt:cond>
+        <tt:attribute name="name" value-ref=".NAME"/>
+      </tt:cond>
       <tt:loop ref=".CONSTANTS">
         <k>
-          <tt:attribute name="context" value-ref="CONTEXT"/>
           <tt:attribute name="ricef" value-ref="RICEF"/>
           <tt:attribute name="fieldname" value-ref="FIELDNAME"/>
-            <tt:loop ref="T_VALUE">
-              <v>
+          <tt:d-cond>
+            <tt:attribute name="context" value-ref="CONTEXT"/>
+          </tt:d-cond>
+          <tt:d-cond>
+            <!-- This is an inline value which defaults to a simple I EQ LOW -->
+            <tt:attribute name="value" value-ref="VALUE"/>
+          </tt:d-cond>
+          <tt:loop ref="T_VALUE">
+            <!-- While these are multiple values which can be used to define a range -->
+            <v>
+              <tt:attribute name="low" value-ref="UE_LOW"/>
+              <tt:cond>
                 <tt:attribute name="sign" value-ref="UE_SIGN"/>
                 <tt:attribute name="option" value-ref="UE_OPTION"/>
-                <tt:attribute name="low" value-ref="UE_LOW"/>
                 <tt:attribute name="high" value-ref="UE_HIGH"/>
-              </v>
-            </tt:loop>
+              </tt:cond>
+            </v>
+          </tt:loop>
         </k>
       </tt:loop>
     </abak>
