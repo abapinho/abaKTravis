@@ -1,19 +1,19 @@
-CLASS zcl_abak DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PRIVATE
+class ZCL_ABAK definition
+  public
+  final
+  create private
 
-  GLOBAL FRIENDS zcl_abak_factory .
+  global friends ZCL_ABAK_FACTORY .
 
-  PUBLIC SECTION.
+public section.
 
-    INTERFACES zif_abak .
+  interfaces ZIF_ABAK .
 
-    METHODS constructor
-      IMPORTING
-        !io_data TYPE REF TO zif_abak_data
-      RAISING
-        zcx_abak .
+  methods CONSTRUCTOR
+    importing
+      !IO_SOURCE type ref to ZIF_ABAK_SOURCE
+    raising
+      ZCX_ABAK .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -72,11 +72,13 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
   METHOD constructor.
 
-    IF io_data IS NOT BOUND.
+    IF io_source IS NOT BOUND.
       RAISE EXCEPTION TYPE zcx_abak. " TODO
     ENDIF.
 
-    go_data = io_data.
+    CREATE OBJECT go_data TYPE zcl_abak_data
+      EXPORTING
+        io_source = io_source.
 
   ENDMETHOD.
 

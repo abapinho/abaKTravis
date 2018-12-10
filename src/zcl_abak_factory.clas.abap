@@ -66,17 +66,11 @@ CLASS ZCL_ABAK_FACTORY IMPLEMENTATION.
 
 METHOD create_instance.
 
-  DATA: o_data TYPE REF TO zif_abak_data.
-
-  LOG-POINT ID zabak SUBKEY 'factory.create_data' FIELDS i_id.
-
-  CREATE OBJECT o_data TYPE zcl_abak_data
-    EXPORTING
-      io_source = create_source( get_config( i_id ) ).
+  LOG-POINT ID zabak SUBKEY 'factory.create_instance' FIELDS i_id.
 
   CREATE OBJECT ro_instance TYPE zcl_abak
     EXPORTING
-      io_data = o_data.
+      io_source = create_source( get_config( i_id ) ).
 
 ENDMETHOD.
 
