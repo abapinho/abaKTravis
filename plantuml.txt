@@ -1,6 +1,5 @@
 @startuml
 class ZCL_ABAK_UTIL {
-  +check_table()
   +fetch_content_from_url()
 }
 
