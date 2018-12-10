@@ -83,8 +83,7 @@ ENDMETHOD.
 
 METHOD create_source.
   DATA: tablename TYPE tabname,
-        str       TYPE string,
-        o_util    TYPE REF TO zcl_abak_util.
+        str       TYPE string.
 
   CASE is_config-source_type.
     WHEN zif_abak_source=>source_type-database.
@@ -98,12 +97,6 @@ METHOD create_source.
       CREATE OBJECT ro_object TYPE zcl_abak_source_xml
         EXPORTING
           i_xml = str.
-
-    WHEN zif_abak_source=>source_type-xml_url.
-      CREATE OBJECT o_util.
-      CREATE OBJECT ro_object TYPE zcl_abak_source_xml_url
-        EXPORTING
-          i_url = str.
 
     WHEN OTHERS.
       RAISE EXCEPTION TYPE zcx_abak. " TODO invalid source
