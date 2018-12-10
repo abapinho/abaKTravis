@@ -1,6 +1,6 @@
 *"* use this source file for your ABAP unit test classes
 CLASS lcl_unittest DEFINITION DEFERRED.
-CLASS zcl_abak_source_shm DEFINITION LOCAL FRIENDS lcl_unittest.
+CLASS zcl_abak_source_db_shm DEFINITION LOCAL FRIENDS lcl_unittest.
 
 CLASS lcl_unittest DEFINITION FOR TESTING
   INHERITING FROM zcl_abak_unit_tests
@@ -10,7 +10,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO zcl_abak_source_shm.  "class under test
+      f_cut TYPE REF TO zcl_abak_source_db_shm.  "class under test
 
     METHODS: setup.
     METHODS: check_table_valid FOR TESTING RAISING zcx_abak.

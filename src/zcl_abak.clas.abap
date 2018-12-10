@@ -252,4 +252,9 @@ CLASS ZCL_ABAK IMPLEMENTATION.
     ENDTRY.
 
   ENDMETHOD.
+
+
+METHOD zif_abak~invalidate.
+  go_data->invalidate( ).
+ENDMETHOD.
 ENDCLASS.

@@ -12,6 +12,13 @@ public section.
       value(RO_INSTANCE) type ref to ZIF_ABAK
     raising
       ZCX_ABAK .
+  class-methods GET_INSTANCE_WITH_SOURCE
+    importing
+      !IO_SOURCE type ref to ZIF_ABAK_SOURCE
+    returning
+      value(RO_INSTANCE) type ref to ZIF_ABAK
+    raising
+      ZCX_ABAK .
 protected section.
 private section.
 
@@ -30,13 +37,6 @@ private section.
       !I_ID type ZABAK_ID
     returning
       value(RS_CONFIG) type ZABAK
-    raising
-      ZCX_ABAK .
-  class-methods CREATE_SOURCE
-    importing
-      !IS_CONFIG type ZABAK
-    returning
-      value(RO_OBJECT) type ref to ZIF_ABAK_SOURCE
     raising
       ZCX_ABAK .
   class-methods CREATE_INSTANCE
@@ -66,36 +66,21 @@ CLASS ZCL_ABAK_FACTORY IMPLEMENTATION.
 
 METHOD create_instance.
 
+  DATA: s_config TYPE zabak,
+        content  TYPE string.
+
   LOG-POINT ID zabak SUBKEY 'factory.create_instance' FIELDS i_id.
+
+  s_config = get_config( i_id ).
+
+  content = s_config-content.
 
   CREATE OBJECT ro_instance TYPE zcl_abak
     EXPORTING
-      io_source = create_source( get_config( i_id ) ).
+      io_source = zcl_abak_source_factory=>get_instance(
+      i_source_type = s_config-source_type
+      i_content     = content ).
 
-ENDMETHOD.
-
-
-METHOD create_source.
-  DATA: tablename TYPE tabname,
-        str       TYPE string.
-
-  CASE is_config-source_type.
-    WHEN zif_abak_source=>source_type-database.
-      tablename = is_config-content.
-      CREATE OBJECT ro_object TYPE zcl_abak_source_db
-        EXPORTING
-          i_tablename = tablename.
-
-    WHEN zif_abak_source=>source_type-xml.
-      str = is_config-content.
-      CREATE OBJECT ro_object TYPE zcl_abak_source_xml
-        EXPORTING
-          i_xml = str.
-
-    WHEN OTHERS.
-      RAISE EXCEPTION TYPE zcx_abak. " TODO invalid source
-
-  ENDCASE.
 ENDMETHOD.
 
 
@@ -119,6 +104,21 @@ METHOD get_instance.
     write_cache( i_id      = i_id
                  io_instance = ro_instance ).
   ENDIF.
+
+ENDMETHOD.
+
+
+METHOD get_instance_with_source.
+
+  LOG-POINT ID zabak SUBKEY 'factory.create_instance_with_source'.
+
+  IF io_source IS NOT BOUND.
+    RAISE EXCEPTION TYPE zcx_abak.
+  ENDIF.
+
+  CREATE OBJECT ro_instance TYPE zcl_abak
+    EXPORTING
+      io_source = io_source.
 
 ENDMETHOD.
 

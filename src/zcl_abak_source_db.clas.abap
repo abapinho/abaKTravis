@@ -2,7 +2,10 @@ class ZCL_ABAK_SOURCE_DB definition
   public
   final
   create public
-  shared memory enabled .
+  shared memory enabled
+
+  global friends ZCL_ABAK_SOURCE_DB_SHM
+                 ZCL_ABAK_SOURCE_FACTORY .
 
 public section.
 

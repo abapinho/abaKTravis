@@ -1,4 +1,4 @@
-class ZCL_ABAK_SOURCE_SHM definition
+class ZCL_ABAK_SOURCE_DB_SHM definition
   public
   final
   create public
@@ -24,7 +24,8 @@ private section.
       value(RT_DATA) type ZABAK_DATA_T
     raising
       ZCX_ABAK
-      CX_SHM_NO_ACTIVE_VERSION .
+      CX_SHM_NO_ACTIVE_VERSION
+      CX_SHM_INCONSISTENT .
   methods WRITE_SHM
     returning
       value(RT_DATA) type ZABAK_DATA_T
@@ -35,10 +36,10 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_SOURCE_SHM IMPLEMENTATION.
+CLASS ZCL_ABAK_SOURCE_DB_SHM IMPLEMENTATION.
 
 
-METHOD constructor.
+METHOD CONSTRUCTOR.
 
   DATA: o_util TYPE REF TO zcl_abak_util.
 
@@ -96,8 +97,7 @@ METHOD READ_SHM.
       "have the same result
       o_broker->detach( ).
 
-    CATCH cx_shm_inconsistent "Root class is out of date
-          cx_shm_exclusive_lock_active "Someone trying to change
+    CATCH cx_shm_exclusive_lock_active "Someone trying to change
           cx_shm_change_lock_active "Someone trying to change data
           cx_shm_read_lock_active INTO o_exp. "Amazingly, this can be an error
 
@@ -110,7 +110,7 @@ METHOD READ_SHM.
 ENDMETHOD.
 
 
-METHOD write_shm.
+METHOD WRITE_SHM.
 
   DATA: o_broker      TYPE REF TO zcl_abak_shm_area,
         o_root        TYPE REF TO zcl_abak_source_db,
@@ -160,14 +160,24 @@ ENDMETHOD.
 
 METHOD zif_abak_source~get_data.
 
+  DATA: o_exp TYPE REF TO cx_shm_parameter_error.
+
   LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS zif_abak_source~get_name( ).
 
   TRY.
       rt_data = read_shm( ).
 
     CATCH cx_shm_no_active_version.
-
       rt_data = write_shm( ).
+
+    CATCH cx_shm_inconsistent.
+      TRY.
+          zcl_abak_shm_area=>free_area( ).
+          rt_data = write_shm( ).
+
+        CATCH cx_shm_parameter_error INTO o_exp.
+          LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS o_exp->get_text( ).
+      ENDTRY.
 
   ENDTRY.
 
@@ -179,7 +189,7 @@ method ZIF_ABAK_SOURCE~GET_NAME.
 endmethod.
 
 
-METHOD zif_abak_source~invalidate.
+METHOD ZIF_ABAK_SOURCE~INVALIDATE.
 
   LOG-POINT ID zabak SUBKEY 'source_shm.invalidate' FIELDS me->zif_abak_source~get_name( ).
 
