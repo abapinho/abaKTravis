@@ -1,4 +1,4 @@
-# ABAK
+# abaK
 
 ABAP constants done right.
 
