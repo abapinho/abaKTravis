@@ -58,7 +58,7 @@ endmethod.
 
 
 method ZIF_ABAK_SOURCE~GET_NAME.
-  r_name = |URL{ go_source_xml->get_name( ) }|.
+  r_name = |URL.{ go_source_xml->get_name( ) }|.
 endmethod.
 
 

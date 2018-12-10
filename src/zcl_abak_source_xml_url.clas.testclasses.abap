@@ -45,7 +45,7 @@ CLASS lcl_unittest IMPLEMENTATION.
         i_url = g_url.
 
     cl_abap_unit_assert=>assert_equals(
-      exp = |URLXML:simple values|
+      exp = |XML_URL.simple values|
       act = f_cut->zif_abak_source~get_name( ) ).
 
   ENDMETHOD.

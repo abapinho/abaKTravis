@@ -11,7 +11,9 @@ interface ZIF_ABAK_DATA
       value(RT_DATA) type ZABAK_DATA_T
     raising
       ZCX_ABAK .
-  methods INVALIDATE .
+  methods INVALIDATE
+    raising
+      ZCX_ABAK .
   methods GET_NAME
     returning
       value(R_NAME) type STRING .

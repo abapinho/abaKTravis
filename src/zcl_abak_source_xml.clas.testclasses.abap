@@ -60,7 +60,7 @@ CLASS lcl_unittest IMPLEMENTATION.
         i_xml = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v low="1234"/></k></abak>|.
 
     cl_abap_unit_assert=>assert_equals(
-      exp = |XML:test1|
+      exp = |XML.test1|
       act = f_cut->zif_abak_source~get_name( ) ).
 
   ENDMETHOD.

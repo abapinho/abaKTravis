@@ -7,6 +7,15 @@ public section.
 
   interfaces IF_T100_MESSAGE .
 
+  constants:
+    begin of INVALID_PARAMETERS,
+      msgid type symsgid value 'ZABAK',
+      msgno type symsgno value '000',
+      attr1 type scx_attrname value '',
+      attr2 type scx_attrname value '',
+      attr3 type scx_attrname value '',
+      attr4 type scx_attrname value '',
+    end of INVALID_PARAMETERS .
   data PREVIOUS_FROM_SYST type FLAG .
 
   methods CONSTRUCTOR

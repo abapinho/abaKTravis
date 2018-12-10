@@ -65,7 +65,7 @@ CLASS lcl_unittest IMPLEMENTATION.
         i_tablename = gc_tablename-valid.
 
     cl_abap_unit_assert=>assert_equals(
-      exp = |DB:{ gc_tablename-valid }|
+      exp = |DB.{ gc_tablename-valid }|
       act = f_cut->zif_abak_source~get_name( )
       msg = 'Name different from what was expected' ).
 

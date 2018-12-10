@@ -102,7 +102,7 @@ ENDMETHOD.
 METHOD zif_abak_source~get_name.
   r_name = |XML|.
   IF g_name IS NOT INITIAL.
-    r_name = |{ r_name }:{ g_name }|.
+    r_name = |{ r_name }.{ g_name }|.
   ENDIF.
 ENDMETHOD.
 

@@ -9,7 +9,7 @@ class ZCL_ABAK_SHM_AREA definition
 public section.
 
   constants AREA_NAME type SHM_AREA_NAME value 'ZCL_ABAK_SHM_AREA'. "#EC NOTEXT
-  data ROOT type ref to ZCL_ABAK_SOURCE_DB read-only .
+  data ROOT type ref to ZCL_ABAK_SHM_ROOT read-only .
 
   class-methods CLASS_CONSTRUCTOR .
   class-methods GET_GENERATOR_VERSION
@@ -107,7 +107,7 @@ public section.
       CX_SHM_BUILD_FAILED .
   methods SET_ROOT
     importing
-      !ROOT type ref to ZCL_ABAK_SOURCE_DB
+      !ROOT type ref to ZCL_ABAK_SHM_ROOT
     raising
       CX_SHM_INITIAL_REFERENCE
       CX_SHM_WRONG_HANDLE .

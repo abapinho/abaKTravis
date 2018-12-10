@@ -2,10 +2,7 @@ class ZCL_ABAK_SOURCE_DB definition
   public
   final
   create public
-  shared memory enabled
-
-  global friends ZCL_ABAK_SOURCE_DB_SHM
-                 ZCL_ABAK_SOURCE_FACTORY .
+  shared memory enabled .
 
 public section.
 
@@ -51,7 +48,7 @@ ENDMETHOD.
 
 
 method ZIF_ABAK_SOURCE~GET_NAME.
-  r_name = |DB:{ g_tablename }|.
+  r_name = |DB.{ g_tablename }|.
 endmethod.
 
 
