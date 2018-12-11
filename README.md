@@ -1,3 +1,5 @@
+(abaK is in alpha stage. It's API can still change. Please don't using for production objects just yet.)
+
 # abaK
 
 ABAP constants done right.
