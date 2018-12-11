@@ -18,11 +18,14 @@ private section.
   data GT_DATA type ZABAK_DATA_T .
   data G_NAME type NAME1 .
 
-  methods CONVERT_TO_SOURCE_FORMAT
+  methods DEEP_TABLE_2_SOURCE_FORMAT
     importing
       !IT_XML type ZABAK_XML_CONSTANT_T
     returning
       value(RT_ITAB) type ZABAK_DATA_T .
+  methods LOAD_XML
+    importing
+      !I_XML type STRING .
 ENDCLASS.
 
 
@@ -32,27 +35,12 @@ CLASS ZCL_ABAK_SOURCE_XML IMPLEMENTATION.
 
 METHOD constructor.
 
-  DATA: t_constant  TYPE zabak_xml_constant_t,
-        o_exp       TYPE REF TO cx_st_error.
-
-  TRY.
-      CALL TRANSFORMATION zabak_source_xml
-       SOURCE XML i_xml
-       RESULT constants = t_constant
-              name = g_name.
-
-      gt_data = convert_to_source_format( t_constant ).
-
-    CATCH cx_st_error INTO o_exp.
-      RAISE EXCEPTION TYPE zcx_abak
-        EXPORTING
-          previous = o_exp.
-  ENDTRY.
+  load_xml( i_xml ).
 
 ENDMETHOD.
 
 
-METHOD convert_to_source_format.
+METHOD DEEP_TABLE_2_SOURCE_FORMAT.
 
   DATA: s_itab LIKE LINE OF rt_itab.
 
@@ -86,6 +74,28 @@ METHOD convert_to_source_format.
     ENDLOOP.
 
   ENDLOOP.
+
+ENDMETHOD.
+
+
+METHOD load_xml.
+
+  DATA: t_constant  TYPE zabak_xml_constant_t,
+        o_exp       TYPE REF TO cx_st_error.
+
+  TRY.
+      CALL TRANSFORMATION zabak_source_xml
+       SOURCE XML i_xml
+       RESULT constants = t_constant
+              name = g_name.
+
+      gt_data = deep_table_2_source_format( t_constant ).
+
+    CATCH cx_st_error INTO o_exp.
+      RAISE EXCEPTION TYPE zcx_abak
+        EXPORTING
+          previous = o_exp.
+  ENDTRY.
 
 ENDMETHOD.
 
