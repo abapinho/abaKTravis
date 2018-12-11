@@ -23,3 +23,6 @@ Documentation in the [wiki](https://github.com/abapinho/abak/wiki).
 ## Requirements
 * ABAP Version: 702 or higher.
 * [abapGit](https://abapgit.org)
+
+## FAQ
+For questions/comments/bugs/feature requests/wishes please create an [issue](https://github.com/abapinho/abak/issues).
