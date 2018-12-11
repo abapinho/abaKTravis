@@ -22,4 +22,4 @@ Documentation in the [wiki](https://github.com/abapinho/abak/wiki).
 
 ## Requirements
 * ABAP Version: 702 or higher.
-* abapGit
+* [abapGit](https://abapgit.org)
