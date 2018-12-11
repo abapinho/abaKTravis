@@ -1,4 +1,4 @@
-(abaK is still in alpha stage. It's API can change. Please don't using for production objects just yet.)
+(abaK is still in alpha stage. It's API can change. Please don't using for production objects just yet. Wait for a release.)
 
 # abaK
 
