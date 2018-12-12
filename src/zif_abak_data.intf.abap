@@ -8,7 +8,7 @@ interface ZIF_ABAK_DATA
       !I_FIELDNAME type NAME_FELD
       !I_CONTEXT type ZABAK_CONTEXT
     returning
-      value(RT_DATA) type ZABAK_DATA_T
+      value(RT_KV) type ZABAK_KV_T
     raising
       ZCX_ABAK .
   methods INVALIDATE

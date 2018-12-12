@@ -70,14 +70,14 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_differs(
       exp = 0
-      act = lines( f_cut->gt_data )
+      act = lines( f_cut->gt_k )
       msg = 'Resulting table should have more than one line' ).
 
     f_cut->zif_abak_data~invalidate( ).
 
     cl_abap_unit_assert=>assert_equals(
       exp = 0
-      act = lines( f_cut->gt_data )
+      act = lines( f_cut->gt_k )
       msg = 'Resulting table should have ZERO lines' ).
 
   ENDMETHOD.

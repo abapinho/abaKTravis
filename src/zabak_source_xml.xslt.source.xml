@@ -1,7 +1,7 @@
 <?sap.transform simple?>
 <tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary" xmlns:def="http://www.sap.com/abapxml/types/defined">
   <tt:root name="NAME" type="ddic:NAME1"/>
-  <tt:root name="CONSTANTS" type="ddic:ZABAK_XML_CONSTANT_T"/>
+  <tt:root name="CONSTANTS" type="ddic:ZABAK_XML_K_T"/>
   <tt:template>
     <abak>
       <tt:cond>
@@ -18,14 +18,14 @@
             <!-- This is an inline value which defaults to a simple I EQ LOW -->
             <tt:attribute name="value" value-ref="VALUE"/>
           </tt:d-cond>
-          <tt:loop ref="T_VALUE">
+          <tt:loop ref="T_KV">
             <!-- While these are multiple values which can be used to define a range -->
             <v>
-              <tt:attribute name="low" value-ref="UE_LOW"/>
+              <tt:attribute name="low" value-ref="LOW"/>
               <tt:cond>
-                <tt:attribute name="sign" value-ref="UE_SIGN"/>
-                <tt:attribute name="option" value-ref="UE_OPTION"/>
-                <tt:attribute name="high" value-ref="UE_HIGH"/>
+                <tt:attribute name="sign" value-ref="SIGN"/>
+                <tt:attribute name="option" value-ref="OPTION"/>
+                <tt:attribute name="high" value-ref="HIGH"/>
               </tt:cond>
             </v>
           </tt:loop>

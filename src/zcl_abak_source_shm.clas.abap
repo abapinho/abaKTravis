@@ -21,14 +21,14 @@ private section.
 
   methods READ_SHM
     returning
-      value(RT_DATA) type ZABAK_DATA_T
+      value(RT_K) type ZABAK_K_T
     raising
       ZCX_ABAK
       CX_SHM_NO_ACTIVE_VERSION
       CX_SHM_INCONSISTENT .
   methods WRITE_SHM
     returning
-      value(RT_DATA) type ZABAK_DATA_T
+      value(RT_K) type ZABAK_K_T
     raising
       ZCX_ABAK .
   methods GET_INSTANCE_NAME
@@ -101,7 +101,7 @@ METHOD read_shm.
 
   TRY.
       o_broker = zcl_abak_shm_area=>attach_for_read( get_instance_name( ) ).
-      rt_data = o_broker->root->get_data( ).
+      rt_k = o_broker->root->get_data( ).
       o_broker->detach( ).
 
     CATCH cx_shm_exclusive_lock_active
@@ -136,7 +136,7 @@ METHOD WRITE_SHM.
               i_content     = g_content.
 
           o_broker->set_root( o_root ).
-          rt_data = o_root->get_data( ).
+          rt_k = o_root->get_data( ).
           o_broker->detach_commit( ).
 
         CATCH zcx_abak INTO o_abak_exp.
@@ -162,15 +162,15 @@ METHOD ZIF_ABAK_SOURCE~GET_DATA.
   LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS zif_abak_source~get_name( ).
 
   TRY.
-      rt_data = read_shm( ).
+      rt_k = read_shm( ).
 
     CATCH cx_shm_no_active_version.
-      rt_data = write_shm( ).
+      rt_k = write_shm( ).
 
     CATCH cx_shm_inconsistent.
       TRY.
           zcl_abak_shm_area=>free_area( ).
-          rt_data = write_shm( ).
+          rt_k = write_shm( ).
 
         CATCH cx_shm_parameter_error INTO o_exp.
           LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS o_exp->get_text( ).

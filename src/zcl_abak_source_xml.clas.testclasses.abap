@@ -10,12 +10,12 @@ CLASS lcl_unittest DEFINITION FOR TESTING
 
     DATA:
       f_cut TYPE REF TO zcl_abak_source_xml,
-      t_data TYPE zabak_data_t.
+      t_k TYPE zabak_k_t.
 
     METHODS: get_inline_value FOR TESTING RAISING zcx_abak.
     METHODS: get_value FOR TESTING RAISING zcx_abak.
     METHODS: get_name FOR TESTING RAISING zcx_abak.
-    methods: get_range_line for TESTING raising zcx_abak.
+    METHODS: get_range_line FOR TESTING RAISING zcx_abak.
 ENDCLASS.       "lcl_Unittest
 
 
@@ -23,33 +23,37 @@ CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD get_inline_value.
 
-    FIELD-SYMBOLS: <s_data> LIKE LINE OF t_data.
+    FIELD-SYMBOLS: <s_k> LIKE LINE OF t_k,
+                   <s_kv> LIKE LINE OF <s_k>-t_kv.
 
     CREATE OBJECT f_cut
       EXPORTING
         i_xml = |<abak name="test1"><k ricef="a" fieldname="bukrs" value="4321"/></abak>|.
 
-    t_data = f_cut->zif_abak_source~get_data( ).
-    READ TABLE t_data ASSIGNING <s_data> INDEX 1.
+    t_k = f_cut->zif_abak_source~get_data( ).
+    READ TABLE t_k ASSIGNING <s_k> INDEX 1.
+    READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1.
 
     cl_abap_unit_assert=>assert_equals( exp = '4321'
-                                        act = <s_data>-ue_low ).
+                                        act = <s_kv>-low ).
 
   ENDMETHOD.
 
   METHOD get_value.
 
-    FIELD-SYMBOLS: <s_data> LIKE LINE OF t_data.
+    FIELD-SYMBOLS: <s_k> LIKE LINE OF t_k,
+                   <s_kv> LIKE LINE OF <s_k>-t_kv.
 
     CREATE OBJECT f_cut
       EXPORTING
         i_xml = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v low="1234"/></k></abak>|.
 
-    t_data = f_cut->zif_abak_source~get_data( ).
-    READ TABLE t_data ASSIGNING <s_data> INDEX 1.
+    t_k = f_cut->zif_abak_source~get_data( ).
+    READ TABLE t_k ASSIGNING <s_k> INDEX 1.
+    READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1.
 
     cl_abap_unit_assert=>assert_equals( exp = '1234'
-                                        act = <s_data>-ue_low ).
+                                        act = <s_kv>-low ).
 
   ENDMETHOD.
 
@@ -67,23 +71,25 @@ CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD get_range_line.
 
-    FIELD-SYMBOLS: <s_data> LIKE LINE OF t_data.
+    FIELD-SYMBOLS: <s_k> LIKE LINE OF t_k,
+                   <s_kv> LIKE LINE OF <s_k>-t_kv.
 
     CREATE OBJECT f_cut
       EXPORTING
         i_xml = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v sign="I" option="BT" low="1234" high="9999"/></k></abak>|.
 
-    t_data = f_cut->zif_abak_source~get_data( ).
-    READ TABLE t_data ASSIGNING <s_data> INDEX 1.
+    t_k = f_cut->zif_abak_source~get_data( ).
+    READ TABLE t_k ASSIGNING <s_k> INDEX 1.
+    READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1.
 
     cl_abap_unit_assert=>assert_equals( exp = '1234'
-                                        act = <s_data>-ue_low ).
+                                        act = <s_kv>-low ).
     cl_abap_unit_assert=>assert_equals( exp = '9999'
-                                        act = <s_data>-ue_high ).
+                                        act = <s_kv>-high ).
     cl_abap_unit_assert=>assert_equals( exp = 'I'
-                                        act = <s_data>-ue_sign ).
+                                        act = <s_kv>-sign ).
     cl_abap_unit_assert=>assert_equals( exp = 'BT'
-                                        act = <s_data>-ue_option ).
+                                        act = <s_kv>-option ).
 
   ENDMETHOD.
 

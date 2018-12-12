@@ -14,7 +14,7 @@ public section.
       ZCX_ABAK .
   methods GET_DATA
     returning
-      value(RT_DATA) type ZABAK_DATA_T
+      value(RT_K) type ZABAK_K_T
     raising
       ZCX_ABAK .
 protected section.
@@ -22,7 +22,7 @@ private section.
 
   data G_SOURCE_TYPE type ZABAK_SOURCE_TYPE .
   data G_CONTENT type STRING .
-  data GT_DATA type ZABAK_DATA_T .
+  data GT_K type ZABAK_K_T .
   data G_LOADED type FLAG .
 
   methods GET_SOURCE
@@ -56,7 +56,7 @@ METHOD GET_DATA.
 
   load_data( ).
 
-  rt_data = gt_data.
+  rt_k = gt_k.
 
 ENDMETHOD.
 
@@ -70,8 +70,8 @@ ENDMETHOD.
 METHOD LOAD_DATA.
 
   IF g_loaded IS INITIAL.
-    gt_data = zcl_abak_source_factory=>get_instance( i_source_type = g_source_type
-                                                     i_content     = g_content )->get_data( ).
+    gt_k = zcl_abak_source_factory=>get_instance( i_source_type = g_source_type
+                                                  i_content     = g_content )->get_data( ).
     g_loaded = abap_true.
   ENDIF.
 

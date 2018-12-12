@@ -53,7 +53,7 @@ endmethod.
 
 
 method ZIF_ABAK_SOURCE~GET_DATA.
-  rt_data = go_source_xml->get_data( ).
+  rt_k = go_source_xml->get_data( ).
 endmethod.
 
 

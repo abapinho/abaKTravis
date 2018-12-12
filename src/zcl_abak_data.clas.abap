@@ -31,16 +31,16 @@ private section.
         greater_or_equal         TYPE bapioption VALUE 'GE',
       END OF gc_option .
   data GO_SOURCE type ref to ZIF_ABAK_SOURCE .
-  data GT_DATA type ZABAK_DATA_T .
+  data GT_K type ZABAK_K_T .
 
   methods CHECK_LINE
     importing
-      !I_LINE type ZABAK_DATA
+      !IS_K type ZABAK_K
     raising
       ZCX_ABAK .
   methods CHECK_DATA
     importing
-      !IT_DATA type ZABAK_DATA_T
+      !IT_K type ZABAK_K_T
     raising
       ZCX_ABAK .
   methods LOAD_FROM_SOURCE
@@ -55,24 +55,31 @@ CLASS ZCL_ABAK_DATA IMPLEMENTATION.
 
   METHOD CHECK_DATA.
 
-    FIELD-SYMBOLS: <s_data> LIKE LINE OF it_data.
+    FIELD-SYMBOLS: <s_k> LIKE LINE OF it_k.
 
-    LOOP AT it_data ASSIGNING <s_data>.
-      check_line( <s_data> ).
+    LOOP AT it_k ASSIGNING <s_k>.
+      check_line( <s_k> ).
     ENDLOOP.
 
   ENDMETHOD.
 
 
-  METHOD CHECK_LINE.
+METHOD check_line.
+
+  FIELD-SYMBOLS: <s_kv> LIKE LINE OF is_k-t_kv.
+
+  IF is_k-fieldname IS INITIAL OR is_k-ricef IS INITIAL.
+    RAISE EXCEPTION TYPE zcx_abak.
+  ENDIF.
+
+  LOOP AT is_k-t_kv ASSIGNING <s_kv>.
 
 * Validate sign
-    IF i_line-ue_sign CN 'IE'.
+    IF <s_kv>-sign CN 'IE'.
       RAISE EXCEPTION TYPE zcx_abak. " XXX
     ENDIF.
 
-* Single value operators cannot have high defined
-    CASE i_line-ue_option.
+    CASE <s_kv>-option.
       WHEN gc_option-equal OR
            gc_option-not_equal OR
            gc_option-contains_pattern OR
@@ -81,30 +88,32 @@ CLASS ZCL_ABAK_DATA IMPLEMENTATION.
            gc_option-greater_than OR
            gc_option-less_or_equal OR
            gc_option-less_than.
+*      Single value operators cannot have high defined
 
-        IF i_line-ue_high IS NOT INITIAL.
+        IF <s_kv>-high IS NOT INITIAL.
           RAISE EXCEPTION TYPE zcx_abak. " XXX
         ENDIF.
 
-*   Two value operator must have high defined
       WHEN gc_option-between OR
            gc_option-not_between.
+*       Two value operator must have high defined
 
-        IF i_line-ue_high IS INITIAL.
+        IF <s_kv>-high IS INITIAL.
           RAISE EXCEPTION TYPE zcx_abak. " XXX
         ENDIF.
 
-        IF i_line-ue_high < i_line-ue_low.
+        IF <s_kv>-high < <s_kv>-low.
           RAISE EXCEPTION TYPE zcx_abak. " XXX
         ENDIF.
 
       WHEN OTHERS.
-
         RAISE EXCEPTION TYPE zcx_abak. " XXX
 
     ENDCASE.
 
-  ENDMETHOD.
+  ENDLOOP.
+
+ENDMETHOD.
 
 
 METHOD constructor.
@@ -122,13 +131,13 @@ ENDMETHOD.
 
 METHOD load_from_source.
 
-  IF gt_data[] IS NOT INITIAL.
+  IF gt_k[] IS NOT INITIAL.
     RETURN.
   ENDIF.
 
-  gt_data = go_source->get_data( ).
+  gt_k = go_source->get_data( ).
 
-  check_data( gt_data ).
+  check_data( gt_k ).
 
 ENDMETHOD.
 
@@ -142,7 +151,7 @@ METHOD zif_abak_data~invalidate.
 
   LOG-POINT ID zabak SUBKEY 'data.invalidate'.
 
-  REFRESH gt_data.
+  REFRESH gt_k.
 
   go_source->invalidate( ).
 
@@ -151,19 +160,19 @@ ENDMETHOD.
 
 METHOD zif_abak_data~read.
 
-  FIELD-SYMBOLS: <s_data> LIKE LINE OF gt_data.
+  FIELD-SYMBOLS: <s_k> LIKE LINE OF gt_k.
 
   LOG-POINT ID zabak SUBKEY 'data.read' FIELDS go_source->get_name( ) i_ricef i_fieldname i_context.
 
   load_from_source( ).
 
-  LOOP AT gt_data
-    ASSIGNING <s_data>
-    WHERE ricef = i_ricef
-      AND fieldname = i_fieldname
-      AND context = i_context.
-    INSERT <s_data> INTO TABLE rt_data.
-  ENDLOOP.
+  READ TABLE gt_k ASSIGNING <s_k>
+    WITH KEY ricef = i_ricef
+             fieldname = i_fieldname
+             context = i_context.
+  IF sy-subrc = 0.
+    rt_kv = <s_k>-t_kv.
+  ENDIF.
 
 ENDMETHOD.
 ENDCLASS.

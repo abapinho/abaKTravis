@@ -91,31 +91,26 @@ CLASS ZCL_ABAK IMPLEMENTATION.
   METHOD get_range_aux.
 
 
-    DATA: t_data TYPE zabak_data_t,
+    DATA: t_kv TYPE zabak_kv_t,
           context TYPE zabak_context.
 
     DATA: s_range LIKE LINE OF rr_range.
 
-    FIELD-SYMBOLS: <s_data> LIKE LINE OF t_data.
+    FIELD-SYMBOLS: <s_kv> LIKE LINE OF t_kv.
 
     context = convert_context( i_context ).
 
-    t_data = go_data->read( i_ricef     = i_ricef
-                            i_fieldname = i_fieldname
-                            i_context   = context ).
+    t_kv = go_data->read( i_ricef     = i_ricef
+                         i_fieldname = i_fieldname
+                         i_context   = context ).
 
-    LOOP AT t_data ASSIGNING <s_data>
-      WHERE ricef = i_ricef
-        AND fieldname = i_fieldname
-        AND context = context.
-
+    LOOP AT t_kv ASSIGNING <s_kv>.
       CLEAR s_range.
-      s_range-sign = <s_data>-ue_sign.
-      s_range-option = <s_data>-ue_option.
-      s_range-low = <s_data>-ue_low.
-      s_range-high = <s_data>-ue_high.
+      s_range-sign = <s_kv>-sign.
+      s_range-option = <s_kv>-option.
+      s_range-low = <s_kv>-low.
+      s_range-high = <s_kv>-high.
       INSERT s_range INTO TABLE rr_range.
-
     ENDLOOP.
 
     IF rr_range[] IS INITIAL.
@@ -126,7 +121,6 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 *        ricef     = i_ricef
 *        fieldname = i_fieldname
 *        context   = context.
-
     ENDIF.
 
   ENDMETHOD.
@@ -134,26 +128,18 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
   METHOD get_value_aux.
 
-    DATA: t_data TYPE zabak_data_t,
-          context TYPE zabak_context.
+    DATA: t_kv TYPE zabak_kv_t.
 
-    FIELD-SYMBOLS: <s_data> LIKE LINE OF t_data.
+    FIELD-SYMBOLS: <s_kv> LIKE LINE OF t_kv.
 
-    context = convert_context( i_context ).
+    t_kv = go_data->read( i_ricef     = i_ricef
+                          i_fieldname = i_fieldname
+                          i_context   = convert_context( i_context ) ).
 
-    t_data = go_data->read( i_ricef     = i_ricef
-                            i_fieldname = i_fieldname
-                            i_context   = context ).
-
-    READ TABLE t_data
-      ASSIGNING <s_data>
-      WITH KEY ricef = i_ricef
-               fieldname = i_fieldname
-               context = context.
+    READ TABLE t_kv ASSIGNING <s_kv> index 1.
 
     IF sy-subrc = 0.
-
-      r_value = <s_data>-ue_low.
+      r_value = <s_kv>-low.
 
     ELSE.
 

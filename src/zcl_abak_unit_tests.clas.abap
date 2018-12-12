@@ -31,7 +31,7 @@ CLASS ZCL_ABAK_UNIT_TESTS IMPLEMENTATION.
 
   METHOD generate_test_data.
 
-    DATA: t_data TYPE zabak_data_t,
+    DATA: t_data TYPE zabak_db_t,
           s_data LIKE LINE OF t_data.
 
     CLEAR s_data.
