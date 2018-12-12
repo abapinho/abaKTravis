@@ -22,6 +22,8 @@ CLASS lcl_unittest DEFINITION FOR TESTING
     METHODS: get_value_if_exists FOR TESTING.
 
     METHODS: check_value_ok FOR TESTING RAISING zcx_abak.
+    methods: check_value_range_ok for testing raising zcx_abak.
+    methods: check_value_range_nok for testing raising zcx_abak.
     METHODS: check_value_nok FOR TESTING.
     METHODS: check_value_if_exists FOR TESTING.
 
@@ -115,6 +117,26 @@ CLASS lcl_unittest IMPLEMENTATION.
                                 i_fieldname = 'BUKRS'
                                 i_value     = '0231' )
       msg                  = 'Value is 0231 so result should be true' ).
+
+  ENDMETHOD.       "get_Value
+
+  METHOD check_value_range_ok.
+
+    cl_abap_unit_assert=>assert_equals(
+      exp = abap_true
+      act = f_iut->check_value( i_ricef     = gc_ricef-utest
+                                i_fieldname = 'WAERS'
+                                i_value     = 'EUR' ) ).
+
+  ENDMETHOD.       "get_Value
+
+  METHOD check_value_range_nok.
+
+    cl_abap_unit_assert=>assert_equals(
+      exp = abap_false
+      act = f_iut->check_value( i_ricef     = gc_ricef-utest
+                                i_fieldname = 'WAERS'
+                                i_value     = 'CAD' ) ).
 
   ENDMETHOD.       "get_Value
 

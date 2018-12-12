@@ -63,6 +63,24 @@ CLASS ZCL_ABAK_UNIT_TESTS IMPLEMENTATION.
     s_data-ue_low = '1234567890'.
     INSERT s_data INTO TABLE t_data.
 
+    CLEAR s_data.
+    s_data-ricef = gc_ricef.
+    s_data-fieldname = 'WAERS'.
+    s_data-idx = 1.
+    s_data-ue_option = 'EQ'.
+    s_data-ue_sign = 'I'.
+    s_data-ue_low = 'EUR'.
+    INSERT s_data INTO TABLE t_data.
+
+    CLEAR s_data.
+    s_data-ricef = gc_ricef.
+    s_data-fieldname = 'WAERS'.
+    s_data-idx = 2.
+    s_data-ue_option = 'EQ'.
+    s_data-ue_sign = 'I'.
+    s_data-ue_low = 'USD'.
+    INSERT s_data INTO TABLE t_data.
+
 *   Delete table content
     DELETE FROM zabak_unittests WHERE ricef <> space.   "#EC CI_NOFIELD
 

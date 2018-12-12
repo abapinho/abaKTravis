@@ -61,9 +61,14 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
   METHOD check_value_aux.
 
-    IF get_value_aux( i_ricef     = i_ricef
-                      i_fieldname = i_fieldname
-                      i_context   = i_context ) = i_value.
+    DATA: r_range TYPE zabak_range_t.
+
+    r_range = get_range_aux( i_ricef     = i_ricef
+                             i_fieldname = i_fieldname
+                            i_context   = i_context ).
+    IF r_range[] IS INITIAL.
+      RETURN.
+    ELSEIF i_value IN r_range.
       r_result = abap_true.
     ENDIF.
 
@@ -169,7 +174,6 @@ CLASS ZCL_ABAK IMPLEMENTATION.
   METHOD zif_abak~check_value_if_exists.
 
     TRY.
-
         LOG-POINT ID zabak SUBKEY 'engine.check_value_if_exists' FIELDS go_data->get_name( ) i_ricef i_fieldname i_context i_value.
 
         r_result = check_value_aux( i_ricef     = i_ricef
