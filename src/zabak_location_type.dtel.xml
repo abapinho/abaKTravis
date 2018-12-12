@@ -3,18 +3,18 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DD04V>
-    <ROLLNAME>ZABAK_USE_SHMO</ROLLNAME>
+    <ROLLNAME>ZABAK_LOCATION_TYPE</ROLLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
-    <DOMNAME>FLAG</DOMNAME>
-    <HEADLEN>18</HEADLEN>
+    <DOMNAME>ZABAK_LOCATION_TYPE</DOMNAME>
+    <HEADLEN>13</HEADLEN>
     <SCRLEN1>10</SCRLEN1>
-    <SCRLEN2>18</SCRLEN2>
+    <SCRLEN2>15</SCRLEN2>
     <SCRLEN3>20</SCRLEN3>
-    <DDTEXT>abaK Use Shared Objects</DDTEXT>
-    <REPTEXT>Use Shared Objects</REPTEXT>
-    <SCRTEXT_S>UseSHMO</SCRTEXT_S>
-    <SCRTEXT_M>Use Shared Objects</SCRTEXT_M>
-    <SCRTEXT_L>Use Shared Objects</SCRTEXT_L>
+    <DDTEXT>abaK Location type</DDTEXT>
+    <REPTEXT>Location type</REPTEXT>
+    <SCRTEXT_S>LocType</SCRTEXT_S>
+    <SCRTEXT_M>Location type</SCRTEXT_M>
+    <SCRTEXT_L>Location type</SCRTEXT_L>
     <DTELMASTER>E</DTELMASTER>
     <REFKIND>D</REFKIND>
    </DD04V>

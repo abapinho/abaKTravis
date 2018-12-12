@@ -4,12 +4,12 @@ CLASS zcl_abak_unit_tests DEFINITION
 
   PUBLIC SECTION.
 PROTECTED SECTION.
+    CONSTANTS:
+      BEGIN OF gc_tablename,
+                   valid TYPE string VALUE 'ZABAK_UNITTESTS',
+                   invalid TYPE string VALUE 'USR01',
+                 END OF gc_tablename .
 
-  CONSTANTS:
-    BEGIN OF gc_tablename,
-                 valid TYPE tabname VALUE 'ZABAK_UNITTESTS',
-                 invalid TYPE tabname VALUE 'USR01',
-               END OF gc_tablename .
   CONSTANTS:
     begin of gc_ricef,
       utest TYPE zabak_ricef VALUE 'UTEST',

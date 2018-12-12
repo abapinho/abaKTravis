@@ -9,7 +9,8 @@ public section.
   methods CONSTRUCTOR
     importing
       !I_SOURCE_TYPE type ZABAK_SOURCE_TYPE
-      !I_CONTENT type STRING
+      !I_LOCATION_TYPE type ZABAK_LOCATION_TYPE
+      !I_PARAM type STRING
     raising
       ZCX_ABAK .
   methods GET_DATA
@@ -18,21 +19,22 @@ public section.
     raising
       ZCX_ABAK .
 protected section.
-private section.
+PRIVATE SECTION.
 
-  data G_SOURCE_TYPE type ZABAK_SOURCE_TYPE .
-  data G_CONTENT type STRING .
-  data GT_K type ZABAK_K_T .
-  data G_LOADED type FLAG .
+  DATA g_source_type TYPE zabak_source_type .
+  DATA g_location_type TYPE zabak_location_type .
+  DATA g_param TYPE string .
+  DATA gt_k TYPE zabak_k_t .
+  DATA g_loaded TYPE flag .
 
-  methods GET_SOURCE
-    returning
-      value(RO_SOURCE) type ref to ZIF_ABAK_SOURCE
-    raising
-      ZCX_ABAK .
-  methods LOAD_DATA
-    raising
-      ZCX_ABAK .
+  METHODS get_source
+    RETURNING
+      value(ro_source) TYPE REF TO zif_abak_source
+    RAISING
+      zcx_abak .
+  METHODS load_data
+    RAISING
+      zcx_abak .
 ENDCLASS.
 
 
@@ -43,7 +45,8 @@ CLASS ZCL_ABAK_SHM_ROOT IMPLEMENTATION.
 METHOD CONSTRUCTOR.
 
   g_source_type = i_source_type.
-  g_content     = i_content.
+  g_location_type = i_location_type.
+  g_param = i_param.
 
   load_data( ).
 
@@ -52,7 +55,7 @@ ENDMETHOD.
 
 METHOD GET_DATA.
 
-  LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS g_source_type g_content.
+  LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS g_source_type g_location_type g_param.
 
   load_data( ).
 
@@ -62,16 +65,16 @@ ENDMETHOD.
 
 
 METHOD GET_SOURCE.
-  ro_source = zcl_abak_source_factory=>get_instance( i_source_type = g_source_type
-                                                     i_content     = g_content ).
+  ro_source = zcl_abak_source_factory=>get_instance( i_source_type   = g_source_type
+                                                     i_location_type = g_location_type
+                                                     i_param         = g_param ).
 ENDMETHOD.
 
 
 METHOD LOAD_DATA.
 
   IF g_loaded IS INITIAL.
-    gt_k = zcl_abak_source_factory=>get_instance( i_source_type = g_source_type
-                                                  i_content     = g_content )->get_data( ).
+    gt_k = get_source( )->get_data( ).
     g_loaded = abap_true.
   ENDIF.
 

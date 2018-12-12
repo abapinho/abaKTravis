@@ -10,7 +10,8 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO zcl_abak_source_shm.
+      f_cut TYPE REF TO zcl_abak_source_shm,
+      o_location TYPE REF TO zif_abak_location.
 
     METHODS: setup.
     METHODS: invalid_source FOR TESTING.
@@ -27,14 +28,14 @@ CLASS lcl_unittest IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD invalid_source.
-    DATA: content TYPE string.
+    DATA: param TYPE string.
 
     TRY.
-        content = gc_tablename-invalid.
         CREATE OBJECT f_cut
           EXPORTING
-            i_source_type = zcl_abak_source_factory=>gc_source_type-database
-            i_content     = content.
+            i_source_type   = zcl_abak_source_factory=>gc_source_type-database
+            i_location_type = zcl_abak_location_factory=>gc_location_type-inline
+            i_param         = gc_tablename-invalid.
 
         cl_abap_unit_assert=>fail( msg = 'Table is invalid. An exception should have been raised' ).
 
@@ -45,13 +46,12 @@ CLASS lcl_unittest IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_data.
-    DATA: content TYPE string.
 
-    content = gc_tablename-valid.
     CREATE OBJECT f_cut
       EXPORTING
-        i_source_type = zcl_abak_source_factory=>gc_source_type-database
-        i_content     = content.
+        i_source_type   = zcl_abak_source_factory=>gc_source_type-database
+        i_location_type = zcl_abak_location_factory=>gc_location_type-inline
+        i_param         = gc_tablename-valid.
 
     cl_abap_unit_assert=>assert_differs(
       exp = 0
@@ -61,29 +61,27 @@ CLASS lcl_unittest IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_name.
-    DATA: content TYPE string.
 
-    content = gc_tablename-valid.
     CREATE OBJECT f_cut
       EXPORTING
-        i_source_type = zcl_abak_source_factory=>gc_source_type-database
-        i_content     = content.
+        i_source_type   = zcl_abak_source_factory=>gc_source_type-database
+        i_location_type = zcl_abak_location_factory=>gc_location_type-inline
+        i_param         = gc_tablename-valid.
 
     cl_abap_unit_assert=>assert_equals(
-      exp = |SHM.DB.{ gc_tablename-valid }|
+      exp = |SHM.DB.INLINE.{ gc_tablename-valid }|
       act = f_cut->zif_abak_source~get_name( )
       msg = 'Name different from what was expected' ).
 
   ENDMETHOD.
 
   METHOD invalidate.
-    DATA: content TYPE string.
 
-    content = gc_tablename-valid.
     CREATE OBJECT f_cut
       EXPORTING
-        i_source_type = zcl_abak_source_factory=>gc_source_type-database
-        i_content     = content.
+        i_source_type   = zcl_abak_source_factory=>gc_source_type-database
+        i_location_type = zcl_abak_location_factory=>gc_location_type-inline
+        i_param         = gc_tablename-valid.
 
     f_cut->zif_abak_source~get_data( ).
 

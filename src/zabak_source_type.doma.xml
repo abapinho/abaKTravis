@@ -23,8 +23,8 @@
      <DOMNAME>ZABAK_SOURCE_TYPE</DOMNAME>
      <VALPOS>0002</VALPOS>
      <DDLANGUAGE>E</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
+     <DDTEXT>XML</DDTEXT>
     </DD07V>
    </DD07V_TAB>
    <I18N_LANGS>
@@ -221,105 +221,71 @@
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>1</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>2</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>3</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>A</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>F</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>G</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>I</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>J</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>L</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>M</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>N</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>P</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>R</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>S</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>T</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>U</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
     <item>
      <VALPOS>0002</VALPOS>
-     <DDLANGUAGE>W</DDLANGUAGE>
-     <DOMVALUE_L>SHMO</DOMVALUE_L>
-     <DDTEXT>Shared memory</DDTEXT>
+     <DOMVALUE_L>XML</DOMVALUE_L>
     </item>
    </DD07_TEXTS>
   </asx:values>

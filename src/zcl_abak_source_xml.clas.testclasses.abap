@@ -10,6 +10,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
 
     DATA:
       f_cut TYPE REF TO zcl_abak_source_xml,
+      o_location type ref to zcl_abak_location_inline,
       t_k TYPE zabak_k_t.
 
     METHODS: get_inline_value FOR TESTING RAISING zcx_abak.
@@ -26,9 +27,12 @@ CLASS lcl_unittest IMPLEMENTATION.
     FIELD-SYMBOLS: <s_k> LIKE LINE OF t_k,
                    <s_kv> LIKE LINE OF <s_k>-t_kv.
 
+    create object o_location
+      EXPORTING
+        i_text = |<abak name="test1"><k ricef="a" fieldname="bukrs" value="4321"/></abak>|.
     CREATE OBJECT f_cut
       EXPORTING
-        i_xml = |<abak name="test1"><k ricef="a" fieldname="bukrs" value="4321"/></abak>|.
+        io_location = o_location.
 
     t_k = f_cut->zif_abak_source~get_data( ).
     READ TABLE t_k ASSIGNING <s_k> INDEX 1.
@@ -44,9 +48,12 @@ CLASS lcl_unittest IMPLEMENTATION.
     FIELD-SYMBOLS: <s_k> LIKE LINE OF t_k,
                    <s_kv> LIKE LINE OF <s_k>-t_kv.
 
+    create object o_location
+      EXPORTING
+        i_text = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v low="1234"/></k></abak>|.
     CREATE OBJECT f_cut
       EXPORTING
-        i_xml = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v low="1234"/></k></abak>|.
+        io_location = o_location.
 
     t_k = f_cut->zif_abak_source~get_data( ).
     READ TABLE t_k ASSIGNING <s_k> INDEX 1.
@@ -59,9 +66,12 @@ CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD get_name.
 
+    create object o_location
+      EXPORTING
+        i_text = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v low="1234"/></k></abak>|.
     CREATE OBJECT f_cut
       EXPORTING
-        i_xml = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v low="1234"/></k></abak>|.
+        io_location = o_location.
 
     cl_abap_unit_assert=>assert_equals(
       exp = |XML.test1|
@@ -74,9 +84,12 @@ CLASS lcl_unittest IMPLEMENTATION.
     FIELD-SYMBOLS: <s_k> LIKE LINE OF t_k,
                    <s_kv> LIKE LINE OF <s_k>-t_kv.
 
+    create object o_location
+      EXPORTING
+        i_text = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v sign="I" option="BT" low="1234" high="9999"/></k></abak>|.
     CREATE OBJECT f_cut
       EXPORTING
-        i_xml = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v sign="I" option="BT" low="1234" high="9999"/></k></abak>|.
+        io_location = o_location.
 
     t_k = f_cut->zif_abak_source~get_data( ).
     READ TABLE t_k ASSIGNING <s_k> INDEX 1.

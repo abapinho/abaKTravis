@@ -1,7 +1,7 @@
 class ZCL_ABAK_SOURCE_SHM definition
   public
   final
-  create public.
+  create public .
 
 public section.
 
@@ -10,14 +10,16 @@ public section.
   methods CONSTRUCTOR
     importing
       !I_SOURCE_TYPE type ZABAK_SOURCE_TYPE
-      !I_CONTENT type STRING
+      !I_LOCATION_TYPE type ZABAK_LOCATION_TYPE
+      !I_PARAM type STRING
     raising
       ZCX_ABAK .
 protected section.
 private section.
 
   data G_SOURCE_TYPE type ZABAK_SOURCE_TYPE .
-  data G_CONTENT type STRING .
+  data G_LOCATION_TYPE type ZABAK_LOCATION_TYPE .
+  data G_PARAM type STRING .
 
   methods READ_SHM
     returning
@@ -49,7 +51,8 @@ CLASS ZCL_ABAK_SOURCE_SHM IMPLEMENTATION.
 METHOD CONSTRUCTOR.
 
   g_source_type = i_source_type.
-  g_content = i_content.
+  g_location_type = i_location_type.
+  g_param = i_param.
 
   zif_abak_source~get_data( ).
 
@@ -59,7 +62,7 @@ ENDMETHOD.
 METHOD get_instance_name.
   DATA: instance_name TYPE string.
 
-  instance_name = |{ g_source_type }.{ g_content }|.
+  instance_name = |{ g_source_type }.{ g_location_type }.{ g_param }|.
 
   IF strlen( instance_name ) <= 80.
     r_instance_name = instance_name.
@@ -132,8 +135,9 @@ METHOD WRITE_SHM.
       TRY.
           CREATE OBJECT o_root AREA HANDLE o_broker
             EXPORTING
-              i_source_type = g_source_type
-              i_content     = g_content.
+              i_source_type   = g_source_type
+              i_location_type = g_location_type
+              i_param         = g_param.
 
           o_broker->set_root( o_root ).
           rt_k = o_root->get_data( ).
