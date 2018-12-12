@@ -15,32 +15,34 @@ public section.
     raising
       ZCX_ABAK .
 protected section.
-private section.
+PRIVATE SECTION.
 
-  data G_SOURCE_TYPE type ZABAK_SOURCE_TYPE .
-  data G_LOCATION_TYPE type ZABAK_LOCATION_TYPE .
-  data G_PARAM type STRING .
+  CONSTANTS: gc_max_instance_name TYPE i VALUE 80.
 
-  methods READ_SHM
-    returning
-      value(RT_K) type ZABAK_K_T
-    raising
-      ZCX_ABAK
-      CX_SHM_NO_ACTIVE_VERSION
-      CX_SHM_INCONSISTENT .
-  methods WRITE_SHM
-    returning
-      value(RT_K) type ZABAK_K_T
-    raising
-      ZCX_ABAK .
-  methods GET_INSTANCE_NAME
-    returning
-      value(R_INSTANCE_NAME) type SHM_INST_NAME .
-  methods HASH
-    importing
-      !I_DATA type STRING
-    returning
-      value(R_HASHED) type STRING .
+  DATA g_source_type TYPE zabak_source_type .
+  DATA g_location_type TYPE zabak_location_type .
+  DATA g_param TYPE string .
+
+  METHODS read_shm
+    RETURNING
+      value(rt_k) TYPE zabak_k_t
+    RAISING
+      zcx_abak
+      cx_shm_no_active_version
+      cx_shm_inconsistent .
+  METHODS write_shm
+    RETURNING
+      value(rt_k) TYPE zabak_k_t
+    RAISING
+      zcx_abak .
+  METHODS get_instance_name
+    RETURNING
+      value(r_instance_name) TYPE shm_inst_name .
+  METHODS hash
+    IMPORTING
+      !i_data TYPE string
+    RETURNING
+      value(r_hashed) TYPE string .
 ENDCLASS.
 
 
@@ -64,7 +66,7 @@ METHOD get_instance_name.
 
   instance_name = |{ g_source_type }.{ g_location_type }.{ g_param }|.
 
-  IF strlen( instance_name ) <= 80.
+  IF strlen( instance_name ) <= gc_max_instance_name.
     r_instance_name = instance_name.
   ELSE.
 *   If the instance name size is too big just hash it
@@ -117,7 +119,7 @@ METHOD read_shm.
 
   ENDTRY.
 
-ENDMETHOD.
+ENDMETHOD. "#EC CI_VALPAR
 
 
 METHOD WRITE_SHM.
@@ -156,7 +158,7 @@ METHOD WRITE_SHM.
 
   ENDTRY.
 
-ENDMETHOD.
+ENDMETHOD. "#EC CI_VALPAR
 
 
 METHOD ZIF_ABAK_SOURCE~GET_DATA.

@@ -33,7 +33,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_abak_source_xml IMPLEMENTATION.
+CLASS ZCL_ABAK_SOURCE_XML IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -53,8 +53,7 @@ CLASS zcl_abak_source_xml IMPLEMENTATION.
     DATA: s_k LIKE LINE OF rt_k,
           s_v LIKE LINE OF s_k-t_kv.
 
-    FIELD-SYMBOLS: <s_xml_k> LIKE LINE OF it_xml_k,
-                   <s_v> LIKE LINE OF <s_xml_k>-t_kv.
+    FIELD-SYMBOLS: <s_xml_k> LIKE LINE OF it_xml_k.
 
     LOOP AT it_xml_k ASSIGNING <s_xml_k>.
 
@@ -74,7 +73,7 @@ CLASS zcl_abak_source_xml IMPLEMENTATION.
 
     ENDLOOP.
 
-  ENDMETHOD.
+  ENDMETHOD. "#EC CI_VALPAR
 
 
   METHOD load_xml.

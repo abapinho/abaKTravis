@@ -6,7 +6,7 @@ interface ZIF_ABAK_SOURCE
     returning
       value(RT_K) type ZABAK_K_T
     raising
-      ZCX_ABAK .
+      ZCX_ABAK . "#EC CI_VALPAR
   methods INVALIDATE
     raising
       ZCX_ABAK .

@@ -151,7 +151,7 @@ METHOD zif_abak_data~invalidate.
 
   LOG-POINT ID zabak SUBKEY 'data.invalidate'.
 
-  REFRESH gt_k.
+  clear gt_k[].
 
   go_source->invalidate( ).
 

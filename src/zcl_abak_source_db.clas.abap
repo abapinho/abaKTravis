@@ -40,7 +40,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_abak_source_db IMPLEMENTATION.
+CLASS ZCL_ABAK_SOURCE_DB IMPLEMENTATION.
 
 
   METHOD check_table.
@@ -64,13 +64,13 @@ CLASS zcl_abak_source_db IMPLEMENTATION.
 
 * 1st include is ZABAK_DB_KEYS
     READ TABLE t_component ASSIGNING <s_component> INDEX 1.
-    IF <s_component>-type->absolute_name <> '\TYPE=ZABAK_DB_KEY'.
+    IF sy-subrc <> 0 OR <s_component>-type->absolute_name <> '\TYPE=ZABAK_DB_KEY'.
       RAISE EXCEPTION TYPE zcx_abak.
     ENDIF.
 
 * 2nd include is ZABAK_DB_FIELDS
     READ TABLE t_component ASSIGNING <s_component> INDEX 2.
-    IF <s_component>-type->absolute_name <> '\TYPE=ZABAK_DB_FIELDS'.
+    IF sy-subrc <> 0 OR <s_component>-type->absolute_name <> '\TYPE=ZABAK_DB_FIELDS'.
       RAISE EXCEPTION TYPE zcx_abak.
     ENDIF.
 
@@ -102,7 +102,7 @@ CLASS zcl_abak_source_db IMPLEMENTATION.
 
     LOOP AT it_db ASSIGNING <s_db>.
 
-      DO 2 TIMES.
+      DO 2 TIMES. "#EC CI_NESTED
 *     Get K line
         READ TABLE rt_k ASSIGNING <s_k>
           WITH KEY ricef = <s_db>-ricef
@@ -131,7 +131,7 @@ CLASS zcl_abak_source_db IMPLEMENTATION.
 
     ENDLOOP.
 
-  ENDMETHOD.
+  ENDMETHOD. "#EC CI_VALPAR
 
 
   METHOD select.

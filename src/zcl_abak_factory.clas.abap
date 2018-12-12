@@ -67,19 +67,19 @@ CLASS ZCL_ABAK_FACTORY IMPLEMENTATION.
 METHOD create_instance.
 
   DATA: s_config TYPE zabak,
-        content  TYPE string.
+        param    TYPE string.
 
   LOG-POINT ID zabak SUBKEY 'factory.create_instance' FIELDS i_id.
 
   s_config = get_config( i_id ).
 
-  content = s_config-content.
+  param = s_config-params.
 
   CREATE OBJECT ro_instance TYPE zcl_abak
     EXPORTING
-      io_source = zcl_abak_source_factory=>get_instance(
-      i_source_type = s_config-source_type
-      i_content     = content ).
+      io_source = zcl_abak_source_factory=>get_instance( i_source_type   = s_config-source_type
+                                                         i_location_type = s_config-location_type
+                                                         i_param         = param ).
 
 ENDMETHOD.
 

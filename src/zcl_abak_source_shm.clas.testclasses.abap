@@ -10,8 +10,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO zcl_abak_source_shm,
-      o_location TYPE REF TO zif_abak_location.
+      f_cut TYPE REF TO zcl_abak_source_shm.
 
     METHODS: setup.
     METHODS: invalid_source FOR TESTING.
@@ -28,7 +27,6 @@ CLASS lcl_unittest IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD invalid_source.
-    DATA: param TYPE string.
 
     TRY.
         CREATE OBJECT f_cut
@@ -96,7 +94,7 @@ CLASS lcl_unittest IMPLEMENTATION.
         zcl_abak_shm_area=>attach_for_read( f_cut->get_instance_name( ) ).
         cl_abap_unit_assert=>fail( msg = 'If we got here the instance was not invalidated' ).
 
-      CATCH cx_root.
+      CATCH cx_shm_error cx_shm_general_error.
         RETURN.
     ENDTRY.
 

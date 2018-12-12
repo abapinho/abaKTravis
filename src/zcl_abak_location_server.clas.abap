@@ -39,6 +39,18 @@ CLASS ZCL_ABAK_LOCATION_SERVER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  method load_from_server.
+    open dataset i_filepath for input in text mode ENCODING default.
+    if sy-subrc <> 0.
+      raise EXCEPTION type zcx_abak. " TODO
+    endif.
+
+    read dataset i_filepath into r_text.
+
+    close dataset i_filepath.
+  ENDMETHOD.
+
+
   METHOD zif_abak_location~get.
     r_text = g_text.
   ENDMETHOD.
@@ -47,17 +59,4 @@ CLASS ZCL_ABAK_LOCATION_SERVER IMPLEMENTATION.
   METHOD zif_abak_location~invalidate.
     g_text = load_from_server( g_filepath ).
   ENDMETHOD.
-
-  method load_from_server.
-    open dataset i_filepath for input in text mode ENCODING default.
-    if sy-subrc <> 0.
-      raise EXCEPTION type zcx_abak. " TODO
-    endif.
-
-    read dataset i_filepath into g_text.
-
-    close dataset i_filepath.
-  ENDMETHOD.
-
-
 ENDCLASS.

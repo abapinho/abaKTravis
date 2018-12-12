@@ -35,8 +35,8 @@ CLASS lcl_unittest IMPLEMENTATION.
         io_location = o_location.
 
     t_k = f_cut->zif_abak_source~get_data( ).
-    READ TABLE t_k ASSIGNING <s_k> INDEX 1.
-    READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1.
+    READ TABLE t_k ASSIGNING <s_k> INDEX 1. "#EC CI_SUBRC
+    READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1. "#EC CI_SUBRC
 
     cl_abap_unit_assert=>assert_equals( exp = '4321'
                                         act = <s_kv>-low ).
@@ -56,8 +56,8 @@ CLASS lcl_unittest IMPLEMENTATION.
         io_location = o_location.
 
     t_k = f_cut->zif_abak_source~get_data( ).
-    READ TABLE t_k ASSIGNING <s_k> INDEX 1.
-    READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1.
+    READ TABLE t_k ASSIGNING <s_k> INDEX 1. "#EC CI_SUBRC
+    READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1. "#EC CI_SUBRC
 
     cl_abap_unit_assert=>assert_equals( exp = '1234'
                                         act = <s_kv>-low ).
@@ -92,8 +92,8 @@ CLASS lcl_unittest IMPLEMENTATION.
         io_location = o_location.
 
     t_k = f_cut->zif_abak_source~get_data( ).
-    READ TABLE t_k ASSIGNING <s_k> INDEX 1.
-    READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1.
+    READ TABLE t_k ASSIGNING <s_k> INDEX 1. "#EC CI_SUBRC
+    READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1. "#EC CI_SUBRC
 
     cl_abap_unit_assert=>assert_equals( exp = '1234'
                                         act = <s_kv>-low ).
