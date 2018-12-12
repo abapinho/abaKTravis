@@ -1,71 +1,71 @@
-class ZCL_ABAK_SOURCE_FACTORY definition
-  public
-  final
-  create public .
+CLASS zcl_abak_source_factory DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  constants:
-    BEGIN OF gc_source_type,
-        database                TYPE zabak_source_type VALUE 'DB',
-        xml                     TYPE zabak_source_type VALUE 'XML',
-        xml_url                 TYPE zabak_source_type VALUE 'XML_URL',
-      END OF gc_source_type .
+    CONSTANTS:
+      BEGIN OF gc_source_type,
+          database                TYPE zabak_source_type VALUE 'DB',
+          xml                     TYPE zabak_source_type VALUE 'XML',
+          xml_url                 TYPE zabak_source_type VALUE 'XML_URL',
+        END OF gc_source_type .
 
-  class-methods GET_INSTANCE
-    importing
-      !I_SOURCE_TYPE type ZABAK_SOURCE_TYPE
-      !I_LOCATION_TYPE type ZABAK_LOCATION_TYPE
-      !I_PARAM type STRING
-      !I_USE_SHM type ZABAK_USE_SHM optional
-    returning
-      value(RO_INSTANCE) type ref to ZIF_ABAK_SOURCE
-    raising
-      ZCX_ABAK .
+    CLASS-METHODS get_instance
+      IMPORTING
+        !i_source_type TYPE zabak_source_type
+        !i_origin_type TYPE zabak_origin_type
+        !i_param TYPE string
+        !i_use_shm TYPE zabak_use_shm OPTIONAL
+      RETURNING
+        value(ro_instance) TYPE REF TO zif_abak_source
+      RAISING
+        zcx_abak .
   PROTECTED SECTION.
-private section.
+  PRIVATE SECTION.
 
-  class-methods CREATE_SHM
-    importing
-      !I_SOURCE_TYPE type ZABAK_SOURCE_TYPE
-      !I_LOCATION_TYPE type ZABAK_LOCATION_TYPE
-      !I_PARAM type STRING
-    returning
-      value(RO_INSTANCE) type ref to ZIF_ABAK_SOURCE
-    raising
-      ZCX_ABAK .
-  class-methods CREATE_NO_SHM
-    importing
-      !I_SOURCE_TYPE type ZABAK_SOURCE_TYPE
-      !I_LOCATION_TYPE type ZABAK_LOCATION_TYPE
-      !I_PARAM type STRING
-    returning
-      value(RO_INSTANCE) type ref to ZIF_ABAK_SOURCE
-    raising
-      ZCX_ABAK .
+    CLASS-METHODS create_shm
+      IMPORTING
+        !i_source_type TYPE zabak_source_type
+        !i_origin_type TYPE zabak_origin_type
+        !i_param TYPE string
+      RETURNING
+        value(ro_instance) TYPE REF TO zif_abak_source
+      RAISING
+        zcx_abak .
+    CLASS-METHODS create_no_shm
+      IMPORTING
+        !i_source_type TYPE zabak_source_type
+        !i_origin_type TYPE zabak_origin_type
+        !i_param TYPE string
+      RETURNING
+        value(ro_instance) TYPE REF TO zif_abak_source
+      RAISING
+        zcx_abak .
 ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_SOURCE_FACTORY IMPLEMENTATION.
+CLASS zcl_abak_source_factory IMPLEMENTATION.
 
 
-  METHOD CREATE_NO_SHM.
-    DATA: o_location TYPE REF TO zif_abak_location.
+  METHOD create_no_shm.
+    DATA: o_location TYPE REF TO zif_abak_origin.
 
-    o_location = zcl_abak_location_factory=>get_instance( i_location_type = i_location_type
+    o_location = zcl_abak_origin_factory=>get_instance( i_origin_type = i_origin_type
                                                           i_param         = i_param ).
 
     CASE i_source_type.
       WHEN gc_source_type-database.
         CREATE OBJECT ro_instance TYPE zcl_abak_source_db
           EXPORTING
-            io_location = o_location.
+            io_origin = o_location.
 
       WHEN gc_source_type-xml.
         CREATE OBJECT ro_instance TYPE zcl_abak_source_xml
           EXPORTING
-            io_location = o_location.
+            io_origin = o_location.
 
       WHEN OTHERS.
         RAISE EXCEPTION TYPE zcx_abak
@@ -80,9 +80,9 @@ CLASS ZCL_ABAK_SOURCE_FACTORY IMPLEMENTATION.
   METHOD create_shm.
     CREATE OBJECT ro_instance TYPE zcl_abak_source_shm
       EXPORTING
-        i_source_type   = i_source_type
-        i_location_type = i_location_type
-        i_param         = i_param.
+        i_source_type = i_source_type
+        i_origin_type = i_origin_type
+        i_param       = i_param.
 
   ENDMETHOD.
 
@@ -91,12 +91,12 @@ CLASS ZCL_ABAK_SOURCE_FACTORY IMPLEMENTATION.
 
     IF i_use_shm = abap_true.
       ro_instance = create_shm( i_source_type   = i_source_type
-                                i_location_type = i_location_type
+                                i_origin_type = i_origin_type
                                 i_param         = i_param ).
 
     ELSE.
       ro_instance = create_no_shm( i_source_type   = i_source_type
-                                   i_location_type = i_location_type
+                                   i_origin_type = i_origin_type
                                    i_param         = i_param ).
     ENDIF.
 

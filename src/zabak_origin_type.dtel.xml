@@ -3,14 +3,14 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DD04V>
-    <ROLLNAME>ZABAK_LOCATION_TYPE</ROLLNAME>
+    <ROLLNAME>ZABAK_ORIGIN_TYPE</ROLLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
-    <DOMNAME>ZABAK_LOCATION_TYPE</DOMNAME>
+    <DOMNAME>ZABAK_ORIGIN_TYPE</DOMNAME>
     <HEADLEN>13</HEADLEN>
     <SCRLEN1>10</SCRLEN1>
     <SCRLEN2>15</SCRLEN2>
     <SCRLEN3>20</SCRLEN3>
-    <DDTEXT>abaK Location type</DDTEXT>
+    <DDTEXT>abaK Origin type</DDTEXT>
     <REPTEXT>Location type</REPTEXT>
     <SCRTEXT_S>LocType</SCRTEXT_S>
     <SCRTEXT_M>Location type</SCRTEXT_M>

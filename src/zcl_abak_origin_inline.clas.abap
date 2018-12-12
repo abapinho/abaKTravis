@@ -1,11 +1,11 @@
-class ZCL_ABAK_LOCATION_INLINE definition
+class ZCL_ABAK_ORIGIN_INLINE definition
   public
   final
   create public .
 
 public section.
 
-  interfaces ZIF_ABAK_LOCATION .
+  interfaces zif_abak_origin .
 
   methods CONSTRUCTOR
     importing
@@ -21,7 +21,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_LOCATION_INLINE IMPLEMENTATION.
+CLASS ZCL_ABAK_ORIGIN_INLINE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -29,12 +29,12 @@ CLASS ZCL_ABAK_LOCATION_INLINE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_location~get.
+  METHOD zif_abak_origin~get.
     r_text = g_text.
   ENDMETHOD.
 
 
-  METHOD zif_abak_location~invalidate.
+  METHOD zif_abak_origin~invalidate.
     RETURN. " Nothing to invalidate
   ENDMETHOD.
 ENDCLASS.

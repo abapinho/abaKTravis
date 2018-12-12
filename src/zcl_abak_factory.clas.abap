@@ -78,7 +78,7 @@ METHOD create_instance.
   CREATE OBJECT ro_instance TYPE zcl_abak
     EXPORTING
       io_source = zcl_abak_source_factory=>get_instance( i_source_type   = s_config-source_type
-                                                         i_location_type = s_config-location_type
+                                                         i_origin_type = s_config-location_type
                                                          i_param         = param ).
 
 ENDMETHOD.

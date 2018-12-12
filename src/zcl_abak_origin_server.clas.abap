@@ -1,11 +1,11 @@
-CLASS ZCL_ABAK_LOCATION_SERVER DEFINITION
+CLASS ZCL_ABAK_ORIGIN_SERVER DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
 
   PUBLIC SECTION.
 
-    INTERFACES zif_abak_location .
+    INTERFACES zif_abak_origin .
 
     METHODS constructor
       IMPORTING
@@ -30,7 +30,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_LOCATION_SERVER IMPLEMENTATION.
+CLASS ZCL_ABAK_ORIGIN_SERVER IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -51,12 +51,12 @@ CLASS ZCL_ABAK_LOCATION_SERVER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_location~get.
+  METHOD zif_abak_origin~get.
     r_text = g_text.
   ENDMETHOD.
 
 
-  METHOD zif_abak_location~invalidate.
+  METHOD zif_abak_origin~invalidate.
     g_text = load_from_server( g_filepath ).
   ENDMETHOD.
 ENDCLASS.

@@ -11,7 +11,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
 
     DATA:
       f_cut TYPE REF TO zcl_abak_data,  "class under test
-      f_location type ref to zcl_abak_location_inline,
+      f_location type ref to zcl_abak_origin_inline,
       f_source type ref to zcl_abak_source_db.
 
     METHODS: setup raising zcx_abak.
@@ -31,7 +31,7 @@ CLASS lcl_unittest IMPLEMENTATION.
         i_text = gc_tablename-valid.
     create object f_source
       EXPORTING
-        io_location = f_location.
+        io_origin = f_location.
 
   ENDMETHOD.
 

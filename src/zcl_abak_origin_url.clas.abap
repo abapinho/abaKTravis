@@ -1,11 +1,11 @@
-class ZCL_ABAK_LOCATION_URL definition
+class ZCL_ABAK_ORIGIN_URL definition
   public
   final
   create public .
 
 public section.
 
-  interfaces ZIF_ABAK_LOCATION .
+  interfaces zif_abak_origin .
 
   methods CONSTRUCTOR
     importing
@@ -29,7 +29,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_LOCATION_URL IMPLEMENTATION.
+CLASS ZCL_ABAK_ORIGIN_URL IMPLEMENTATION.
 
 
 METHOD CONSTRUCTOR.
@@ -98,12 +98,12 @@ method FETCH_FROM_URL.
 endmethod.
 
 
-method ZIF_ABAK_LOCATION~GET.
+method zif_abak_origin~GET.
   r_text = g_text.
 endmethod.
 
 
-METHOD zif_abak_location~invalidate.
+METHOD zif_abak_origin~invalidate.
   g_text = fetch_from_url( g_url ).
 ENDMETHOD.
 ENDCLASS.

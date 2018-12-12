@@ -10,13 +10,13 @@ CLASS zcl_abak_source_db DEFINITION
 
     METHODS constructor
       IMPORTING
-        !io_location TYPE REF TO zif_abak_location
+        !io_origin TYPE REF TO zif_abak_origin
       RAISING
         zcx_abak .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
-    DATA go_location TYPE REF TO zif_abak_location.
+    DATA go_origin TYPE REF TO zif_abak_origin.
     DATA g_tablename TYPE tabname .
 
     METHODS check_table
@@ -79,14 +79,14 @@ CLASS ZCL_ABAK_SOURCE_DB IMPLEMENTATION.
 
   METHOD constructor.
 
-    IF io_location IS NOT BOUND.
+    IF io_origin IS NOT BOUND.
       RAISE EXCEPTION TYPE zcx_abak
         EXPORTING
           textid = zcx_abak=>invalid_parameters.
     ENDIF.
 
-    go_location = io_location.
-    g_tablename = io_location->get( ).
+    go_origin = io_origin.
+    g_tablename = io_origin->get( ).
     check_table( g_tablename ).
 
   ENDMETHOD.
@@ -158,7 +158,7 @@ CLASS ZCL_ABAK_SOURCE_DB IMPLEMENTATION.
 
 
   METHOD zif_abak_source~invalidate.
-    go_location->invalidate( ).
-    g_tablename = go_location->get( ).
+    go_origin->invalidate( ).
+    g_tablename = go_origin->get( ).
   ENDMETHOD.
 ENDCLASS.

@@ -1,82 +1,82 @@
-class ZCL_ABAK_SHM_ROOT definition
-  public
-  final
-  create public
-  shared memory enabled .
+CLASS zcl_abak_shm_root DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC
+  SHARED MEMORY ENABLED .
 
-public section.
+  PUBLIC SECTION.
 
-  methods CONSTRUCTOR
-    importing
-      !I_SOURCE_TYPE type ZABAK_SOURCE_TYPE
-      !I_LOCATION_TYPE type ZABAK_LOCATION_TYPE
-      !I_PARAM type STRING
-    raising
-      ZCX_ABAK .
-  methods GET_DATA
-    returning
-      value(RT_K) type ZABAK_K_T
-    raising
-      ZCX_ABAK .
-protected section.
-PRIVATE SECTION.
+    METHODS constructor
+      IMPORTING
+        !i_source_type TYPE zabak_source_type
+        !i_origin_type TYPE zabak_origin_type
+        !i_param TYPE string
+      RAISING
+        zcx_abak .
+    METHODS get_data
+      RETURNING
+        value(rt_k) TYPE zabak_k_t
+      RAISING
+        zcx_abak .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 
-  DATA g_source_type TYPE zabak_source_type .
-  DATA g_location_type TYPE zabak_location_type .
-  DATA g_param TYPE string .
-  DATA gt_k TYPE zabak_k_t .
-  DATA g_loaded TYPE flag .
+    DATA g_source_type TYPE zabak_source_type .
+    DATA g_origin_type TYPE zabak_origin_type .
+    DATA g_param TYPE string .
+    DATA gt_k TYPE zabak_k_t .
+    DATA g_loaded TYPE flag .
 
-  METHODS get_source
-    RETURNING
-      value(ro_source) TYPE REF TO zif_abak_source
-    RAISING
-      zcx_abak .
-  METHODS load_data
-    RAISING
-      zcx_abak .
+    METHODS get_source
+      RETURNING
+        value(ro_source) TYPE REF TO zif_abak_source
+      RAISING
+        zcx_abak .
+    METHODS load_data
+      RAISING
+        zcx_abak .
 ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_SHM_ROOT IMPLEMENTATION.
+CLASS zcl_abak_shm_root IMPLEMENTATION.
 
 
-METHOD CONSTRUCTOR.
+  METHOD constructor.
 
-  g_source_type = i_source_type.
-  g_location_type = i_location_type.
-  g_param = i_param.
+    g_source_type = i_source_type.
+    g_origin_type = i_origin_type.
+    g_param = i_param.
 
-  load_data( ).
+    load_data( ).
 
-ENDMETHOD.
-
-
-METHOD GET_DATA.
-
-  LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS g_source_type g_location_type g_param.
-
-  load_data( ).
-
-  rt_k = gt_k.
-
-ENDMETHOD. "#EC CI_VALPAR
+  ENDMETHOD.
 
 
-METHOD GET_SOURCE.
-  ro_source = zcl_abak_source_factory=>get_instance( i_source_type   = g_source_type
-                                                     i_location_type = g_location_type
-                                                     i_param         = g_param ).
-ENDMETHOD.
+  METHOD get_data.
+
+    LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS g_source_type g_origin_type g_param.
+
+    load_data( ).
+
+    rt_k = gt_k.
+
+  ENDMETHOD.                                             "#EC CI_VALPAR
 
 
-METHOD LOAD_DATA.
+  METHOD get_source.
+    ro_source = zcl_abak_source_factory=>get_instance( i_source_type   = g_source_type
+                                                       i_origin_type = g_origin_type
+                                                       i_param         = g_param ).
+  ENDMETHOD.
 
-  IF g_loaded IS INITIAL.
-    gt_k = get_source( )->get_data( ).
-    g_loaded = abap_true.
-  ENDIF.
 
-ENDMETHOD.
+  METHOD load_data.
+
+    IF g_loaded IS INITIAL.
+      gt_k = get_source( )->get_data( ).
+      g_loaded = abap_true.
+    ENDIF.
+
+  ENDMETHOD.
 ENDCLASS.

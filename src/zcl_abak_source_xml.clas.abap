@@ -9,13 +9,13 @@ CLASS zcl_abak_source_xml DEFINITION
 
     METHODS constructor
       IMPORTING
-        !io_location TYPE ref to zif_abak_location
+        !io_origin TYPE ref to zif_abak_origin
       RAISING
         zcx_abak .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
-    data go_location type ref to zif_abak_location.
+    data go_origin type ref to zif_abak_origin.
     DATA gt_k TYPE zabak_k_t .
     DATA g_name TYPE name1 .
 
@@ -37,14 +37,14 @@ CLASS ZCL_ABAK_SOURCE_XML IMPLEMENTATION.
 
 
   METHOD constructor.
-    if io_location is not bound.
+    if io_origin is not bound.
       raise EXCEPTION type zcx_abak
         EXPORTING
           textid = zcx_abak=>invalid_parameters.
     endif.
 
-    go_location = io_location.
-    load_xml( io_location->get( ) ).
+    go_origin = io_origin.
+    load_xml( io_origin->get( ) ).
   ENDMETHOD.
 
 
@@ -113,7 +113,7 @@ CLASS ZCL_ABAK_SOURCE_XML IMPLEMENTATION.
 
 
   METHOD zif_abak_source~invalidate.
-    go_location->invalidate( ).
-    load_xml( go_location->get( ) ).
+    go_origin->invalidate( ).
+    load_xml( go_origin->get( ) ).
   ENDMETHOD.
 ENDCLASS.

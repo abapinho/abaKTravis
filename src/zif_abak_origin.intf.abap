@@ -1,4 +1,4 @@
-INTERFACE zif_abak_location
+INTERFACE ZIF_ABAK_ORIGIN
   PUBLIC .
 
 

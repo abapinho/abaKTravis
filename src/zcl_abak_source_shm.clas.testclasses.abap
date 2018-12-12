@@ -32,7 +32,7 @@ CLASS lcl_unittest IMPLEMENTATION.
         CREATE OBJECT f_cut
           EXPORTING
             i_source_type   = zcl_abak_source_factory=>gc_source_type-database
-            i_location_type = zcl_abak_location_factory=>gc_location_type-inline
+            i_origin_type = zcl_abak_origin_factory=>gc_origin_type-inline
             i_param         = gc_tablename-invalid.
 
         cl_abap_unit_assert=>fail( msg = 'Table is invalid. An exception should have been raised' ).
@@ -48,7 +48,7 @@ CLASS lcl_unittest IMPLEMENTATION.
     CREATE OBJECT f_cut
       EXPORTING
         i_source_type   = zcl_abak_source_factory=>gc_source_type-database
-        i_location_type = zcl_abak_location_factory=>gc_location_type-inline
+        i_origin_type = zcl_abak_origin_factory=>gc_origin_type-inline
         i_param         = gc_tablename-valid.
 
     cl_abap_unit_assert=>assert_differs(
@@ -63,7 +63,7 @@ CLASS lcl_unittest IMPLEMENTATION.
     CREATE OBJECT f_cut
       EXPORTING
         i_source_type   = zcl_abak_source_factory=>gc_source_type-database
-        i_location_type = zcl_abak_location_factory=>gc_location_type-inline
+        i_origin_type = zcl_abak_origin_factory=>gc_origin_type-inline
         i_param         = gc_tablename-valid.
 
     cl_abap_unit_assert=>assert_equals(
@@ -78,7 +78,7 @@ CLASS lcl_unittest IMPLEMENTATION.
     CREATE OBJECT f_cut
       EXPORTING
         i_source_type   = zcl_abak_source_factory=>gc_source_type-database
-        i_location_type = zcl_abak_location_factory=>gc_location_type-inline
+        i_origin_type = zcl_abak_origin_factory=>gc_origin_type-inline
         i_param         = gc_tablename-valid.
 
     f_cut->zif_abak_source~get_data( ).

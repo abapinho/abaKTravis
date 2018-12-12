@@ -11,8 +11,8 @@ CLASS lcl_unittest DEFINITION FOR TESTING
 
     DATA:
       f_cut TYPE REF TO zcl_abak_source_db,
-      o_location_valid TYPE REF TO zcl_abak_location_inline,
-      o_location_invalid TYPE REF TO zcl_abak_location_inline.
+      o_location_valid TYPE REF TO zcl_abak_origin_inline,
+      o_location_invalid TYPE REF TO zcl_abak_origin_inline.
 
     METHODS: setup RAISING zcx_abak.
     METHODS: check_table_valid FOR TESTING RAISING zcx_abak.
@@ -39,14 +39,14 @@ CLASS lcl_unittest IMPLEMENTATION.
   METHOD check_table_valid.
     CREATE OBJECT f_cut
       EXPORTING
-        io_location = o_location_valid.
+        io_origin = o_location_valid.
   ENDMETHOD.
 
   METHOD check_table_invalid.
     TRY.
         CREATE OBJECT f_cut
           EXPORTING
-            io_location = o_location_invalid.
+            io_origin = o_location_invalid.
 
         cl_abap_unit_assert=>fail( msg = 'Table is invalid so exception should have happened' ).
 
@@ -59,7 +59,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     CREATE OBJECT f_cut
       EXPORTING
-        io_location = o_location_valid.
+        io_origin = o_location_valid.
 
     cl_abap_unit_assert=>assert_differs(
       exp = 0
@@ -72,7 +72,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     CREATE OBJECT f_cut
       EXPORTING
-        io_location = o_location_valid.
+        io_origin = o_location_valid.
 
     cl_abap_unit_assert=>assert_equals(
       exp = |DB.{ gc_tablename-valid }|
