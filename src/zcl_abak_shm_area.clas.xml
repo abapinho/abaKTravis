@@ -9,7 +9,6 @@
     <DESCRIPT>abaK database shared memory area</DESCRIPT>
     <CATEGORY>45</CATEGORY>
     <STATE>1</STATE>
-    <CLSFINAL>X</CLSFINAL>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
