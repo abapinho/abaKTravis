@@ -5,7 +5,7 @@ class ZCL_ABAK_ORIGIN_URL definition
 
 public section.
 
-  interfaces zif_abak_origin .
+  interfaces ZIF_ABAK_ORIGIN .
 
   methods CONSTRUCTOR
     importing
