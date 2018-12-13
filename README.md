@@ -16,7 +16,7 @@ abaK provides a simple yet powerful and flexible way for any program to manage i
 - extensible: if needed, new data sources can be created (ex.: to read legacy data in a specific data format)
 
 ## How
-Providing a well-defined API, abaK separates the way it is used from the way the constants are stored. abaK is based on the concept of data sources. It currently has 3 working data sources: custom table, custom table with Shared Objects and XML. A couple more are planned (to read the XML from an URL for example). It also allows for new data sources to be created for specific needs.
+Providing a well-defined API, abaK separates the way it is used from the way the constants are stored. abaK is based on the concept of data sources. It currently has 2 working data sources: custom database table and XML. CSV will come soon. It also allows for new data sources to be created for specific needs.
 
 Documentation in the [wiki](https://github.com/abapinho/abak/wiki).
 
