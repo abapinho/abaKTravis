@@ -1,26 +1,29 @@
 CLASS zcl_abak_unit_tests DEFINITION
   PUBLIC
-  CREATE PUBLIC .
+  CREATE PUBLIC
+  RISK LEVEL HARMLESS
+  ABSTRACT
+  FOR TESTING.
 
   PUBLIC SECTION.
-PROTECTED SECTION.
+  PROTECTED SECTION.
     CONSTANTS:
       BEGIN OF gc_tablename,
                    valid TYPE string VALUE 'ZABAK_UNITTESTS',
                    invalid TYPE string VALUE 'USR01',
                  END OF gc_tablename .
 
-  CONSTANTS:
-    begin of gc_ricef,
-      utest TYPE zabak_ricef VALUE 'UTEST',
-    end of gc_ricef.        "#EC NOTEXT
-  CONSTANTS:
-    begin of gc_context,
-      c1             TYPE zabak_context VALUE 'C1',
-      does_not_exist type zabak_context value 'DOES_NOT_EXIST',
-    end of gc_context.
+    CONSTANTS:
+      BEGIN OF gc_ricef,
+        utest TYPE zabak_ricef VALUE 'UTEST',
+      END OF gc_ricef.                                      "#EC NOTEXT
+    CONSTANTS:
+      BEGIN OF gc_context,
+        c1             TYPE zabak_context VALUE 'C1',
+        does_not_exist TYPE zabak_context VALUE 'DOES_NOT_EXIST',
+      END OF gc_context.
 
-  METHODS generate_test_data .
+    METHODS generate_test_data .
   PRIVATE SECTION.
 ENDCLASS.
 

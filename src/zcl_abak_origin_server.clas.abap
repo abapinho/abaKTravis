@@ -1,17 +1,17 @@
-CLASS ZCL_ABAK_ORIGIN_SERVER DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
+class ZCL_ABAK_ORIGIN_SERVER definition
+  public
+  final
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    INTERFACES zif_abak_origin .
+  interfaces ZIF_ABAK_ORIGIN .
 
-    METHODS constructor
-      IMPORTING
-        !i_filepath TYPE string
-      RAISING
-        zcx_abak .
+  methods CONSTRUCTOR
+    importing
+      !I_FILEPATH type STRING
+    raising
+      ZCX_ABAK .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
