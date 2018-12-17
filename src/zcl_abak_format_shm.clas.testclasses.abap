@@ -1,6 +1,6 @@
 *"* use this source file for your ABAP unit test classes
 CLASS lcl_unittest DEFINITION DEFERRED.
-CLASS zcl_abak_source_shm DEFINITION LOCAL FRIENDS lcl_unittest.
+CLASS ZCL_ABAK_FORMAT_SHM DEFINITION LOCAL FRIENDS lcl_unittest.
 
 CLASS lcl_unittest DEFINITION FOR TESTING
   INHERITING FROM zcl_abak_unit_tests
@@ -10,10 +10,10 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO zcl_abak_source_shm.
+      f_cut TYPE REF TO ZCL_ABAK_FORMAT_SHM.
 
     METHODS: setup.
-    METHODS: invalid_source FOR TESTING.
+    METHODS: invalid_format FOR TESTING.
     METHODS: get_data FOR TESTING RAISING zcx_abak.
     METHODS: get_name FOR TESTING RAISING zcx_abak.
     METHODS: invalidate FOR TESTING RAISING cx_static_check.
@@ -26,12 +26,12 @@ CLASS lcl_unittest IMPLEMENTATION.
     generate_test_data( ).
   ENDMETHOD.
 
-  METHOD invalid_source.
+  METHOD invalid_format.
 
     TRY.
         CREATE OBJECT f_cut
           EXPORTING
-            i_source_type   = zcl_abak_source_factory=>gc_source_type-database
+            i_format_type   = zcl_abak_format_factory=>gc_format_type-database
             i_origin_type = zcl_abak_origin_factory=>gc_origin_type-inline
             i_param         = gc_tablename-invalid.
 
@@ -47,13 +47,13 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     CREATE OBJECT f_cut
       EXPORTING
-        i_source_type   = zcl_abak_source_factory=>gc_source_type-database
+        i_format_type   = zcl_abak_format_factory=>gc_format_type-database
         i_origin_type = zcl_abak_origin_factory=>gc_origin_type-inline
         i_param         = gc_tablename-valid.
 
     cl_abap_unit_assert=>assert_differs(
       exp = 0
-      act = lines( f_cut->zif_abak_source~get_data( ) )
+      act = lines( f_cut->zif_abak_format~get_data( ) )
       msg = 'Resulting table should not have zero lines' ).
 
   ENDMETHOD.
@@ -62,13 +62,13 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     CREATE OBJECT f_cut
       EXPORTING
-        i_source_type   = zcl_abak_source_factory=>gc_source_type-database
+        i_format_type   = zcl_abak_format_factory=>gc_format_type-database
         i_origin_type = zcl_abak_origin_factory=>gc_origin_type-inline
         i_param         = gc_tablename-valid.
 
     cl_abap_unit_assert=>assert_equals(
       exp = |SHM.DB.INLINE.{ gc_tablename-valid }|
-      act = f_cut->zif_abak_source~get_name( )
+      act = f_cut->zif_abak_format~get_name( )
       msg = 'Name different from what was expected' ).
 
   ENDMETHOD.
@@ -77,18 +77,18 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     CREATE OBJECT f_cut
       EXPORTING
-        i_source_type   = zcl_abak_source_factory=>gc_source_type-database
+        i_format_type   = zcl_abak_format_factory=>gc_format_type-database
         i_origin_type = zcl_abak_origin_factory=>gc_origin_type-inline
         i_param         = gc_tablename-valid.
 
-    f_cut->zif_abak_source~get_data( ).
+    f_cut->zif_abak_format~get_data( ).
 
     zcl_abak_shm_area=>attach_for_read( f_cut->get_instance_name( ) ).
 
 *  If we got here there is currently a shared memory instance as it should
 *  Now let's invalidate it and check again
 
-    f_cut->zif_abak_source~invalidate( ).
+    f_cut->zif_abak_format~invalidate( ).
 
     TRY.
         zcl_abak_shm_area=>attach_for_read( f_cut->get_instance_name( ) ).

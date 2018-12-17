@@ -1,11 +1,11 @@
-CLASS zcl_abak_source_xml DEFINITION
+CLASS ZCL_ABAK_FORMAT_XML DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
 
   PUBLIC SECTION.
 
-    INTERFACES zif_abak_source .
+    INTERFACES zif_abak_format .
 
     METHODS constructor
       IMPORTING
@@ -19,7 +19,7 @@ CLASS zcl_abak_source_xml DEFINITION
     DATA gt_k TYPE zabak_k_t .
     DATA g_name TYPE name1 .
 
-    METHODS deep_table_2_source_format
+    METHODS deep_table_2_format_format
       IMPORTING
         !it_xml_k TYPE zabak_xml_k_t
       RETURNING
@@ -33,7 +33,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_SOURCE_XML IMPLEMENTATION.
+CLASS ZCL_ABAK_FORMAT_XML IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -48,7 +48,7 @@ CLASS ZCL_ABAK_SOURCE_XML IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD deep_table_2_source_format.
+  METHOD deep_table_2_format_format.
 
     DATA: s_k LIKE LINE OF rt_k,
           s_v LIKE LINE OF s_k-t_kv.
@@ -82,12 +82,12 @@ CLASS ZCL_ABAK_SOURCE_XML IMPLEMENTATION.
           o_exp       TYPE REF TO cx_st_error.
 
     TRY.
-        CALL TRANSFORMATION zabak_source_xml
+        CALL TRANSFORMATION zabak_format_xml
          SOURCE XML i_xml
          RESULT constants = t_xml_k
                 name = g_name.
 
-        gt_k = deep_table_2_source_format( t_xml_k ).
+        gt_k = deep_table_2_format_format( t_xml_k ).
 
       CATCH cx_st_error INTO o_exp.
         RAISE EXCEPTION TYPE zcx_abak
@@ -98,13 +98,13 @@ CLASS ZCL_ABAK_SOURCE_XML IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_source~get_data.
-    LOG-POINT ID zabak SUBKEY 'source_xml.get_data'.
+  METHOD zif_abak_format~get_data.
+    LOG-POINT ID zabak SUBKEY 'format_xml.get_data'.
     rt_k = gt_k.
   ENDMETHOD.
 
 
-  METHOD zif_abak_source~get_name.
+  METHOD zif_abak_format~get_name.
     r_name = |XML|.
     IF g_name IS NOT INITIAL.
       r_name = |{ r_name }.{ g_name }|.
@@ -112,7 +112,7 @@ CLASS ZCL_ABAK_SOURCE_XML IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_source~invalidate.
+  METHOD zif_abak_format~invalidate.
     go_origin->invalidate( ).
     load_xml( go_origin->get( ) ).
   ENDMETHOD.

@@ -11,7 +11,7 @@ public section.
 
   methods CONSTRUCTOR
     importing
-      !IO_SOURCE type ref to ZIF_ABAK_SOURCE
+      !io_format type ref to zif_abak_format
     raising
       ZCX_ABAK .
   PROTECTED SECTION.
@@ -30,7 +30,7 @@ private section.
         greater_than             TYPE bapioption VALUE 'GT',
         greater_or_equal         TYPE bapioption VALUE 'GE',
       END OF gc_option .
-  data GO_SOURCE type ref to ZIF_ABAK_SOURCE .
+  data go_format type ref to zif_abak_format .
   data GT_K type ZABAK_K_T .
 
   methods CHECK_LINE
@@ -43,7 +43,7 @@ private section.
       !IT_K type ZABAK_K_T
     raising
       ZCX_ABAK .
-  methods LOAD_FROM_SOURCE
+  methods load_from_format
     raising
       ZCX_ABAK .
 ENDCLASS.
@@ -118,24 +118,24 @@ ENDMETHOD.
 
 METHOD constructor.
 
-  IF io_source IS NOT BOUND.
-    RAISE EXCEPTION TYPE zcx_abak. " TODO
-*        EXPORTING
-*          textid = zcx_abak=>invalid_data_source.
+  IF io_format IS NOT BOUND.
+    RAISE EXCEPTION TYPE zcx_abak
+        EXPORTING
+          textid = zcx_abak=>invalid_parameters.
   ENDIF.
 
-  go_source = io_source.
+  go_format = io_format.
 
 ENDMETHOD.
 
 
-METHOD load_from_source.
+METHOD load_from_format.
 
   IF gt_k[] IS NOT INITIAL.
     RETURN.
   ENDIF.
 
-  gt_k = go_source->get_data( ).
+  gt_k = go_format->get_data( ).
 
   check_data( gt_k ).
 
@@ -143,7 +143,7 @@ ENDMETHOD.
 
 
 METHOD zif_abak_data~get_name.
-  r_name = go_source->get_name( ).
+  r_name = go_format->get_name( ).
 ENDMETHOD.
 
 
@@ -153,7 +153,7 @@ METHOD zif_abak_data~invalidate.
 
   clear gt_k[].
 
-  go_source->invalidate( ).
+  go_format->invalidate( ).
 
 ENDMETHOD.
 
@@ -162,9 +162,9 @@ METHOD zif_abak_data~read.
 
   FIELD-SYMBOLS: <s_k> LIKE LINE OF gt_k.
 
-  LOG-POINT ID zabak SUBKEY 'data.read' FIELDS go_source->get_name( ) i_ricef i_fieldname i_context.
+  LOG-POINT ID zabak SUBKEY 'data.read' FIELDS go_format->get_name( ) i_ricef i_fieldname i_context.
 
-  load_from_source( ).
+  load_from_format( ).
 
   READ TABLE gt_k ASSIGNING <s_k>
     WITH KEY ricef = i_ricef

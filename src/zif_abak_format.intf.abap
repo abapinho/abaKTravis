@@ -1,4 +1,4 @@
-interface ZIF_ABAK_SOURCE
+interface ZIF_ABAK_FORMAT
   public .
 
 

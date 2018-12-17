@@ -11,7 +11,7 @@ public section.
 
   methods CONSTRUCTOR
     importing
-      !IO_SOURCE type ref to ZIF_ABAK_SOURCE
+      !io_format type ref to zif_abak_format
     raising
       ZCX_ABAK .
   PROTECTED SECTION.
@@ -77,13 +77,13 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
   METHOD constructor.
 
-    IF io_source IS NOT BOUND.
+    IF io_format IS NOT BOUND.
       RAISE EXCEPTION TYPE zcx_abak. " TODO
     ENDIF.
 
     CREATE OBJECT go_data TYPE zcl_abak_data
       EXPORTING
-        io_source = io_source.
+        io_format = io_format.
 
   ENDMETHOD.
 

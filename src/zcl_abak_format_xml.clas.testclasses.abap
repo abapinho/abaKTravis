@@ -1,6 +1,6 @@
 *"* use this source file for your ABAP unit test classes
 CLASS lcl_unittest DEFINITION DEFERRED.
-CLASS zcl_abak_source_xml DEFINITION LOCAL FRIENDS lcl_unittest.
+CLASS ZCL_ABAK_FORMAT_XML DEFINITION LOCAL FRIENDS lcl_unittest.
 
 CLASS lcl_unittest DEFINITION FOR TESTING
   DURATION SHORT
@@ -9,7 +9,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO zcl_abak_source_xml,
+      f_cut TYPE REF TO ZCL_ABAK_FORMAT_XML,
       o_location type ref to zcl_abak_origin_inline,
       t_k TYPE zabak_k_t.
 
@@ -34,7 +34,7 @@ CLASS lcl_unittest IMPLEMENTATION.
       EXPORTING
         io_origin = o_location.
 
-    t_k = f_cut->zif_abak_source~get_data( ).
+    t_k = f_cut->zif_abak_format~get_data( ).
     READ TABLE t_k ASSIGNING <s_k> INDEX 1. "#EC CI_SUBRC
     READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1. "#EC CI_SUBRC
 
@@ -55,7 +55,7 @@ CLASS lcl_unittest IMPLEMENTATION.
       EXPORTING
         io_origin = o_location.
 
-    t_k = f_cut->zif_abak_source~get_data( ).
+    t_k = f_cut->zif_abak_format~get_data( ).
     READ TABLE t_k ASSIGNING <s_k> INDEX 1. "#EC CI_SUBRC
     READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1. "#EC CI_SUBRC
 
@@ -75,7 +75,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       exp = |XML.test1|
-      act = f_cut->zif_abak_source~get_name( ) ).
+      act = f_cut->zif_abak_format~get_name( ) ).
 
   ENDMETHOD.
 
@@ -91,7 +91,7 @@ CLASS lcl_unittest IMPLEMENTATION.
       EXPORTING
         io_origin = o_location.
 
-    t_k = f_cut->zif_abak_source~get_data( ).
+    t_k = f_cut->zif_abak_format~get_data( ).
     READ TABLE t_k ASSIGNING <s_k> INDEX 1. "#EC CI_SUBRC
     READ TABLE <s_k>-t_kv ASSIGNING <s_kv> INDEX 1. "#EC CI_SUBRC
 

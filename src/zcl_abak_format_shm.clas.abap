@@ -1,15 +1,15 @@
-CLASS zcl_abak_source_shm DEFINITION
+CLASS ZCL_ABAK_FORMAT_SHM DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
 
   PUBLIC SECTION.
 
-    INTERFACES zif_abak_source .
+    INTERFACES zif_abak_format .
 
     METHODS constructor
       IMPORTING
-        !i_source_type TYPE zabak_source_type
+        !i_format_type TYPE zabak_format_type
         !i_origin_type TYPE zabak_origin_type
         !i_param TYPE string
       RAISING
@@ -19,7 +19,7 @@ CLASS zcl_abak_source_shm DEFINITION
 
     CONSTANTS: gc_max_instance_name TYPE i VALUE 80.
 
-    DATA g_source_type TYPE zabak_source_type .
+    DATA g_format_type TYPE zabak_format_type .
     DATA g_origin_type TYPE zabak_origin_type .
     DATA g_param TYPE string .
 
@@ -47,16 +47,16 @@ ENDCLASS.
 
 
 
-CLASS zcl_abak_source_shm IMPLEMENTATION.
+CLASS ZCL_ABAK_FORMAT_SHM IMPLEMENTATION.
 
 
   METHOD constructor.
 
-    g_source_type = i_source_type.
+    g_format_type = i_format_type.
     g_origin_type = i_origin_type.
     g_param = i_param.
 
-    zif_abak_source~get_data( ).
+    zif_abak_format~get_data( ).
 
   ENDMETHOD.
 
@@ -64,7 +64,7 @@ CLASS zcl_abak_source_shm IMPLEMENTATION.
   METHOD get_instance_name.
     DATA: instance_name TYPE string.
 
-    instance_name = |{ g_source_type }.{ g_origin_type }.{ g_param }|.
+    instance_name = |{ g_format_type }.{ g_origin_type }.{ g_param }|.
 
     IF strlen( instance_name ) <= gc_max_instance_name.
       r_instance_name = instance_name.
@@ -130,14 +130,14 @@ CLASS zcl_abak_source_shm IMPLEMENTATION.
           o_abak_exp  TYPE REF TO zcx_abak.
 
     TRY.
-        LOG-POINT ID zabak SUBKEY 'source_shm.write_shm' FIELDS me->zif_abak_source~get_name( ).
+        LOG-POINT ID zabak SUBKEY 'format_shm.write_shm' FIELDS me->zif_abak_format~get_name( ).
 
         o_broker = zcl_abak_shm_area=>attach_for_write( get_instance_name( ) ).
 
         TRY.
             CREATE OBJECT o_root AREA HANDLE o_broker
               EXPORTING
-                i_source_type = g_source_type
+                i_format_type = g_format_type
                 i_origin_type = g_origin_type
                 i_param       = g_param.
 
@@ -161,11 +161,11 @@ CLASS zcl_abak_source_shm IMPLEMENTATION.
   ENDMETHOD.                                             "#EC CI_VALPAR
 
 
-  METHOD zif_abak_source~get_data.
+  METHOD zif_abak_format~get_data.
 
     DATA: o_exp TYPE REF TO cx_shm_parameter_error.
 
-    LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS zif_abak_source~get_name( ).
+    LOG-POINT ID zabak SUBKEY 'format_shm.get_data' FIELDS zif_abak_format~get_name( ).
 
     TRY.
         rt_k = read_shm( ).
@@ -179,7 +179,7 @@ CLASS zcl_abak_source_shm IMPLEMENTATION.
             rt_k = write_shm( ).
 
           CATCH cx_shm_parameter_error INTO o_exp.
-            LOG-POINT ID zabak SUBKEY 'source_shm.get_data' FIELDS o_exp->get_text( ).
+            LOG-POINT ID zabak SUBKEY 'format_shm.get_data' FIELDS o_exp->get_text( ).
         ENDTRY.
 
     ENDTRY.
@@ -187,16 +187,16 @@ CLASS zcl_abak_source_shm IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_source~get_name.
+  METHOD zif_abak_format~get_name.
     r_name = |SHM.{ get_instance_name( ) }|.
   ENDMETHOD.
 
 
-  METHOD zif_abak_source~invalidate.
+  METHOD zif_abak_format~invalidate.
 
     DATA: o_broker TYPE REF TO zcl_abak_shm_area.
 
-    LOG-POINT ID zabak SUBKEY 'source_shm.invalidate' FIELDS me->zif_abak_source~get_name( ).
+    LOG-POINT ID zabak SUBKEY 'format_shm.invalidate' FIELDS me->zif_abak_format~get_name( ).
 
     TRY.
         o_broker = zcl_abak_shm_area=>attach_for_read( ).

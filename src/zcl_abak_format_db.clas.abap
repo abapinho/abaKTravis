@@ -1,4 +1,4 @@
-CLASS zcl_abak_source_db DEFINITION
+CLASS ZCL_ABAK_FORMAT_DB DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC
@@ -6,7 +6,7 @@ CLASS zcl_abak_source_db DEFINITION
 
   PUBLIC SECTION.
 
-    INTERFACES zif_abak_source .
+    INTERFACES zif_abak_format .
 
     METHODS constructor
       IMPORTING
@@ -40,7 +40,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_SOURCE_DB IMPLEMENTATION.
+CLASS ZCL_ABAK_FORMAT_DB IMPLEMENTATION.
 
 
   METHOD check_table.
@@ -143,21 +143,21 @@ CLASS ZCL_ABAK_SOURCE_DB IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_source~get_data.
+  METHOD zif_abak_format~get_data.
 
-    LOG-POINT ID zabak SUBKEY 'source_db.get_data' FIELDS g_tablename.
+    LOG-POINT ID zabak SUBKEY 'format_db.get_data' FIELDS g_tablename.
 
     rt_k = convert( select( g_tablename ) ).
 
   ENDMETHOD.
 
 
-  METHOD zif_abak_source~get_name.
+  METHOD zif_abak_format~get_name.
     r_name = |DB.{ g_tablename }|.
   ENDMETHOD.
 
 
-  METHOD zif_abak_source~invalidate.
+  METHOD zif_abak_format~invalidate.
     go_origin->invalidate( ).
     g_tablename = go_origin->get( ).
   ENDMETHOD.
