@@ -7,9 +7,10 @@ public section.
 
   constants:
     BEGIN OF gc_origin_type,
-        inline TYPE zabak_origin_type VALUE 'INLINE',
-        url    TYPE zabak_origin_type VALUE 'URL',
-        server TYPE zabak_origin_type VALUE 'SERVER',
+        inline        TYPE zabak_origin_type VALUE 'INLINE',
+        url           TYPE zabak_origin_type VALUE 'URL',
+        standard_text TYPE zabak_origin_type VALUE 'SO10',
+        server        TYPE zabak_origin_type VALUE 'SERVER',
       END OF gc_origin_type .
 
   class-methods GET_INSTANCE
@@ -21,7 +22,26 @@ public section.
     raising
       ZCX_ABAK .
   PROTECTED SECTION.
-  PRIVATE SECTION.
+PRIVATE SECTION.
+
+  TYPES:
+    BEGIN OF ty_s_param,
+      name TYPE string,
+      value TYPE string,
+    END OF ty_s_param .
+  TYPES:
+    ty_t_param TYPE SORTED TABLE OF ty_s_param WITH UNIQUE KEY name .
+
+  CONSTANTS:
+    begin of gc_regex,
+      so10_param TYPE string VALUE '(ID|NAME|SPRAS)=(\w+)', "#EC NOTEXT
+    end of gc_regex.
+
+  CLASS-METHODS get_params
+    IMPORTING
+      !i_text TYPE string
+    RETURNING
+      value(rt_param) TYPE ty_t_param .
 ENDCLASS.
 
 
@@ -47,6 +67,16 @@ CLASS ZCL_ABAK_ORIGIN_FACTORY IMPLEMENTATION.
           EXPORTING
             i_filepath = i_param.
 
+      WHEN gc_origin_type-standard_text.
+        CREATE OBJECT ro_origin TYPE ZCL_ABAK_ORIGIN_SO10
+          EXPORTING
+            i_id = ''
+            i_name = ''
+            i_spras = ''.
+
+
+      when gc_origin_type-standard_text.
+
       WHEN OTHERS.
         RAISE EXCEPTION TYPE zcx_abak
           EXPORTING
@@ -54,4 +84,30 @@ CLASS ZCL_ABAK_ORIGIN_FACTORY IMPLEMENTATION.
     ENDCASE.
 
   ENDMETHOD.
+
+
+METHOD get_params.
+
+  DATA: o_regex   TYPE REF TO cl_abap_regex,
+        o_exp     TYPE REF TO cx_root,
+        o_matcher TYPE REF TO cl_abap_matcher,
+        t_result  type match_result_tab.
+
+  TRY.
+      CREATE OBJECT o_regex
+        EXPORTING
+          pattern     = gc_regex-so10_param
+          ignore_case = abap_true.
+
+      o_matcher = o_regex->create_matcher( text = i_text ).
+
+      t_result = o_matcher->find_all( ).
+
+    CATCH cx_sy_regex cx_sy_matcher INTO o_exp.
+      RAISE EXCEPTION TYPE zcx_abak
+        EXPORTING
+          previous = o_exp.
+  ENDTRY.
+
+ENDMETHOD.
 ENDCLASS.

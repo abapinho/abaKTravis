@@ -33,6 +33,13 @@
      <DOMVALUE_L>INLINE</DOMVALUE_L>
      <DDTEXT>Inline</DDTEXT>
     </DD07V>
+    <DD07V>
+     <DOMNAME>ZABAK_ORIGIN_TYPE</DOMNAME>
+     <VALPOS>0004</VALPOS>
+     <DDLANGUAGE>E</DDLANGUAGE>
+     <DOMVALUE_L>SO10</DOMVALUE_L>
+     <DDTEXT>Standard text</DDTEXT>
+    </DD07V>
    </DD07V_TAB>
   </asx:values>
  </asx:abap>

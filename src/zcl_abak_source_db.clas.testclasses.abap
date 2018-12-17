@@ -15,7 +15,6 @@ CLASS lcl_unittest DEFINITION FOR TESTING
       o_location_invalid TYPE REF TO zcl_abak_origin_inline.
 
     METHODS: setup RAISING zcx_abak.
-    METHODS: check_table_valid FOR TESTING RAISING zcx_abak.
     METHODS: check_table_invalid FOR TESTING.
     METHODS: get_data FOR TESTING RAISING zcx_abak.
     METHODS: get_name FOR TESTING RAISING zcx_abak.
@@ -34,12 +33,6 @@ CLASS lcl_unittest IMPLEMENTATION.
         i_text = gc_tablename-invalid.
 
     generate_test_data( ).
-  ENDMETHOD.
-
-  METHOD check_table_valid.
-    CREATE OBJECT f_cut
-      EXPORTING
-        io_origin = o_location_valid.
   ENDMETHOD.
 
   METHOD check_table_invalid.
