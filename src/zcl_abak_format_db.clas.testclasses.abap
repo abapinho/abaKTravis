@@ -1,6 +1,6 @@
 *"* use this source file for your ABAP unit test classes
 CLASS lcl_unittest DEFINITION DEFERRED.
-CLASS zcl_abak_source_db DEFINITION LOCAL FRIENDS lcl_unittest.
+CLASS ZCL_ABAK_FORMAT_DB DEFINITION LOCAL FRIENDS lcl_unittest.
 
 CLASS lcl_unittest DEFINITION FOR TESTING
   INHERITING FROM zcl_abak_unit_tests
@@ -10,7 +10,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO zcl_abak_source_db,
+      f_cut TYPE REF TO ZCL_ABAK_FORMAT_DB,
       o_location_valid TYPE REF TO zcl_abak_origin_inline,
       o_location_invalid TYPE REF TO zcl_abak_origin_inline.
 
@@ -56,7 +56,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_differs(
       exp = 0
-      act = lines( f_cut->zif_abak_source~get_data( ) )
+      act = lines( f_cut->zif_abak_format~get_data( ) )
       msg = 'Resulting table should not have zero lines' ).
 
   ENDMETHOD.
@@ -69,7 +69,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       exp = |DB.{ gc_tablename-valid }|
-      act = f_cut->zif_abak_source~get_name( )
+      act = f_cut->zif_abak_format~get_name( )
       msg = 'Name different from what was expected' ).
 
   ENDMETHOD.

@@ -12,9 +12,9 @@ CLASS zcl_abak_factory DEFINITION
         value(ro_instance) TYPE REF TO zif_abak
       RAISING
         zcx_abak .
-    CLASS-METHODS get_instance_with_source
+    CLASS-METHODS get_instance_with_format
       IMPORTING
-        !io_source TYPE REF TO zif_abak_source
+        !io_format TYPE REF TO zif_abak_format
       RETURNING
         value(ro_instance) TYPE REF TO zif_abak
       RAISING
@@ -77,7 +77,7 @@ CLASS ZCL_ABAK_FACTORY IMPLEMENTATION.
 
     CREATE OBJECT ro_instance TYPE zcl_abak
       EXPORTING
-        io_source = zcl_abak_source_factory=>get_instance( i_source_type = s_config-source_type
+        io_format = zcl_abak_format_factory=>get_instance( i_format_type = s_config-format_type
                                                            i_origin_type = s_config-origin_type
                                                            i_param       = param ).
 
@@ -108,17 +108,17 @@ CLASS ZCL_ABAK_FACTORY IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD get_instance_with_source.
+  METHOD get_instance_with_format.
 
-    LOG-POINT ID zabak SUBKEY 'factory.create_instance_with_source'.
+    LOG-POINT ID zabak SUBKEY 'factory.create_instance_with_format'.
 
-    IF io_source IS NOT BOUND.
+    IF io_format IS NOT BOUND.
       RAISE EXCEPTION TYPE zcx_abak.
     ENDIF.
 
     CREATE OBJECT ro_instance TYPE zcl_abak
       EXPORTING
-        io_source = io_source.
+        io_format = io_format.
 
   ENDMETHOD.
 

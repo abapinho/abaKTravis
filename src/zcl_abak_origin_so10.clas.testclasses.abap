@@ -67,7 +67,7 @@ CLASS lcl_unittest IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD read_xml.
-    DATA: o_xml  TYPE REF TO zcl_abak_source_xml,
+    DATA: o_xml  TYPE REF TO zcl_abak_format_xml,
           o_abak TYPE REF TO zif_abak.
 
     CREATE OBJECT f_cut
@@ -79,12 +79,12 @@ CLASS lcl_unittest IMPLEMENTATION.
         io_origin = f_cut.
 
     cl_abap_unit_assert=>assert_equals( exp = 'XML.ABAK SO10 XML Unit tests'
-                                        act = o_xml->zif_abak_source~get_name( ) ).
+                                        act = o_xml->zif_abak_format~get_name( ) ).
 
     cl_abap_unit_assert=>assert_equals( exp = 1
-                                        act = lines( o_xml->zif_abak_source~get_data( ) ) ).
+                                        act = lines( o_xml->zif_abak_format~get_data( ) ) ).
 
-    o_abak = zcl_abak_factory=>get_instance_with_source( o_xml ).
+    o_abak = zcl_abak_factory=>get_instance_with_format( o_xml ).
 
     cl_abap_unit_assert=>assert_equals( exp = '1234'
                                         act = o_abak->get_value( i_ricef     = 'GLOBAL'

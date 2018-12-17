@@ -12,7 +12,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
     DATA:
       f_cut TYPE REF TO zcl_abak_data,  "class under test
       f_location type ref to zcl_abak_origin_inline,
-      f_source type ref to zcl_abak_source_db.
+      f_format type ref to zcl_abak_format_db.
 
     METHODS: setup raising zcx_abak.
     METHODS: read_valid FOR TESTING RAISING zcx_abak.
@@ -29,7 +29,7 @@ CLASS lcl_unittest IMPLEMENTATION.
     create object f_location
       exporting
         i_text = gc_tablename-valid.
-    create object f_source
+    create object f_format
       EXPORTING
         io_origin = f_location.
 
@@ -39,7 +39,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     CREATE OBJECT f_cut
       EXPORTING
-        io_source = f_source.
+        io_format = f_format.
 
     cl_abap_unit_assert=>assert_differs(
       exp = 0
@@ -54,10 +54,10 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     CREATE OBJECT f_cut
       EXPORTING
-        io_source = f_source.
+        io_format = f_format.
 
     cl_abap_unit_assert=>assert_equals(
-      exp = f_source->zif_abak_source~get_name( )
+      exp = f_format->zif_abak_format~get_name( )
       act = f_cut->zif_abak_data~get_name( )
       msg = 'Name different from what was expected' ).
 
@@ -67,7 +67,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     CREATE OBJECT f_cut
       EXPORTING
-        io_source = f_source.
+        io_format = f_format.
 
     f_cut->zif_abak_data~read( i_ricef     = 'UTEST'
                                i_fieldname = 'BUKRS'

@@ -37,7 +37,7 @@ ENDCLASS.       "lcl_Unit_Test
 CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD setup.
-    DATA: o_source TYPE REF TO zcl_abak_source_db,
+    DATA: o_format TYPE REF TO zcl_abak_format_db,
           o_location TYPE REF TO zcl_abak_origin_inline.
 
     generate_test_data( ).
@@ -45,13 +45,13 @@ CLASS lcl_unittest IMPLEMENTATION.
     CREATE OBJECT o_location
       EXPORTING
         i_text = gc_tablename-valid.
-    CREATE OBJECT o_source
+    CREATE OBJECT o_format
       EXPORTING
         io_origin = o_location.
 
     CREATE OBJECT f_cut
       EXPORTING
-        io_source = o_source.
+        io_format = o_format.
 
     f_iut = f_cut.
 
