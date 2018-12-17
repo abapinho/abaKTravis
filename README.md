@@ -5,7 +5,7 @@
 A powerful yet simple ABAP library to manage constants.
 
 ## Why
-Today, whenever a constant is need in a program, it has to be hard coded, stored in a dedicated custom ZTABLE or, even worse, stored in standard table TVARVC (or similar).
+Nowadays, whenever a constant is need in a program, it has to be hard coded, stored in a dedicated custom ZTABLE or, even worse, stored in the standard table TVARVC (or similar).
 
 ## What
 abaK provides a simple yet powerful and flexible way for any program to manage its constants. Advantages of using abaK:
