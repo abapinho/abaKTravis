@@ -94,6 +94,6 @@ ENDMETHOD.
 
 
 METHOD zif_abak_format~get_type.
-  r_format_type = zcl_abak_format_factory=>gc_format_type-xml.
+  r_format_type = zif_abak_consts=>format_type-xml.
 ENDMETHOD.
 ENDCLASS.

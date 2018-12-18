@@ -3,18 +3,18 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DD04V>
-    <ROLLNAME>ZABAK_ORIGIN_TYPE</ROLLNAME>
+    <ROLLNAME>ZABAK_CONTENT_TYPE</ROLLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
-    <DOMNAME>ZABAK_ORIGIN_TYPE</DOMNAME>
-    <HEADLEN>13</HEADLEN>
+    <DOMNAME>ZABAK_CONTENT_TYPE</DOMNAME>
+    <HEADLEN>20</HEADLEN>
     <SCRLEN1>10</SCRLEN1>
     <SCRLEN2>15</SCRLEN2>
     <SCRLEN3>20</SCRLEN3>
-    <DDTEXT>abaK Origin type</DDTEXT>
-    <REPTEXT>Location type</REPTEXT>
-    <SCRTEXT_S>LocType</SCRTEXT_S>
-    <SCRTEXT_M>Location type</SCRTEXT_M>
-    <SCRTEXT_L>Location type</SCRTEXT_L>
+    <DDTEXT>abaK Content type</DDTEXT>
+    <REPTEXT>Content type</REPTEXT>
+    <SCRTEXT_S>ContntType</SCRTEXT_S>
+    <SCRTEXT_M>Content type</SCRTEXT_M>
+    <SCRTEXT_L>Content type</SCRTEXT_L>
     <DTELMASTER>E</DTELMASTER>
     <REFKIND>D</REFKIND>
    </DD04V>

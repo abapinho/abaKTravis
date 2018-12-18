@@ -7,7 +7,7 @@
 *  PRIVATE SECTION.
 *
 *    DATA:
-*      f_cut TYPE REF TO zcl_abak_origin_server.
+*      f_cut TYPE REF TO zcl_abak_content_server.
 *
 *    METHODS: setup RAISING zcx_abak.
 *    METHODS: read FOR TESTING RAISING zcx_abak.
@@ -38,7 +38,7 @@
 *
 *  METHOD read.
 *    cl_abap_unit_assert=>assert_equals( exp = 'Something'
-*                                        act = f_cut->zif_abak_origin~get( ) ).
+*                                        act = f_cut->zif_abak_content~get( ) ).
 *  ENDMETHOD.
 *
 *ENDCLASS.

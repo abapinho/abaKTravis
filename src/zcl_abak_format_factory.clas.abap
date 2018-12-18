@@ -5,12 +5,6 @@ class ZCL_ABAK_FORMAT_FACTORY definition
 
 public section.
 
-  constants:
-    BEGIN OF gc_format_type,
-          database                TYPE zabak_format_type VALUE 'DB',
-          xml                     TYPE zabak_format_type VALUE 'XML',
-        END OF gc_format_type .
-
   class-methods GET_INSTANCE
     importing
       !I_FORMAT_TYPE type ZABAK_FORMAT_TYPE
@@ -30,10 +24,10 @@ CLASS ZCL_ABAK_FORMAT_FACTORY IMPLEMENTATION.
   METHOD get_instance.
 
     CASE i_format_type.
-      WHEN gc_format_type-database.
+      WHEN zif_abak_consts=>format_type-database.
         CREATE OBJECT ro_instance TYPE zcl_abak_format_db.
 
-      WHEN gc_format_type-xml.
+      WHEN zif_abak_consts=>format_type-xml.
         CREATE OBJECT ro_instance TYPE zcl_abak_format_xml.
 
       WHEN OTHERS.

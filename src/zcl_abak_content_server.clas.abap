@@ -1,11 +1,11 @@
-class ZCL_ABAK_ORIGIN_SERVER definition
+class ZCL_ABAK_CONTENT_SERVER definition
   public
   final
   create public .
 
 public section.
 
-  interfaces ZIF_ABAK_ORIGIN .
+  interfaces zif_abak_content .
 
   methods CONSTRUCTOR
     importing
@@ -30,7 +30,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_ORIGIN_SERVER IMPLEMENTATION.
+CLASS ZCL_ABAK_CONTENT_SERVER IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -51,12 +51,16 @@ CLASS ZCL_ABAK_ORIGIN_SERVER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_origin~get.
+  METHOD zif_abak_content~get.
     r_text = g_text.
   ENDMETHOD.
 
 
-  METHOD zif_abak_origin~invalidate.
+  METHOD zif_abak_content~invalidate.
     g_text = load_from_server( g_filepath ).
+  ENDMETHOD.
+
+  METHOD zif_abak_content~get_type.
+    r_type = zif_abak_consts=>content_type-server.
   ENDMETHOD.
 ENDCLASS.

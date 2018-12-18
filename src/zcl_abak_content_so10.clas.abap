@@ -1,11 +1,11 @@
-CLASS zcl_abak_origin_so10 DEFINITION
+CLASS ZCL_ABAK_CONTENT_SO10 DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
 
   PUBLIC SECTION.
 
-    INTERFACES zif_abak_origin .
+    INTERFACES zif_abak_content .
 
     METHODS constructor
       IMPORTING
@@ -31,7 +31,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_ORIGIN_SO10 IMPLEMENTATION.
+CLASS ZCL_ABAK_CONTENT_SO10 IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -96,12 +96,16 @@ CLASS ZCL_ABAK_ORIGIN_SO10 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_origin~get.
+  METHOD zif_abak_content~get.
     r_text = g_text.
   ENDMETHOD.
 
 
-  METHOD zif_abak_origin~invalidate.
+  METHOD zif_abak_content~invalidate.
     g_text = fetch_standard_text( ).
+  ENDMETHOD.
+
+  METHOD zif_abak_content~get_type.
+    r_type = zif_abak_consts=>content_type-standard_text.
   ENDMETHOD.
 ENDCLASS.

@@ -11,45 +11,45 @@ public section.
   methods CONSTRUCTOR
     importing
       !I_FORMAT_TYPE type ZABAK_FORMAT_TYPE
-      !I_ORIGIN_TYPE type ZABAK_ORIGIN_TYPE
+      !I_CONTENT_TYPE type ZABAK_CONTENT_TYPE
       !I_PARAM type STRING
     raising
       ZCX_ABAK .
-protected section.
+  PROTECTED SECTION.
 
-  methods LOAD_DATA_AUX
-    redefinition .
-  methods INVALIDATE_AUX
-    redefinition .
-private section.
+    METHODS invalidate_aux
+      REDEFINITION .
+    METHODS load_data_aux
+      REDEFINITION .
+  PRIVATE SECTION.
 
-  constants GC_MAX_INSTANCE_NAME type I value 80. "#EC NOTEXT
-  data G_FORMAT_TYPE type ZABAK_FORMAT_TYPE .
-  data G_ORIGIN_TYPE type ZABAK_ORIGIN_TYPE .
-  data G_PARAM type STRING .
+    CONSTANTS gc_max_instance_name TYPE i VALUE 80.         "#EC NOTEXT
+    DATA g_format_type TYPE zabak_format_type .
+    DATA g_content_type TYPE zabak_content_type .
+    DATA g_content_param TYPE string .
 
-  methods READ_SHM
-    exporting
-      value(ET_K) type ZABAK_K_T
-      !E_NAME type STRING
-    raising
-      ZCX_ABAK
-      CX_SHM_NO_ACTIVE_VERSION
-      CX_SHM_INCONSISTENT .
-  methods WRITE_SHM
-    exporting
-      value(ET_K) type ZABAK_K_T
-      !E_NAME type STRING
-    raising
-      ZCX_ABAK .
-  methods GET_INSTANCE_NAME
-    returning
-      value(R_INSTANCE_NAME) type SHM_INST_NAME .
-  methods HASH
-    importing
-      !I_DATA type STRING
-    returning
-      value(R_HASHED) type STRING .
+    METHODS read_shm
+      EXPORTING
+        value(et_k) TYPE zabak_k_t
+        !e_name TYPE string
+      RAISING
+        zcx_abak
+        cx_shm_no_active_version
+        cx_shm_inconsistent .
+    METHODS write_shm
+      EXPORTING
+        value(et_k) TYPE zabak_k_t
+        !e_name TYPE string
+      RAISING
+        zcx_abak .
+    METHODS get_instance_name
+      RETURNING
+        value(r_instance_name) TYPE shm_inst_name .
+    METHODS hash
+      IMPORTING
+        !i_data TYPE string
+      RETURNING
+        value(r_hashed) TYPE string .
 ENDCLASS.
 
 
@@ -57,175 +57,175 @@ ENDCLASS.
 CLASS ZCL_ABAK_DATA_SHM IMPLEMENTATION.
 
 
-METHOD constructor.
+  METHOD constructor.
 
-  super->constructor( ).
+    super->constructor( ).
 
-  IF i_format_type IS INITIAL OR i_origin_type IS INITIAL OR i_param IS INITIAL.
-    RAISE EXCEPTION TYPE zcx_abak
-      EXPORTING
-        textid = zcx_abak=>invalid_parameters.
-  ENDIF.
+    IF i_format_type IS INITIAL OR i_content_type IS INITIAL OR i_param IS INITIAL.
+      RAISE EXCEPTION TYPE zcx_abak
+        EXPORTING
+          textid = zcx_abak=>invalid_parameters.
+    ENDIF.
 
-  g_format_type = i_format_type.
-  g_origin_type = i_origin_type.
-  g_param = i_param.
+    g_format_type = i_format_type.
+    g_content_type = i_content_type.
+    g_content_param = i_param.
 
-ENDMETHOD.
+  ENDMETHOD.
 
 
-METHOD get_instance_name.
-  DATA: instance_name TYPE string.
+  METHOD get_instance_name.
+    DATA: instance_name TYPE string.
 
-  instance_name = |{ g_format_type }.{ g_origin_type }.{ g_param }|.
+    instance_name = |{ g_format_type }.{ g_content_type }.{ g_content_param }|.
 
-  IF strlen( instance_name ) <= gc_max_instance_name.
-    r_instance_name = instance_name.
-  ELSE.
+    IF strlen( instance_name ) <= gc_max_instance_name.
+      r_instance_name = instance_name.
+    ELSE.
 *   If the instance name size is too big just hash it
-    r_instance_name = hash( instance_name ).
-  ENDIF.
+      r_instance_name = hash( instance_name ).
+    ENDIF.
 
-ENDMETHOD.
+  ENDMETHOD.
 
 
-METHOD hash.
+  METHOD hash.
 
-  DATA: hashed TYPE hash160.
+    DATA: hashed TYPE hash160.
 
-  CALL FUNCTION 'CALCULATE_HASH_FOR_CHAR'
-    EXPORTING
-      data           = i_data
-    IMPORTING
-      hash           = hashed
-    EXCEPTIONS
-      unknown_alg    = 1
-      param_error    = 2
-      internal_error = 3
-      OTHERS         = 4.
-  IF sy-subrc <> 0.
+    CALL FUNCTION 'CALCULATE_HASH_FOR_CHAR'
+      EXPORTING
+        data           = i_data
+      IMPORTING
+        hash           = hashed
+      EXCEPTIONS
+        unknown_alg    = 1
+        param_error    = 2
+        internal_error = 3
+        OTHERS         = 4.
+    IF sy-subrc <> 0.
 *   This will probably never happen so we'll just call it HASH_ERROR
-    hashed = 'HASH_ERROR'.
-  ENDIF.
+      hashed = 'HASH_ERROR'.
+    ENDIF.
 
-  r_hashed = hashed.
+    r_hashed = hashed.
 
-ENDMETHOD.
-
-
-METHOD invalidate_aux.
-  DATA: o_broker TYPE REF TO zcl_abak_shm_area.
-
-  LOG-POINT ID zabak SUBKEY 'format_shm.invalidate'. " TODO
-
-  TRY.
-      o_broker = zcl_abak_shm_area=>attach_for_read( ).
-
-      o_broker->invalidate_area( ).
-
-      o_broker->detach( ).
-
-    CATCH cx_shm_attach_error
-          cx_shm_parameter_error
-          cx_sy_ref_is_initial
-          cx_dynamic_check.
-      "If the area does not exist, no need to invalidate it
-      RETURN.
-
-  ENDTRY.
-ENDMETHOD.
+  ENDMETHOD.
 
 
-METHOD load_data_aux.
+  METHOD invalidate_aux.
+    DATA: o_broker TYPE REF TO zcl_abak_shm_area.
 
-  DATA: o_exp TYPE REF TO cx_shm_parameter_error.
+    LOG-POINT ID zabak SUBKEY 'format_shm.invalidate'. " TODO
 
-  LOG-POINT ID zabak SUBKEY 'format_shm.get_data'. " TODO
+    TRY.
+        o_broker = zcl_abak_shm_area=>attach_for_read( ).
 
-  TRY.
-      read_shm( IMPORTING et_k   = et_k
-                          e_name = e_name ).
+        o_broker->invalidate_area( ).
 
-    CATCH cx_shm_no_active_version.
-      write_shm( IMPORTING et_k   = et_k
-                           e_name = e_name ).
+        o_broker->detach( ).
 
-    CATCH cx_shm_inconsistent.
-      TRY.
-          zcl_abak_shm_area=>free_instance( get_instance_name( ) ).
-          write_shm( IMPORTING et_k   = et_k
-                               e_name = e_name ).
+      CATCH cx_shm_attach_error
+            cx_shm_parameter_error
+            cx_sy_ref_is_initial
+            cx_dynamic_check.
+        "If the area does not exist, no need to invalidate it
+        RETURN.
 
-        CATCH cx_shm_parameter_error INTO o_exp.
-          LOG-POINT ID zabak SUBKEY 'format_shm.get_data' FIELDS o_exp->get_text( ).
-      ENDTRY.
-
-  ENDTRY.
-
-ENDMETHOD.
+    ENDTRY.
+  ENDMETHOD.
 
 
-METHOD read_shm.
+  METHOD load_data_aux.
 
-  DATA: o_broker      TYPE REF TO zcl_abak_shm_area,
-        o_exp         TYPE REF TO cx_root.
+    DATA: o_exp TYPE REF TO cx_shm_parameter_error.
 
-  TRY.
-      o_broker = zcl_abak_shm_area=>attach_for_read( get_instance_name( ) ).
-      et_k = o_broker->root->get_data( ).
-      e_name = o_broker->root->get_name( ).
-      o_broker->detach( ).
+    LOG-POINT ID zabak SUBKEY 'format_shm.get_data'. " TODO
 
-    CATCH cx_shm_exclusive_lock_active
-          cx_shm_change_lock_active
-          cx_shm_read_lock_active INTO o_exp.
+    TRY.
+        read_shm( IMPORTING et_k   = et_k
+                            e_name = e_name ).
 
-      RAISE EXCEPTION TYPE zcx_abak
-        EXPORTING
-          previous = o_exp.
+      CATCH cx_shm_no_active_version.
+        write_shm( IMPORTING et_k   = et_k
+                             e_name = e_name ).
 
-  ENDTRY.
+      CATCH cx_shm_inconsistent.
+        TRY.
+            zcl_abak_shm_area=>free_instance( get_instance_name( ) ).
+            write_shm( IMPORTING et_k   = et_k
+                                 e_name = e_name ).
 
-ENDMETHOD.
+          CATCH cx_shm_parameter_error INTO o_exp.
+            LOG-POINT ID zabak SUBKEY 'format_shm.get_data' FIELDS o_exp->get_text( ).
+        ENDTRY.
+
+    ENDTRY.
+
+  ENDMETHOD.
 
 
-METHOD write_shm.
+  METHOD read_shm.
 
-  DATA: o_broker      TYPE REF TO zcl_abak_shm_area,
-        o_root        TYPE REF TO zcl_abak_shm_root,
-        o_exp         TYPE REF TO cx_root,
-        o_abak_exp  TYPE REF TO zcx_abak.
+    DATA: o_broker      TYPE REF TO zcl_abak_shm_area,
+          o_exp         TYPE REF TO cx_root.
 
-  TRY.
-      LOG-POINT ID zabak SUBKEY 'data_shm.write_shm'. " TODO
+    TRY.
+        o_broker = zcl_abak_shm_area=>attach_for_read( get_instance_name( ) ).
+        et_k = o_broker->root->get_data( ).
+        e_name = o_broker->root->get_name( ).
+        o_broker->detach( ).
 
-      o_broker = zcl_abak_shm_area=>attach_for_write( get_instance_name( ) ).
+      CATCH cx_shm_exclusive_lock_active
+            cx_shm_change_lock_active
+            cx_shm_read_lock_active INTO o_exp.
 
-      TRY.
-          CREATE OBJECT o_root AREA HANDLE o_broker
-            EXPORTING
-              i_format_type = g_format_type
-              i_origin_type = g_origin_type
-              i_param       = g_param.
+        RAISE EXCEPTION TYPE zcx_abak
+          EXPORTING
+            previous = o_exp.
 
-          o_broker->set_root( o_root ).
-          et_k = o_root->get_data( ).
-          e_name = o_root->get_name( ).
+    ENDTRY.
 
-          o_broker->detach_commit( ).
+  ENDMETHOD.
 
-        CATCH zcx_abak INTO o_abak_exp.
-          o_broker->detach_rollback( ).
-          RAISE EXCEPTION o_abak_exp.
 
-      ENDTRY.
+  METHOD write_shm.
 
-    CATCH cx_shm_error INTO o_exp.
-      RAISE EXCEPTION TYPE zcx_abak
-        EXPORTING
-          previous = o_exp.
+    DATA: o_broker      TYPE REF TO zcl_abak_shm_area,
+          o_root        TYPE REF TO zcl_abak_shm_root,
+          o_exp         TYPE REF TO cx_root,
+          o_abak_exp  TYPE REF TO zcx_abak.
 
-  ENDTRY.
+    TRY.
+        LOG-POINT ID zabak SUBKEY 'data_shm.write_shm'. " TODO
 
-ENDMETHOD.
+        o_broker = zcl_abak_shm_area=>attach_for_write( get_instance_name( ) ).
+
+        TRY.
+            CREATE OBJECT o_root AREA HANDLE o_broker
+              EXPORTING
+                i_format_type   = g_format_type
+                i_content_type  = g_content_type
+                i_content_param = g_content_param.
+
+            o_broker->set_root( o_root ).
+            et_k = o_root->get_data( ).
+            e_name = o_root->get_name( ).
+
+            o_broker->detach_commit( ).
+
+          CATCH zcx_abak INTO o_abak_exp.
+            o_broker->detach_rollback( ).
+            RAISE EXCEPTION o_abak_exp.
+
+        ENDTRY.
+
+      CATCH cx_shm_error INTO o_exp.
+        RAISE EXCEPTION TYPE zcx_abak
+          EXPORTING
+            previous = o_exp.
+
+    ENDTRY.
+
+  ENDMETHOD.
 ENDCLASS.

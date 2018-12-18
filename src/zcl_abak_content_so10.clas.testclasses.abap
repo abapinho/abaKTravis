@@ -6,7 +6,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
     CONSTANTS gc_name TYPE tdobname VALUE 'ABAK_UTEST_XML'.
     DATA:
-      f_cut TYPE REF TO zcl_abak_origin_so10.
+      f_cut TYPE REF TO ZCL_ABAK_CONTENT_SO10.
 
     METHODS: setup RAISING zcx_abak.
     METHODS: invalid_text.
@@ -73,7 +73,7 @@ CLASS lcl_unittest IMPLEMENTATION.
       EXPORTING
         i_name = gc_name.
 
-    d = f_cut->zif_abak_origin~get( ).
+    d = f_cut->zif_abak_content~get( ).
     SHIFT d LEFT DELETING LEADING space.
 
     cl_abap_unit_assert=>assert_equals( exp = |<abak name="ABAK SO10 XML Unit tests">\n<k ricef="GLOBAL" fieldname="BUKRS" value="1234"/>\n</abak>|
