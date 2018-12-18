@@ -22,8 +22,8 @@ CLASS lcl_unittest DEFINITION FOR TESTING
     METHODS: get_value_if_exists FOR TESTING.
 
     METHODS: check_value_ok FOR TESTING RAISING zcx_abak.
-    methods: check_value_range_ok for testing raising zcx_abak.
-    methods: check_value_range_nok for testing raising zcx_abak.
+    METHODS: check_value_range_ok FOR TESTING RAISING zcx_abak.
+    METHODS: check_value_range_nok FOR TESTING RAISING zcx_abak.
     METHODS: check_value_nok FOR TESTING.
     METHODS: check_value_if_exists FOR TESTING.
 
@@ -38,20 +38,24 @@ CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD setup.
     DATA: o_format TYPE REF TO zcl_abak_format_db,
-          o_location TYPE REF TO zcl_abak_origin_inline.
+          o_location TYPE REF TO zcl_abak_origin_inline,
+          o_data TYPE REF TO zcl_abak_data_normal.
 
     generate_test_data( ).
 
     CREATE OBJECT o_location
       EXPORTING
         i_text = gc_tablename-valid.
-    CREATE OBJECT o_format
+    CREATE OBJECT o_format.
+
+    CREATE OBJECT o_data
       EXPORTING
+        io_format = o_format
         io_origin = o_location.
 
     CREATE OBJECT f_cut
       EXPORTING
-        io_format = o_format.
+        io_data = o_data.
 
     f_iut = f_cut.
 

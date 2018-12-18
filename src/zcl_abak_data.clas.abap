@@ -1,6 +1,6 @@
 class ZCL_ABAK_DATA definition
   public
-  final
+  abstract
   create public
 
   global friends ZCL_ABAK_FACTORY .
@@ -8,13 +8,18 @@ class ZCL_ABAK_DATA definition
 public section.
 
   interfaces ZIF_ABAK_DATA .
+  interfaces ZIF_ABAK_DATA_GET_DATA .
+protected section.
 
-  methods CONSTRUCTOR
-    importing
-      !io_format type ref to zif_abak_format
+  methods LOAD_DATA_AUX
+  abstract
+    exporting
+      !ET_K type ZABAK_K_T
+      !E_NAME type STRING
     raising
       ZCX_ABAK .
-  PROTECTED SECTION.
+  methods INVALIDATE_AUX
+  abstract .
 private section.
 
   constants:
@@ -30,20 +35,23 @@ private section.
         greater_than             TYPE bapioption VALUE 'GT',
         greater_or_equal         TYPE bapioption VALUE 'GE',
       END OF gc_option .
-  data go_format type ref to zif_abak_format .
   data GT_K type ZABAK_K_T .
+  data G_NAME type STRING .
 
-  methods CHECK_LINE
-    importing
-      !IS_K type ZABAK_K
-    raising
-      ZCX_ABAK .
   methods CHECK_DATA
     importing
       !IT_K type ZABAK_K_T
     raising
       ZCX_ABAK .
-  methods load_from_format
+  methods CHECK_LINE
+    importing
+      !IS_K type ZABAK_K
+    raising
+      ZCX_ABAK .
+  methods LOAD_DATA
+    exporting
+      !ET_K type ZABAK_K_T
+      !E_NAME type STRING
     raising
       ZCX_ABAK .
 ENDCLASS.
@@ -116,55 +124,47 @@ METHOD check_line.
 ENDMETHOD.
 
 
-METHOD constructor.
+METHOD LOAD_DATA.
 
-  IF io_format IS NOT BOUND.
-    RAISE EXCEPTION TYPE zcx_abak
-        EXPORTING
-          textid = zcx_abak=>invalid_parameters.
-  ENDIF.
-
-  go_format = io_format.
-
-ENDMETHOD.
-
-
-METHOD load_from_format.
-
-  IF gt_k[] IS NOT INITIAL.
+  IF gt_k[] IS NOT INITIAL OR g_name IS NOT INITIAL.
     RETURN.
   ENDIF.
 
-  gt_k = go_format->get_data( ).
+  load_data_aux(
+    importing
+       et_k   = gt_k
+       e_name = g_name ).
 
   check_data( gt_k ).
 
 ENDMETHOD.
 
 
+METHOD zif_abak_data_get_data~get_data.
+  load_data( ).
+  rt_k = gt_k.
+ENDMETHOD.
+
+
 METHOD zif_abak_data~get_name.
-  r_name = go_format->get_name( ).
+  load_data( ).
+  r_name = g_name.
 ENDMETHOD.
 
 
 METHOD zif_abak_data~invalidate.
-
-  LOG-POINT ID zabak SUBKEY 'data.invalidate'.
-
-  clear gt_k[].
-
-  go_format->invalidate( ).
-
+  CLEAR gt_k[].
+  CLEAR g_name.
+  invalidate_aux( ).
 ENDMETHOD.
 
 
-METHOD zif_abak_data~read.
-
+method zif_abak_data~read.
   FIELD-SYMBOLS: <s_k> LIKE LINE OF gt_k.
 
-  LOG-POINT ID zabak SUBKEY 'data.read' FIELDS go_format->get_name( ) i_ricef i_fieldname i_context.
+  LOG-POINT ID zabak SUBKEY 'data.read' FIELDS i_ricef i_fieldname i_context.
 
-  load_from_format( ).
+  load_data( ).
 
   READ TABLE gt_k ASSIGNING <s_k>
     WITH KEY ricef = i_ricef
@@ -174,5 +174,5 @@ METHOD zif_abak_data~read.
     rt_kv = <s_k>-t_kv.
   ENDIF.
 
-ENDMETHOD.
+endmethod.
 ENDCLASS.
