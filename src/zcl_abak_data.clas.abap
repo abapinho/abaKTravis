@@ -8,7 +8,6 @@ class ZCL_ABAK_DATA definition
 public section.
 
   interfaces ZIF_ABAK_DATA .
-  interfaces ZIF_ABAK_DATA_GET_DATA .
 protected section.
 
   methods LOAD_DATA_AUX
@@ -140,10 +139,10 @@ METHOD LOAD_DATA.
 ENDMETHOD.
 
 
-METHOD zif_abak_data_get_data~get_data.
+method ZIF_ABAK_DATA~GET_DATA.
   load_data( ).
   rt_k = gt_k.
-ENDMETHOD.
+endmethod.
 
 
 METHOD zif_abak_data~get_name.

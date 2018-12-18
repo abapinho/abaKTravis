@@ -10,7 +10,7 @@ public section.
       !I_FORMAT_TYPE type ZABAK_FORMAT_TYPE
       !I_ORIGIN_TYPE type ZABAK_ORIGIN_TYPE
       !I_ORIGIN_PARAM type STRING
-      !I_USE_SHM type ZABAK_USE_SHM
+      !I_USE_SHM type ZABAK_USE_SHM optional
     returning
       value(RO_INSTANCE) type ref to ZIF_ABAK_DATA .
   class-methods GET_CUSTOM_INSTANCE
