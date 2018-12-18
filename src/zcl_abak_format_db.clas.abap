@@ -1,41 +1,35 @@
-CLASS ZCL_ABAK_FORMAT_DB DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC
-  SHARED MEMORY ENABLED .
+class ZCL_ABAK_FORMAT_DB definition
+  public
+  final
+  create public
+  shared memory enabled .
 
-  PUBLIC SECTION.
+public section.
 
-    INTERFACES zif_abak_format .
-
-    METHODS constructor
-      IMPORTING
-        !io_origin TYPE REF TO zif_abak_origin
-      RAISING
-        zcx_abak .
+  interfaces ZIF_ABAK_FORMAT .
   PROTECTED SECTION.
-  PRIVATE SECTION.
+private section.
 
-    DATA go_origin TYPE REF TO zif_abak_origin.
-    DATA g_tablename TYPE tabname .
+  data GO_ORIGIN type ref to ZIF_ABAK_ORIGIN .
+  data G_TABLENAME type TABNAME .
 
-    METHODS check_table
-      IMPORTING
-        !i_tablename TYPE tabname
-      RAISING
-        zcx_abak .
-    METHODS convert
-      IMPORTING
-        !it_db TYPE zabak_db_t
-      RETURNING
-        value(rt_k) TYPE zabak_k_t
-      RAISING
-        zcx_abak .
-    METHODS select
-      IMPORTING
-        !i_tablename TYPE tabname
-      RETURNING
-        value(rt_data) TYPE zabak_db_t .
+  methods CHECK_TABLE
+    importing
+      !I_TABLENAME type TABNAME
+    raising
+      ZCX_ABAK .
+  methods CONVERT_DB_2_K
+    importing
+      !IT_DB type ZABAK_DB_T
+    returning
+      value(RT_K) type ZABAK_K_T
+    raising
+      ZCX_ABAK .
+  methods SELECT
+    importing
+      !I_TABLENAME type TABNAME
+    returning
+      value(RT_DATA) type ZABAK_DB_T .
 ENDCLASS.
 
 
@@ -77,22 +71,7 @@ CLASS ZCL_ABAK_FORMAT_DB IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD constructor.
-
-    IF io_origin IS NOT BOUND.
-      RAISE EXCEPTION TYPE zcx_abak
-        EXPORTING
-          textid = zcx_abak=>invalid_parameters.
-    ENDIF.
-
-    go_origin = io_origin.
-    g_tablename = io_origin->get( ).
-    check_table( g_tablename ).
-
-  ENDMETHOD.
-
-
-  METHOD convert.
+  METHOD CONVERT_DB_2_K.
 
     DATA: s_k LIKE LINE OF rt_k,
           s_kv LIKE LINE OF s_k-t_kv.
@@ -143,22 +122,27 @@ CLASS ZCL_ABAK_FORMAT_DB IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_format~get_data.
+METHOD zif_abak_format~convert.
+  DATA: tablename TYPE tabname.
 
-    LOG-POINT ID zabak SUBKEY 'format_db.get_data' FIELDS g_tablename.
+  tablename = i_data.
 
-    rt_k = convert( select( g_tablename ) ).
+  LOG-POINT ID zabak SUBKEY 'format_db.convert' FIELDS tablename.
 
-  ENDMETHOD.
+  check_table( tablename ).
+
+  IF et_k IS REQUESTED.
+    et_k = convert_db_2_k( select( tablename ) ).
+  ENDIF.
+
+  IF e_name IS REQUESTED.
+    e_name = tablename.
+  ENDIF.
+
+ENDMETHOD.
 
 
-  METHOD zif_abak_format~get_name.
-    r_name = |DB.{ g_tablename }|.
-  ENDMETHOD.
-
-
-  METHOD zif_abak_format~invalidate.
-    go_origin->invalidate( ).
-    g_tablename = go_origin->get( ).
-  ENDMETHOD.
+METHOD zif_abak_format~get_type.
+  r_format_type = zcl_abak_format_factory=>gc_format_type-database.
+ENDMETHOD.
 ENDCLASS.

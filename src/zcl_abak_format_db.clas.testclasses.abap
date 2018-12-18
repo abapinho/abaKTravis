@@ -1,6 +1,6 @@
 *"* use this source file for your ABAP unit test classes
 CLASS lcl_unittest DEFINITION DEFERRED.
-CLASS ZCL_ABAK_FORMAT_DB DEFINITION LOCAL FRIENDS lcl_unittest.
+CLASS zcl_abak_format_db DEFINITION LOCAL FRIENDS lcl_unittest.
 
 CLASS lcl_unittest DEFINITION FOR TESTING
   INHERITING FROM zcl_abak_unit_tests
@@ -10,36 +10,25 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO ZCL_ABAK_FORMAT_DB,
-      o_location_valid TYPE REF TO zcl_abak_origin_inline,
-      o_location_invalid TYPE REF TO zcl_abak_origin_inline.
+      f_cut TYPE REF TO zcl_abak_format_db.
 
     METHODS: setup RAISING zcx_abak.
     METHODS: check_table_invalid FOR TESTING.
-    METHODS: get_data FOR TESTING RAISING zcx_abak.
-    METHODS: get_name FOR TESTING RAISING zcx_abak.
+    METHODS: convert FOR TESTING RAISING zcx_abak.
 ENDCLASS.       "lcl_Unittest
 
 
 CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD setup.
-    CREATE OBJECT o_location_valid
-      EXPORTING
-        i_text = gc_tablename-valid.
-
-    CREATE OBJECT o_location_invalid
-      EXPORTING
-        i_text = gc_tablename-invalid.
-
     generate_test_data( ).
   ENDMETHOD.
 
   METHOD check_table_invalid.
     TRY.
-        CREATE OBJECT f_cut
-          EXPORTING
-            io_origin = o_location_invalid.
+        CREATE OBJECT f_cut.
+
+        f_cut->zif_abak_format~convert( gc_tablename-invalid ).
 
         cl_abap_unit_assert=>fail( msg = 'Table is invalid so exception should have happened' ).
 
@@ -48,29 +37,21 @@ CLASS lcl_unittest IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-  METHOD get_data.
+  METHOD convert.
+    data: t_k type zabak_k_t.
 
-    CREATE OBJECT f_cut
+    CREATE OBJECT f_cut.
+
+    f_cut->zif_abak_format~convert(
       EXPORTING
-        io_origin = o_location_valid.
+        i_data = gc_tablename-valid
+      IMPORTING
+        et_k   = t_k ).
 
     cl_abap_unit_assert=>assert_differs(
       exp = 0
-      act = lines( f_cut->zif_abak_format~get_data( ) )
+      act = lines( t_k )
       msg = 'Resulting table should not have zero lines' ).
-
-  ENDMETHOD.
-
-  METHOD get_name.
-
-    CREATE OBJECT f_cut
-      EXPORTING
-        io_origin = o_location_valid.
-
-    cl_abap_unit_assert=>assert_equals(
-      exp = |DB.{ gc_tablename-valid }|
-      act = f_cut->zif_abak_format~get_name( )
-      msg = 'Name different from what was expected' ).
 
   ENDMETHOD.
 
