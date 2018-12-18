@@ -7,9 +7,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO zcl_abak_data_normal,  "class under test
-      f_location TYPE REF TO zcl_abak_origin_inline,
-      f_format TYPE REF TO zcl_abak_format_db.
+      f_cut TYPE REF TO zcl_abak_data_normal.
 
     METHODS: setup RAISING zcx_abak.
     METHODS: read_valid FOR TESTING RAISING zcx_abak.
@@ -23,17 +21,11 @@ CLASS lcl_unittest IMPLEMENTATION.
   METHOD setup.
     generate_test_data( ).
 
-    CREATE OBJECT f_location
-      EXPORTING
-        i_text = gc_tablename-valid.
-
-    CREATE OBJECT f_format.
-
     CREATE OBJECT f_cut
       EXPORTING
-        io_format = f_format
-        io_origin = f_location.
-
+        io_format = zcl_abak_format_factory=>get_instance( zif_abak_consts=>format_type-database )
+        io_content = zcl_abak_content_factory=>get_instance( i_content_type = zif_abak_consts=>content_type-inline
+                                                             i_content_param = gc_tablename-valid ).
   ENDMETHOD.
 
   METHOD read_valid.

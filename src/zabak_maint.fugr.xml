@@ -452,8 +452,8 @@
        <CONT_TYPE>TABLE_CTRL</CONT_TYPE>
        <CONT_NAME>TCTRL_ZABAK</CONT_NAME>
        <TYPE>TEXT</TYPE>
-       <NAME>*ZABAK-SOURCE_TYPE</NAME>
-       <TEXT>Source__________________________________</TEXT>
+       <NAME>*ZABAK-FORMAT_TYPE</NAME>
+       <TEXT>FormatType______________________________</TEXT>
        <LINE>001</LINE>
        <COLUMN>004</COLUMN>
        <LENGTH>040</LENGTH>
@@ -461,7 +461,7 @@
        <HEIGHT>001</HEIGHT>
        <FORMAT>CHAR</FORMAT>
        <FROM_DICT>X</FROM_DICT>
-       <MODIFIC>V</MODIFIC>
+       <MODIFIC>1</MODIFIC>
        <REQU_ENTRY>N</REQU_ENTRY>
        <TC_HEADING>X</TC_HEADING>
       </RPY_DYFATC>
@@ -469,8 +469,8 @@
        <CONT_TYPE>TABLE_CTRL</CONT_TYPE>
        <CONT_NAME>TCTRL_ZABAK</CONT_NAME>
        <TYPE>TEXT</TYPE>
-       <NAME>*ZABAK-ORIGIN_TYPE</NAME>
-       <TEXT>LocType_________________________________</TEXT>
+       <NAME>*ZABAK-CONTENT_TYPE</NAME>
+       <TEXT>ContntType______________________________</TEXT>
        <LINE>001</LINE>
        <COLUMN>005</COLUMN>
        <LENGTH>040</LENGTH>
@@ -573,7 +573,7 @@
        <CONT_TYPE>TABLE_CTRL</CONT_TYPE>
        <CONT_NAME>TCTRL_ZABAK</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
-       <NAME>ZABAK-SOURCE_TYPE</NAME>
+       <NAME>ZABAK-FORMAT_TYPE</NAME>
        <TEXT>__________</TEXT>
        <DROPDOWN>L</DROPDOWN>
        <LINE>001</LINE>
@@ -593,7 +593,7 @@
        <CONT_TYPE>TABLE_CTRL</CONT_TYPE>
        <CONT_NAME>TCTRL_ZABAK</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
-       <NAME>ZABAK-ORIGIN_TYPE</NAME>
+       <NAME>ZABAK-CONTENT_TYPE</NAME>
        <TEXT>__________</TEXT>
        <DROPDOWN>L</DROPDOWN>
        <LINE>001</LINE>
@@ -679,10 +679,10 @@
        <LINE>FIELD ZABAK-USE_SHM .</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>FIELD ZABAK-SOURCE_TYPE .</LINE>
+       <LINE>FIELD ZABAK-FORMAT_TYPE .</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>FIELD ZABAK-ORIGIN_TYPE .</LINE>
+       <LINE>FIELD ZABAK-CONTENT_TYPE .</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
        <LINE>FIELD ZABAK-PARAMS .</LINE>

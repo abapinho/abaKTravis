@@ -8,28 +8,25 @@ public section.
 
   interfaces ZIF_ABAK_FORMAT .
   PROTECTED SECTION.
-private section.
+PRIVATE SECTION.
 
-  data GO_ORIGIN type ref to ZIF_ABAK_ORIGIN .
-  data G_TABLENAME type TABNAME .
-
-  methods CHECK_TABLE
-    importing
-      !I_TABLENAME type TABNAME
-    raising
-      ZCX_ABAK .
-  methods CONVERT_DB_2_K
-    importing
-      !IT_DB type ZABAK_DB_T
-    returning
-      value(RT_K) type ZABAK_K_T
-    raising
-      ZCX_ABAK .
-  methods SELECT
-    importing
-      !I_TABLENAME type TABNAME
-    returning
-      value(RT_DATA) type ZABAK_DB_T .
+  METHODS check_table
+    IMPORTING
+      !i_tablename TYPE tabname
+    RAISING
+      zcx_abak .
+  METHODS convert_db_2_k
+    IMPORTING
+      !it_db TYPE zabak_db_t
+    RETURNING
+      value(rt_k) TYPE zabak_k_t
+    RAISING
+      zcx_abak .
+  METHODS select
+    IMPORTING
+      !i_tablename TYPE tabname
+    RETURNING
+      value(rt_data) TYPE zabak_db_t .
 ENDCLASS.
 
 
@@ -143,6 +140,6 @@ ENDMETHOD.
 
 
 METHOD zif_abak_format~get_type.
-  r_format_type = zcl_abak_format_factory=>gc_format_type-database.
+  r_format_type = zif_abak_consts=>format_type-database.
 ENDMETHOD.
 ENDCLASS.

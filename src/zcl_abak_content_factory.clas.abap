@@ -1,24 +1,16 @@
-class ZCL_ABAK_ORIGIN_FACTORY definition
+class ZCL_ABAK_CONTENT_FACTORY definition
   public
   final
   create public .
 
 public section.
 
-  constants:
-    BEGIN OF gc_origin_type,
-        inline        TYPE zabak_origin_type VALUE 'INLINE',
-        url           TYPE zabak_origin_type VALUE 'URL',
-        standard_text TYPE zabak_origin_type VALUE 'SO10',
-        server        TYPE zabak_origin_type VALUE 'SERVER',
-      END OF gc_origin_type .
-
   class-methods GET_INSTANCE
     importing
-      !i_origin_type type ZABAK_ORIGIN_TYPE
-      !I_PARAM type STRING
+      !I_CONTENT_TYPE type ZABAK_CONTENT_TYPE
+      !I_CONTENT_PARAM type STRING
     returning
-      value(ro_origin) type ref to zif_abak_origin
+      value(RO_CONTENT) type ref to ZIF_ABAK_CONTENT
     raising
       ZCX_ABAK .
   PROTECTED SECTION.
@@ -46,36 +38,35 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_ORIGIN_FACTORY IMPLEMENTATION.
+CLASS ZCL_ABAK_CONTENT_FACTORY IMPLEMENTATION.
 
 
   METHOD get_instance.
+    DATA: so10_name TYPE tdobname.
 
-    CASE i_origin_type.
-      WHEN gc_origin_type-inline.
-        CREATE OBJECT ro_origin TYPE zcl_abak_origin_inline
+    CASE i_content_type.
+      WHEN zif_abak_consts=>content_type-inline.
+        CREATE OBJECT ro_content TYPE zcl_abak_content_inline
           EXPORTING
-            i_text = i_param.
+            i_text = i_content_param.
 
-      WHEN gc_origin_type-url.
-        CREATE OBJECT ro_origin TYPE zcl_abak_origin_url
+      WHEN zif_abak_consts=>content_type-url.
+        CREATE OBJECT ro_content TYPE zcl_abak_content_url
           EXPORTING
-            i_url = i_param.
+            i_url = i_content_param.
 
-      WHEN gc_origin_type-server.
-        CREATE OBJECT ro_origin TYPE zcl_abak_origin_server
+      WHEN zif_abak_consts=>content_type-server.
+        CREATE OBJECT ro_content TYPE zcl_abak_content_server
           EXPORTING
-            i_filepath = i_param.
+            i_filepath = i_content_param.
 
-      WHEN gc_origin_type-standard_text.
-        CREATE OBJECT ro_origin TYPE ZCL_ABAK_ORIGIN_SO10
+      WHEN zif_abak_consts=>content_type-standard_text.
+        so10_name = i_content_param.
+        CREATE OBJECT ro_content TYPE zcl_abak_content_so10
           EXPORTING
-            i_id = ''
-            i_name = ''
-            i_spras = ''.
-
-
-      when gc_origin_type-standard_text.
+*            i_id    = 'ST'
+            i_name  = so10_name.
+*            i_spras = sy-langu.
 
       WHEN OTHERS.
         RAISE EXCEPTION TYPE zcx_abak

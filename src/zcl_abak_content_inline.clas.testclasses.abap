@@ -7,7 +7,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO ZCL_ABAK_ORIGIN_INLINE.
+      f_cut TYPE REF TO ZCL_ABAK_CONTENT_INLINE.
 
     METHODS: setup RAISING zcx_abak.
     METHODS: read FOR TESTING RAISING zcx_abak.
@@ -25,7 +25,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD read.
     cl_abap_unit_assert=>assert_equals( exp = 'Something'
-                                        act = f_cut->zif_abak_origin~get( ) ).
+                                        act = f_cut->zif_abak_content~get( ) ).
   ENDMETHOD.
 
 ENDCLASS.

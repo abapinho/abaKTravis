@@ -1,66 +1,68 @@
-class ZCL_ABAK_DATA definition
-  public
-  abstract
-  create public
+CLASS zcl_abak_data DEFINITION
+  PUBLIC
+  ABSTRACT
+  CREATE PUBLIC
 
-  global friends ZCL_ABAK_FACTORY .
+  GLOBAL FRIENDS zcl_abak_factory .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAK_DATA .
-protected section.
+    INTERFACES zif_abak_data .
+  PROTECTED SECTION.
 
-  methods LOAD_DATA_AUX
-  abstract
-    exporting
-      !ET_K type ZABAK_K_T
-      !E_NAME type STRING
-    raising
-      ZCX_ABAK .
-  methods INVALIDATE_AUX
-  abstract .
-private section.
+    METHODS load_data_aux
+    ABSTRACT
+      EXPORTING
+        !et_k TYPE zabak_k_t
+        !e_name TYPE string
+      RAISING
+        zcx_abak .
+    METHODS invalidate_aux
+    ABSTRACT
+      RAISING
+        zcx_abak .
+  PRIVATE SECTION.
 
-  constants:
-    BEGIN OF gc_option,
-        equal                    TYPE bapioption VALUE 'EQ',
-        not_equal                TYPE bapioption VALUE 'NE',
-        between                  TYPE bapioption VALUE 'BT',
-        not_between              TYPE bapioption VALUE 'NB',
-        contains_pattern         TYPE bapioption VALUE 'CP',
-        does_not_contain_pattern TYPE bapioption VALUE 'NP',
-        less_than                TYPE bapioption VALUE 'LT',
-        less_or_equal            TYPE bapioption VALUE 'LE',
-        greater_than             TYPE bapioption VALUE 'GT',
-        greater_or_equal         TYPE bapioption VALUE 'GE',
-      END OF gc_option .
-  data GT_K type ZABAK_K_T .
-  data G_NAME type STRING .
+    CONSTANTS:
+      BEGIN OF gc_option,
+          equal                    TYPE bapioption VALUE 'EQ',
+          not_equal                TYPE bapioption VALUE 'NE',
+          between                  TYPE bapioption VALUE 'BT',
+          not_between              TYPE bapioption VALUE 'NB',
+          contains_pattern         TYPE bapioption VALUE 'CP',
+          does_not_contain_pattern TYPE bapioption VALUE 'NP',
+          less_than                TYPE bapioption VALUE 'LT',
+          less_or_equal            TYPE bapioption VALUE 'LE',
+          greater_than             TYPE bapioption VALUE 'GT',
+          greater_or_equal         TYPE bapioption VALUE 'GE',
+        END OF gc_option .
+    DATA gt_k TYPE zabak_k_t .
+    DATA g_name TYPE string .
 
-  methods CHECK_DATA
-    importing
-      !IT_K type ZABAK_K_T
-    raising
-      ZCX_ABAK .
-  methods CHECK_LINE
-    importing
-      !IS_K type ZABAK_K
-    raising
-      ZCX_ABAK .
-  methods LOAD_DATA
-    exporting
-      !ET_K type ZABAK_K_T
-      !E_NAME type STRING
-    raising
-      ZCX_ABAK .
+    METHODS check_data
+      IMPORTING
+        !it_k TYPE zabak_k_t
+      RAISING
+        zcx_abak .
+    METHODS check_line
+      IMPORTING
+        !is_k TYPE zabak_k
+      RAISING
+        zcx_abak .
+    METHODS load_data
+      EXPORTING
+        !et_k TYPE zabak_k_t
+        !e_name TYPE string
+      RAISING
+        zcx_abak .
 ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_DATA IMPLEMENTATION.
+CLASS zcl_abak_data IMPLEMENTATION.
 
 
-  METHOD CHECK_DATA.
+  METHOD check_data.
 
     FIELD-SYMBOLS: <s_k> LIKE LINE OF it_k.
 
@@ -71,107 +73,107 @@ CLASS ZCL_ABAK_DATA IMPLEMENTATION.
   ENDMETHOD.
 
 
-METHOD check_line.
+  METHOD check_line.
 
-  FIELD-SYMBOLS: <s_kv> LIKE LINE OF is_k-t_kv.
+    FIELD-SYMBOLS: <s_kv> LIKE LINE OF is_k-t_kv.
 
-  IF is_k-fieldname IS INITIAL OR is_k-ricef IS INITIAL.
-    RAISE EXCEPTION TYPE zcx_abak.
-  ENDIF.
-
-  LOOP AT is_k-t_kv ASSIGNING <s_kv>.
-
-* Validate sign
-    IF <s_kv>-sign CN 'IE'.
-      RAISE EXCEPTION TYPE zcx_abak. " XXX
+    IF is_k-fieldname IS INITIAL OR is_k-ricef IS INITIAL.
+      RAISE EXCEPTION TYPE zcx_abak.
     ENDIF.
 
-    CASE <s_kv>-option.
-      WHEN gc_option-equal OR
-           gc_option-not_equal OR
-           gc_option-contains_pattern OR
-           gc_option-does_not_contain_pattern OR
-           gc_option-greater_or_equal OR
-           gc_option-greater_than OR
-           gc_option-less_or_equal OR
-           gc_option-less_than.
+    LOOP AT is_k-t_kv ASSIGNING <s_kv>.
+
+* Validate sign
+      IF <s_kv>-sign CN 'IE'.
+        RAISE EXCEPTION TYPE zcx_abak. " XXX
+      ENDIF.
+
+      CASE <s_kv>-option.
+        WHEN gc_option-equal OR
+             gc_option-not_equal OR
+             gc_option-contains_pattern OR
+             gc_option-does_not_contain_pattern OR
+             gc_option-greater_or_equal OR
+             gc_option-greater_than OR
+             gc_option-less_or_equal OR
+             gc_option-less_than.
 *      Single value operators cannot have high defined
 
-        IF <s_kv>-high IS NOT INITIAL.
-          RAISE EXCEPTION TYPE zcx_abak. " XXX
-        ENDIF.
+          IF <s_kv>-high IS NOT INITIAL.
+            RAISE EXCEPTION TYPE zcx_abak. " XXX
+          ENDIF.
 
-      WHEN gc_option-between OR
-           gc_option-not_between.
+        WHEN gc_option-between OR
+             gc_option-not_between.
 *       Two value operator must have high defined
 
-        IF <s_kv>-high IS INITIAL.
+          IF <s_kv>-high IS INITIAL.
+            RAISE EXCEPTION TYPE zcx_abak. " XXX
+          ENDIF.
+
+          IF <s_kv>-high < <s_kv>-low.
+            RAISE EXCEPTION TYPE zcx_abak. " XXX
+          ENDIF.
+
+        WHEN OTHERS.
           RAISE EXCEPTION TYPE zcx_abak. " XXX
-        ENDIF.
 
-        IF <s_kv>-high < <s_kv>-low.
-          RAISE EXCEPTION TYPE zcx_abak. " XXX
-        ENDIF.
+      ENDCASE.
 
-      WHEN OTHERS.
-        RAISE EXCEPTION TYPE zcx_abak. " XXX
+    ENDLOOP.
 
-    ENDCASE.
-
-  ENDLOOP.
-
-ENDMETHOD.
+  ENDMETHOD.
 
 
-METHOD LOAD_DATA.
+  METHOD load_data.
 
-  IF gt_k[] IS NOT INITIAL OR g_name IS NOT INITIAL.
-    RETURN.
-  ENDIF.
+    IF gt_k[] IS NOT INITIAL OR g_name IS NOT INITIAL.
+      RETURN.
+    ENDIF.
 
-  load_data_aux(
-    importing
-       et_k   = gt_k
-       e_name = g_name ).
+    load_data_aux(
+      IMPORTING
+         et_k   = gt_k
+         e_name = g_name ).
 
-  check_data( gt_k ).
+    check_data( gt_k ).
 
-ENDMETHOD.
-
-
-method ZIF_ABAK_DATA~GET_DATA.
-  load_data( ).
-  rt_k = gt_k.
-endmethod.
+  ENDMETHOD.
 
 
-METHOD zif_abak_data~get_name.
-  load_data( ).
-  r_name = g_name.
-ENDMETHOD.
+  METHOD zif_abak_data~get_data.
+    load_data( ).
+    rt_k = gt_k.
+  ENDMETHOD.
 
 
-METHOD zif_abak_data~invalidate.
-  CLEAR gt_k[].
-  CLEAR g_name.
-  invalidate_aux( ).
-ENDMETHOD.
+  METHOD zif_abak_data~get_name.
+    load_data( ).
+    r_name = g_name.
+  ENDMETHOD.
 
 
-method zif_abak_data~read.
-  FIELD-SYMBOLS: <s_k> LIKE LINE OF gt_k.
+  METHOD zif_abak_data~invalidate.
+    CLEAR gt_k[].
+    CLEAR g_name.
+    invalidate_aux( ).
+  ENDMETHOD.
 
-  LOG-POINT ID zabak SUBKEY 'data.read' FIELDS i_ricef i_fieldname i_context.
 
-  load_data( ).
+  METHOD zif_abak_data~read.
+    FIELD-SYMBOLS: <s_k> LIKE LINE OF gt_k.
 
-  READ TABLE gt_k ASSIGNING <s_k>
-    WITH KEY ricef = i_ricef
-             fieldname = i_fieldname
-             context = i_context.
-  IF sy-subrc = 0.
-    rt_kv = <s_k>-t_kv.
-  ENDIF.
+    LOG-POINT ID zabak SUBKEY 'data.read' FIELDS i_ricef i_fieldname i_context.
 
-endmethod.
+    load_data( ).
+
+    READ TABLE gt_k ASSIGNING <s_k>
+      WITH KEY ricef = i_ricef
+               fieldname = i_fieldname
+               context = i_context.
+    IF sy-subrc = 0.
+      rt_kv = <s_k>-t_kv.
+    ENDIF.
+
+  ENDMETHOD.
 ENDCLASS.

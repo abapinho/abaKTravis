@@ -6,7 +6,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO zcl_abak_origin_url.
+      f_cut TYPE REF TO ZCL_ABAK_CONTENT_URL.
 
     METHODS: valid FOR TESTING RAISING zcx_abak.
     METHODS: invalid_url FOR TESTING.
@@ -24,7 +24,7 @@ CLASS lcl_unittest IMPLEMENTATION.
       EXPORTING
         i_url = 'https://github.com/abapinho/abaK/blob/master/plantuml.txt'.
 
-    str = f_cut->zif_abak_origin~get( ).
+    str = f_cut->zif_abak_content~get( ).
 
     cl_abap_unit_assert=>assert_differs( exp = '@startuml'
                                          act = str(9) ).
@@ -53,7 +53,7 @@ CLASS lcl_unittest IMPLEMENTATION.
           EXPORTING
             i_url = 'https://github.com/abapinho/abaK/blob/master/plantuml_this_does_not_exist.txt'.
 
-        f_cut->zif_abak_origin~get( ).
+        f_cut->zif_abak_content~get( ).
 
         cl_abap_unit_assert=>fail( msg = '401 file not found not detected' ).
 

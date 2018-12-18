@@ -37,25 +37,13 @@ ENDCLASS.       "lcl_Unit_Test
 CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD setup.
-    DATA: o_format TYPE REF TO zcl_abak_format_db,
-          o_location TYPE REF TO zcl_abak_origin_inline,
-          o_data TYPE REF TO zcl_abak_data_normal.
-
     generate_test_data( ).
-
-    CREATE OBJECT o_location
-      EXPORTING
-        i_text = gc_tablename-valid.
-    CREATE OBJECT o_format.
-
-    CREATE OBJECT o_data
-      EXPORTING
-        io_format = o_format
-        io_origin = o_location.
 
     CREATE OBJECT f_cut
       EXPORTING
-        io_data = o_data.
+        io_data = zcl_abak_data_factory=>get_instance( i_format_type   = zif_abak_consts=>format_type-database
+                                                       i_content_type  = zif_abak_consts=>content_type-inline
+                                                       i_content_param = gc_tablename-valid ).
 
     f_iut = f_cut.
 
