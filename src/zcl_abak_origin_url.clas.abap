@@ -10,21 +10,23 @@ public section.
   methods CONSTRUCTOR
     importing
       !I_URL type STRING
+      !I_PROXY_HOST type STRING optional
+      !I_PROXY_SERVICE type STRING optional
     raising
       ZCX_ABAK .
 protected section.
-private section.
+PRIVATE SECTION.
 
-  data G_TEXT type STRING .
-  data G_URL type STRING .
+  DATA g_text TYPE string .
+  DATA g_url TYPE string .
+  DATA g_proxy_host TYPE string.
+  DATA g_proxy_service TYPE string.
 
-  methods FETCH_FROM_URL
-    importing
-      !I_URL type STRING
-    returning
-      value(R_CONTENT) type STRING
-    raising
-      ZCX_ABAK .
+  METHODS fetch_from_url
+    RETURNING
+      value(r_content) TYPE string
+    RAISING
+      zcx_abak .
 ENDCLASS.
 
 
@@ -35,18 +37,22 @@ CLASS ZCL_ABAK_ORIGIN_URL IMPLEMENTATION.
 METHOD CONSTRUCTOR.
 
   g_url = i_url.
-  g_text = fetch_from_url( i_url ).
+  g_proxy_host = i_proxy_host.
+  g_proxy_service = i_proxy_service.
+  g_text = fetch_from_url( ).
 
 ENDMETHOD.
 
 
-method FETCH_FROM_URL.
+METHOD fetch_from_url.
 
   DATA: o_http_client TYPE REF TO if_http_client.
 
   cl_http_client=>create_by_url(
     EXPORTING
-      url                = i_url
+      url                = g_url
+      proxy_host         = g_proxy_host
+      proxy_service      = g_proxy_service
     IMPORTING
       client             = o_http_client
     EXCEPTIONS
@@ -55,7 +61,7 @@ method FETCH_FROM_URL.
       internal_error     = 3
       OTHERS             = 4 ).
   IF sy-subrc <> 0.
-    RAISE EXCEPTION TYPE ZCX_ABAK
+    RAISE EXCEPTION TYPE zcx_abak
       EXPORTING
         previous_from_syst = abap_true.
   ENDIF.
@@ -68,7 +74,7 @@ method FETCH_FROM_URL.
       http_invalid_timeout       = 4
       OTHERS                     = 5 ).
   IF sy-subrc <> 0.
-    RAISE EXCEPTION TYPE ZCX_ABAK
+    RAISE EXCEPTION TYPE zcx_abak
       EXPORTING
         previous_from_syst = abap_true.
   ENDIF.
@@ -80,7 +86,7 @@ method FETCH_FROM_URL.
       http_processing_failed     = 3
       OTHERS                     = 4 ).
   IF sy-subrc <> 0.
-    RAISE EXCEPTION TYPE ZCX_ABAK
+    RAISE EXCEPTION TYPE zcx_abak
       EXPORTING
         previous_from_syst = abap_true.
   ENDIF.
@@ -95,7 +101,7 @@ method FETCH_FROM_URL.
     RAISE EXCEPTION TYPE zcx_abak.
   ENDIF.
 
-endmethod.
+ENDMETHOD.
 
 
 method zif_abak_origin~GET.
@@ -104,6 +110,6 @@ endmethod.
 
 
 METHOD zif_abak_origin~invalidate.
-  g_text = fetch_from_url( g_url ).
+  g_text = fetch_from_url( ).
 ENDMETHOD.
 ENDCLASS.
