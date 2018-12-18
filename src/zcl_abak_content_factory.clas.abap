@@ -55,8 +55,8 @@ CLASS ZCL_ABAK_CONTENT_FACTORY IMPLEMENTATION.
           EXPORTING
             i_url = i_content_param.
 
-      WHEN zif_abak_consts=>content_type-server.
-        CREATE OBJECT ro_content TYPE zcl_abak_content_server
+      WHEN zif_abak_consts=>content_type-file.
+        CREATE OBJECT ro_content TYPE zcl_abak_content_file
           EXPORTING
             i_filepath = i_content_param.
 

@@ -1,4 +1,4 @@
-class ZCL_ABAK_CONTENT_SERVER definition
+class ZCL_ABAK_CONTENT_FILE definition
   public
   final
   create public .
@@ -30,7 +30,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAK_CONTENT_SERVER IMPLEMENTATION.
+CLASS ZCL_ABAK_CONTENT_FILE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -61,6 +61,6 @@ CLASS ZCL_ABAK_CONTENT_SERVER IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_abak_content~get_type.
-    r_type = zif_abak_consts=>content_type-server.
+    r_type = zif_abak_consts=>content_type-file.
   ENDMETHOD.
 ENDCLASS.

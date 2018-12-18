@@ -6,7 +6,7 @@ interface ZIF_ABAK_CONSTS
         inline        TYPE zabak_content_type VALUE 'INLINE',
         url           TYPE zabak_content_type VALUE 'URL',
         standard_text TYPE zabak_content_type VALUE 'SO10',
-        server        TYPE zabak_content_type VALUE 'SERVER',
+        file          TYPE zabak_content_type VALUE 'FILE',
       END OF content_type .
 
   constants:
