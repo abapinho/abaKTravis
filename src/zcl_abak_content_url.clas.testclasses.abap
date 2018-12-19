@@ -1,12 +1,13 @@
 *"* use this source file for your ABAP unit test classes
 CLASS lcl_unittest DEFINITION FOR TESTING
   DURATION SHORT
-  RISK LEVEL HARMLESS.
+  RISK LEVEL HARMLESS
+  FINAL.
 
   PRIVATE SECTION.
 
     DATA:
-      f_cut TYPE REF TO ZCL_ABAK_CONTENT_URL.
+      f_cut TYPE REF TO zcl_abak_content_url.
 
     METHODS: valid FOR TESTING RAISING zcx_abak.
     METHODS: invalid_url FOR TESTING.

@@ -1,10 +1,8 @@
 *"* use this source file for your ABAP unit test classes
-CLASS lcl_unittest DEFINITION DEFERRED.
-CLASS zcl_abak_format_xml DEFINITION LOCAL FRIENDS lcl_unittest.
-
 CLASS lcl_unittest DEFINITION FOR TESTING
   DURATION SHORT
-  RISK LEVEL HARMLESS.
+  RISK LEVEL HARMLESS
+  FINAL.
 
   PRIVATE SECTION.
 
@@ -33,7 +31,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     f_cut->zif_abak_format~convert(
       EXPORTING
-        i_data = |<abak name="test1"><k ricef="a" fieldname="bukrs" value="4321"/></abak>|
+        i_data = |<abak name="test1"><k scope="a" fieldname="bukrs" value="4321"/></abak>|
       IMPORTING
         et_k   = t_k ).
 
@@ -52,7 +50,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     f_cut->zif_abak_format~convert(
       EXPORTING
-        i_data = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v low="1234"/></k></abak>|
+        i_data = |<abak name="test1"><k scope="a" fieldname="bukrs"><v low="1234"/></k></abak>|
       IMPORTING
         et_k   = t_k ).
 
@@ -69,7 +67,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     f_cut->zif_abak_format~convert(
       EXPORTING
-        i_data = |<abak name="test1"><k ricef="a" fieldname="bukrs" value="4321"/></abak>|
+        i_data = |<abak name="test1"><k scope="a" fieldname="bukrs" value="4321"/></abak>|
       IMPORTING
         e_name = name ).
 
@@ -85,7 +83,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     f_cut->zif_abak_format~convert(
       EXPORTING
-        i_data = |<abak name="test1"><k ricef="a" fieldname="bukrs"><v sign="I" option="BT" low="1234" high="9999"/></k></abak>|
+        i_data = |<abak name="test1"><k scope="a" fieldname="bukrs"><v sign="I" option="BT" low="1234" high="9999"/></k></abak>|
       IMPORTING
         et_k   = t_k ).
 

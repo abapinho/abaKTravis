@@ -14,26 +14,28 @@ public section.
     raising
       ZCX_ABAK .
   PROTECTED SECTION.
-PRIVATE SECTION.
+private section.
 
-  TYPES:
+  types:
     BEGIN OF ty_s_param,
       name TYPE string,
       value TYPE string,
     END OF ty_s_param .
-  TYPES:
+  types:
     ty_t_param TYPE SORTED TABLE OF ty_s_param WITH UNIQUE KEY name .
 
-  CONSTANTS:
+  constants:
     begin of gc_regex,
       so10_param TYPE string VALUE '(ID|NAME|SPRAS)=(\w+)', "#EC NOTEXT
-    end of gc_regex.
+    end of gc_regex .
 
-  CLASS-METHODS get_params
-    IMPORTING
-      !i_text TYPE string
-    RETURNING
-      value(rt_param) TYPE ty_t_param .
+  class-methods GET_PARAMS
+    importing
+      !I_TEXT type STRING
+    returning
+      value(RT_PARAM) type TY_T_PARAM
+    raising
+      ZCX_ABAK .
 ENDCLASS.
 
 
@@ -62,7 +64,7 @@ CLASS ZCL_ABAK_CONTENT_FACTORY IMPLEMENTATION.
 
       WHEN zif_abak_consts=>content_type-standard_text.
         so10_name = i_content_param.
-        CREATE OBJECT ro_content TYPE zcl_abak_content_so10
+        CREATE OBJECT ro_content TYPE zcl_abak_content_so10 " TODO
           EXPORTING
 *            i_id    = 'ST'
             i_name  = so10_name.
@@ -93,6 +95,8 @@ METHOD get_params.
       o_matcher = o_regex->create_matcher( text = i_text ).
 
       t_result = o_matcher->find_all( ).
+
+*     TODO
 
     CATCH cx_sy_regex cx_sy_matcher INTO o_exp.
       RAISE EXCEPTION TYPE zcx_abak

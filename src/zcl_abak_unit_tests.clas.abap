@@ -14,9 +14,9 @@ CLASS zcl_abak_unit_tests DEFINITION
                  END OF gc_tablename .
 
     CONSTANTS:
-      BEGIN OF gc_ricef,
-        utest TYPE zabak_ricef VALUE 'UTEST',
-      END OF gc_ricef.                                      "#EC NOTEXT
+      BEGIN OF gc_scope,
+        utest TYPE zabak_scope VALUE 'UTEST',
+      END OF gc_scope.                                      "#EC NOTEXT
     CONSTANTS:
       BEGIN OF gc_context,
         c1             TYPE zabak_context VALUE 'C1',
@@ -38,7 +38,7 @@ CLASS ZCL_ABAK_UNIT_TESTS IMPLEMENTATION.
           s_data LIKE LINE OF t_data.
 
     CLEAR s_data.
-    s_data-ricef = gc_ricef.
+    s_data-scope = gc_scope.
     s_data-fieldname = 'BUKRS'.
     s_data-ue_option = 'EQ'.
     s_data-ue_sign = 'I'.
@@ -46,7 +46,7 @@ CLASS ZCL_ABAK_UNIT_TESTS IMPLEMENTATION.
     INSERT s_data INTO TABLE t_data.
 
     CLEAR s_data.
-    s_data-ricef = gc_ricef.
+    s_data-scope = gc_scope.
     s_data-fieldname = 'KOART'.
     s_data-ue_option = 'EQ'.
     s_data-ue_sign = 'I'.
@@ -58,7 +58,7 @@ CLASS ZCL_ABAK_UNIT_TESTS IMPLEMENTATION.
     INSERT s_data INTO TABLE t_data.
 
     CLEAR s_data.
-    s_data-ricef = gc_ricef.
+    s_data-scope = gc_scope.
     s_data-fieldname = 'KUNNR'.
     s_data-context = gc_context-c1.
     s_data-ue_option = 'EQ'.
@@ -67,7 +67,7 @@ CLASS ZCL_ABAK_UNIT_TESTS IMPLEMENTATION.
     INSERT s_data INTO TABLE t_data.
 
     CLEAR s_data.
-    s_data-ricef = gc_ricef.
+    s_data-scope = gc_scope.
     s_data-fieldname = 'WAERS'.
     s_data-idx = 1.
     s_data-ue_option = 'EQ'.
@@ -76,7 +76,7 @@ CLASS ZCL_ABAK_UNIT_TESTS IMPLEMENTATION.
     INSERT s_data INTO TABLE t_data.
 
     CLEAR s_data.
-    s_data-ricef = gc_ricef.
+    s_data-scope = gc_scope.
     s_data-fieldname = 'WAERS'.
     s_data-idx = 2.
     s_data-ue_option = 'EQ'.
@@ -85,7 +85,7 @@ CLASS ZCL_ABAK_UNIT_TESTS IMPLEMENTATION.
     INSERT s_data INTO TABLE t_data.
 
 *   Delete table content
-    DELETE FROM zabak_unittests WHERE ricef <> space.   "#EC CI_NOFIELD
+    DELETE FROM zabak_unittests WHERE scope <> space.   "#EC CI_NOFIELD
 
     INSERT zabak_unittests FROM TABLE t_data.
 

@@ -1,11 +1,9 @@
 *"* use this source file for your ABAP unit test classes
-CLASS lcl_unittest DEFINITION DEFERRED.
-CLASS zcl_abak_format_db DEFINITION LOCAL FRIENDS lcl_unittest.
-
 CLASS lcl_unittest DEFINITION FOR TESTING
   INHERITING FROM zcl_abak_unit_tests
   DURATION SHORT
-  RISK LEVEL HARMLESS.
+  RISK LEVEL HARMLESS
+  FINAL.
 
   PRIVATE SECTION.
 

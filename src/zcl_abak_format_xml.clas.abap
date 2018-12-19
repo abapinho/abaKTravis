@@ -86,7 +86,7 @@ METHOD zif_abak_format~convert.
               et_xml_k = t_xml_k
               e_name   = e_name ).
 
-  IF et_k IS REQUESTED.
+  IF et_k IS SUPPLIED.
     et_k = convert_xml_k_2_k( t_xml_k ).
   ENDIF.
 

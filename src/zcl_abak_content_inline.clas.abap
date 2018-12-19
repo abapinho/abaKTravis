@@ -21,7 +21,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_abak_content_inline IMPLEMENTATION.
+CLASS ZCL_ABAK_CONTENT_INLINE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -34,11 +34,12 @@ CLASS zcl_abak_content_inline IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_content~invalidate.
-    RETURN. " Nothing to invalidate
-  ENDMETHOD.
-
   METHOD zif_abak_content~get_type.
     r_type = zif_abak_consts=>content_type-inline.
+  ENDMETHOD.
+
+
+  METHOD zif_abak_content~invalidate.
+    RETURN. " Nothing to invalidate
   ENDMETHOD.
 ENDCLASS.
