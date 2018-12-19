@@ -1,0 +1,17 @@
+{
+  "license": "MIT",
+  "scripts": {
+    "pretest": "abaplint --version && abaplint \"src/**/*.abap\"",
+    "test": "abapmerge src/zabak.prog.abap > zabak.abap",
+    "_disabled_posttest": "abaplint zabak.abap",
+    "lint": "node_modules/.bin/abaplint \"src/**/*.abap\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abapinho/abaK.git"
+  },
+  "devDependencies": {
+    "abapmerge": "^0.11.0",
+    "abaplint": "^1.5.0"
+  }
+}
