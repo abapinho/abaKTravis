@@ -59,7 +59,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_abak_data IMPLEMENTATION.
+CLASS ZCL_ABAK_DATA IMPLEMENTATION.
 
 
   METHOD check_data.
@@ -77,15 +77,20 @@ CLASS zcl_abak_data IMPLEMENTATION.
 
     FIELD-SYMBOLS: <s_kv> LIKE LINE OF is_k-t_kv.
 
-    IF is_k-fieldname IS INITIAL OR is_k-ricef IS INITIAL.
-      RAISE EXCEPTION TYPE zcx_abak.
+    IF is_k-fieldname IS INITIAL OR is_k-scope IS INITIAL.
+      RAISE EXCEPTION TYPE zcx_abak
+        EXPORTING
+          textid = zcx_abak=>invalid_parameters.
     ENDIF.
 
     LOOP AT is_k-t_kv ASSIGNING <s_kv>.
 
-* Validate sign
+*     Validate sign
       IF <s_kv>-sign CN 'IE'.
-        RAISE EXCEPTION TYPE zcx_abak. " XXX
+        RAISE EXCEPTION TYPE zcx_abak_data
+          EXPORTING
+            textid = zcx_abak_data=>invalid_sign
+            sign   = <s_kv>-sign.
       ENDIF.
 
       CASE <s_kv>-option.
@@ -97,26 +102,40 @@ CLASS zcl_abak_data IMPLEMENTATION.
              gc_option-greater_than OR
              gc_option-less_or_equal OR
              gc_option-less_than.
-*      Single value operators cannot have high defined
 
+*         For single value operators HIGH must be empty
           IF <s_kv>-high IS NOT INITIAL.
-            RAISE EXCEPTION TYPE zcx_abak. " XXX
+            RAISE EXCEPTION TYPE zcx_abak_data
+              EXPORTING
+                textid = zcx_abak_data=>high_must_be_empty
+                option = <s_kv>-option.
           ENDIF.
 
         WHEN gc_option-between OR
              gc_option-not_between.
-*       Two value operator must have high defined
 
-          IF <s_kv>-high IS INITIAL.
-            RAISE EXCEPTION TYPE zcx_abak. " XXX
+*         Two value operator must have high defined
+          IF <s_kv>-low IS INITIAL OR <s_kv>-high IS INITIAL.
+            RAISE EXCEPTION TYPE zcx_abak_data
+              EXPORTING
+                textid = zcx_abak_data=>low_high_must_be_filled
+                option = <s_kv>-option.
           ENDIF.
 
           IF <s_kv>-high < <s_kv>-low.
-            RAISE EXCEPTION TYPE zcx_abak. " XXX
+            RAISE EXCEPTION TYPE zcx_abak_data
+              EXPORTING
+                textid = zcx_abak_data=>high_must_be_gt_low
+                option = <s_kv>-option
+                low    = <s_kv>-low
+                high   = <s_kv>-high.
           ENDIF.
 
         WHEN OTHERS.
-          RAISE EXCEPTION TYPE zcx_abak. " XXX
+          RAISE EXCEPTION TYPE zcx_abak_data
+            EXPORTING
+              textid = zcx_abak_data=>invalid_option
+              option = <s_kv>-option.
 
       ENDCASE.
 
@@ -127,14 +146,14 @@ CLASS zcl_abak_data IMPLEMENTATION.
 
   METHOD load_data.
 
+    CLEAR: et_k, e_name.
+
     IF gt_k[] IS NOT INITIAL OR g_name IS NOT INITIAL.
       RETURN.
     ENDIF.
 
-    load_data_aux(
-      IMPORTING
-         et_k   = gt_k
-         e_name = g_name ).
+    load_data_aux( IMPORTING et_k   = gt_k
+                             e_name = g_name ).
 
     check_data( gt_k ).
 
@@ -163,12 +182,12 @@ CLASS zcl_abak_data IMPLEMENTATION.
   METHOD zif_abak_data~read.
     FIELD-SYMBOLS: <s_k> LIKE LINE OF gt_k.
 
-    LOG-POINT ID zabak SUBKEY 'data.read' FIELDS i_ricef i_fieldname i_context.
+    LOG-POINT ID zabak SUBKEY 'data.read' FIELDS i_scope i_fieldname i_context.
 
     load_data( ).
 
     READ TABLE gt_k ASSIGNING <s_k>
-      WITH KEY ricef = i_ricef
+      WITH KEY scope = i_scope
                fieldname = i_fieldname
                context = i_context.
     IF sy-subrc = 0.

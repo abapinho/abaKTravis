@@ -2,7 +2,8 @@
 CLASS lcl_unittest DEFINITION FOR TESTING
   INHERITING FROM zcl_abak_unit_tests
   DURATION SHORT
-  RISK LEVEL HARMLESS.
+  RISK LEVEL HARMLESS
+  FINAL.
 
   PRIVATE SECTION.
 
@@ -32,7 +33,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_differs(
       exp = 0
-      act = lines( f_cut->zif_abak_data~read( i_ricef     = 'UTEST'
+      act = lines( f_cut->zif_abak_data~read( i_scope     = 'UTEST'
                                               i_fieldname = 'BUKRS'
                                               i_context   = space ) )
       msg = 'Resulting table should not be empty' ).
@@ -52,7 +53,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 *
 *    DATA: o_data TYPE REF TO zcl_abak_data.
 *
-*    f_cut->zif_abak_data~read( i_ricef     = 'UTEST'
+*    f_cut->zif_abak_data~read( i_scope     = 'UTEST'
 *                               i_fieldname = 'BUKRS'
 *                               i_context   = space ).
 *

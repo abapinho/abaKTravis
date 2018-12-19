@@ -1,34 +1,41 @@
-CLASS zcl_abak_factory DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PRIVATE .
+class ZCL_ABAK_FACTORY definition
+  public
+  final
+  create private .
 
-  PUBLIC SECTION.
+public section.
 
-    CLASS-METHODS get_instance
-      IMPORTING
-        !i_format_type TYPE zabak_format_type
-        !i_content_type TYPE zabak_content_type
-        !i_content_param TYPE string
-      RETURNING
-        value(ro_instance) TYPE REF TO zif_abak
-      RAISING
-        zcx_abak .
-    CLASS-METHODS get_custom_instance
-      IMPORTING
-        !io_format TYPE REF TO zif_abak_format
-        !io_content TYPE REF TO zif_abak_content
-      RETURNING
-        value(ro_instance) TYPE REF TO zif_abak
-      RAISING
-        zcx_abak .
-    CLASS-METHODS get_zabak_instance
-      IMPORTING
-        !i_id TYPE zabak_id
-      RETURNING
-        value(ro_instance) TYPE REF TO zif_abak
-      RAISING
-        zcx_abak .
+  class-methods GET_INSTANCE
+    importing
+      !I_FORMAT_TYPE type ZABAK_FORMAT_TYPE
+      !I_CONTENT_TYPE type ZABAK_CONTENT_TYPE
+      !I_CONTENT_PARAM type STRING
+    returning
+      value(RO_INSTANCE) type ref to ZIF_ABAK
+    raising
+      ZCX_ABAK .
+  class-methods GET_CUSTOM_INSTANCE
+    importing
+      !IO_FORMAT type ref to ZIF_ABAK_FORMAT
+      !IO_CONTENT type ref to ZIF_ABAK_CONTENT
+    returning
+      value(RO_INSTANCE) type ref to ZIF_ABAK
+    raising
+      ZCX_ABAK .
+  class-methods GET_ZABAK_INSTANCE
+    importing
+      !I_ID type ZABAK_ID
+    returning
+      value(RO_INSTANCE) type ref to ZIF_ABAK
+    raising
+      ZCX_ABAK .
+  class-methods GET_DB_INSTANCE
+    importing
+      !I_TABLENAME type TABNAME
+    returning
+      value(RO_INSTANCE) type ref to ZIF_ABAK
+    raising
+      ZCX_ABAK .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -40,12 +47,12 @@ CLASS zcl_abak_factory DEFINITION
     TYPES:
       ty_t_instance TYPE SORTED TABLE OF ty_s_instance WITH UNIQUE KEY id .
 
-    CLASS-DATA gt_instance TYPE ty_t_instance .
+    CLASS-DATA gt_instance TYPE ty_t_instance . " TODO
 ENDCLASS.
 
 
 
-CLASS zcl_abak_factory IMPLEMENTATION.
+CLASS ZCL_ABAK_FACTORY IMPLEMENTATION.
 
 
   METHOD get_custom_instance.
@@ -63,6 +70,18 @@ CLASS zcl_abak_factory IMPLEMENTATION.
                                                               io_content = io_content ).
 
   ENDMETHOD.
+
+
+METHOD get_db_instance.
+  DATA: content_param TYPE string.
+* Since it will probably be used a lot, this is a convenience method
+
+  content_param = i_tablename.
+  ro_instance = get_instance(
+      i_format_type   = zif_abak_consts=>format_type-database
+      i_content_type  = zif_abak_consts=>content_type-inline
+      i_content_param = content_param ).
+ENDMETHOD.
 
 
   METHOD get_instance.

@@ -53,7 +53,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       exp = '0231'
-      act = f_iut->get_value( i_ricef     = gc_ricef-utest
+      act = f_iut->get_value( i_scope     = gc_scope-utest
                               i_fieldname = 'BUKRS' )
                               msg         = 'Value should be 0231' ).
 
@@ -63,7 +63,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       exp = '1234567890'
-      act = f_iut->get_value( i_ricef     = gc_ricef-utest
+      act = f_iut->get_value( i_scope     = gc_scope-utest
                               i_context   = gc_context-c1
                               i_fieldname = 'KUNNR' )
                               msg         = 'Value should be 1234567890' ).
@@ -73,7 +73,7 @@ CLASS lcl_unittest IMPLEMENTATION.
   METHOD get_value_nok.
 
     TRY.
-        f_iut->get_value( i_ricef     = gc_ricef-utest
+        f_iut->get_value( i_scope     = gc_scope-utest
                           i_context   = gc_context-does_not_exist
                           i_fieldname = 'BUKRS' ).
 
@@ -88,13 +88,13 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       exp = '0231'
-      act = f_iut->get_value_if_exists( i_ricef     = gc_ricef-utest
+      act = f_iut->get_value_if_exists( i_scope     = gc_scope-utest
                                         i_fieldname = 'BUKRS' )
       msg                  = 'Value exists and should be 0231' ).
 
     cl_abap_unit_assert=>assert_equals(
       exp = space
-      act = f_iut->get_value_if_exists( i_ricef     = gc_ricef-utest
+      act = f_iut->get_value_if_exists( i_scope     = gc_scope-utest
                                         i_context   = gc_context-does_not_exist
                                         i_fieldname = 'BUKRS' )
       msg                  = 'Not found value should return empty' ).
@@ -105,7 +105,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       exp = abap_true
-      act = f_iut->check_value( i_ricef     = gc_ricef-utest
+      act = f_iut->check_value( i_scope     = gc_scope-utest
                                 i_fieldname = 'BUKRS'
                                 i_value     = '0231' )
       msg                  = 'Value is 0231 so result should be true' ).
@@ -116,7 +116,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       exp = abap_true
-      act = f_iut->check_value( i_ricef     = gc_ricef-utest
+      act = f_iut->check_value( i_scope     = gc_scope-utest
                                 i_fieldname = 'WAERS'
                                 i_value     = 'EUR' ) ).
 
@@ -126,7 +126,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       exp = abap_false
-      act = f_iut->check_value( i_ricef     = gc_ricef-utest
+      act = f_iut->check_value( i_scope     = gc_scope-utest
                                 i_fieldname = 'WAERS'
                                 i_value     = 'CAD' ) ).
 
@@ -135,7 +135,7 @@ CLASS lcl_unittest IMPLEMENTATION.
   METHOD check_value_nok.
 
     TRY.
-        f_iut->check_value( i_ricef     = gc_ricef-utest
+        f_iut->check_value( i_scope     = gc_scope-utest
                             i_context   = gc_context-does_not_exist
                             i_fieldname = 'BUKRS'
                                                  i_value     = '0231' ).
@@ -151,14 +151,14 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       exp = abap_true
-      act = f_iut->check_value_if_exists( i_ricef     = gc_ricef-utest
+      act = f_iut->check_value_if_exists( i_scope     = gc_scope-utest
                                           i_fieldname = 'BUKRS'
                                           i_value     = '0231' )
       msg                  = 'Value exists and should be 0231' ).
 
     cl_abap_unit_assert=>assert_equals(
       exp = abap_false
-      act = f_iut->check_value_if_exists( i_ricef     = gc_ricef-utest
+      act = f_iut->check_value_if_exists( i_scope     = gc_scope-utest
                                           i_context   = gc_context-does_not_exist
                                           i_fieldname = 'BUKRS'
                                           i_value     = '0231' )
@@ -170,7 +170,7 @@ CLASS lcl_unittest IMPLEMENTATION.
 
     DATA: r_koart TYPE RANGE OF koart.
 
-    r_koart = f_iut->get_range( i_ricef     = gc_ricef-utest
+    r_koart = f_iut->get_range( i_scope     = gc_scope-utest
                                 i_fieldname = 'KOART' ).
 
     IF NOT ( 'D' IN r_koart AND 'K' IN r_koart ).
@@ -182,7 +182,7 @@ CLASS lcl_unittest IMPLEMENTATION.
   METHOD get_range_nok.
 
     TRY.
-        f_iut->get_range( i_ricef     = gc_ricef-utest
+        f_iut->get_range( i_scope     = gc_scope-utest
                           i_context   = gc_context-does_not_exist
                           i_fieldname = 'KOART' ).
 
@@ -195,13 +195,13 @@ CLASS lcl_unittest IMPLEMENTATION.
 
   METHOD get_range_if_exists.
 
-    IF 'D' NOT IN f_iut->get_range_if_exists( i_ricef     = gc_ricef-utest
+    IF 'D' NOT IN f_iut->get_range_if_exists( i_scope     = gc_scope-utest
                                               i_context   = gc_context-does_not_exist
                                               i_fieldname = 'KOART' ).
       cl_abap_unit_assert=>fail( msg = 'Defined range should include D' ).
     ENDIF.
 
-    IF 'D' NOT IN f_iut->get_range_if_exists( i_ricef     = gc_ricef-utest
+    IF 'D' NOT IN f_iut->get_range_if_exists( i_scope     = gc_scope-utest
                                               i_fieldname = 'KOART' ).
       cl_abap_unit_assert=>fail( msg = 'Undefined range should be empty and ok because it is ignorable' ).
     ENDIF.

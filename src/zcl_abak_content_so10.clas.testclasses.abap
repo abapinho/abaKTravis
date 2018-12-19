@@ -1,7 +1,8 @@
 *"* use this source file for your ABAP unit test classes
 CLASS lcl_unittest DEFINITION FOR TESTING
   DURATION SHORT
-  RISK LEVEL HARMLESS.
+  RISK LEVEL HARMLESS
+  FINAL.
 
   PRIVATE SECTION.
     CONSTANTS gc_name TYPE tdobname VALUE 'ABAK_UTEST_XML'.
@@ -9,7 +10,7 @@ CLASS lcl_unittest DEFINITION FOR TESTING
       f_cut TYPE REF TO ZCL_ABAK_CONTENT_SO10.
 
     METHODS: setup RAISING zcx_abak.
-    METHODS: invalid_text.
+    METHODS: invalid_text FOR TESTING.
     METHODS: read_xml FOR TESTING RAISING zcx_abak.
 ENDCLASS.       "lcl_Unittest
 
@@ -67,17 +68,17 @@ CLASS lcl_unittest IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD read_xml.
-    DATA: d TYPE string.
+    DATA: str TYPE string.
 
     CREATE OBJECT f_cut
       EXPORTING
         i_name = gc_name.
 
-    d = f_cut->zif_abak_content~get( ).
-    SHIFT d LEFT DELETING LEADING space.
+    str = f_cut->zif_abak_content~get( ).
+    SHIFT str LEFT DELETING LEADING space.
 
     cl_abap_unit_assert=>assert_equals( exp = |<abak name="ABAK SO10 XML Unit tests">\n<k ricef="GLOBAL" fieldname="BUKRS" value="1234"/>\n</abak>|
-                                        act = d ).
+                                        act = str ).
 
   ENDMETHOD.
 

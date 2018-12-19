@@ -28,14 +28,14 @@ ENDCLASS.
 
 
 
-CLASS zcl_abak_data_normal IMPLEMENTATION.
+CLASS ZCL_ABAK_DATA_NORMAL IMPLEMENTATION.
 
 
   METHOD constructor.
 
     super->constructor( ).
 
-    IF io_format IS NOT BOUND OR io_format IS NOT BOUND.
+    IF io_format IS NOT BOUND OR io_content IS NOT BOUND.
       RAISE EXCEPTION TYPE zcx_abak
         EXPORTING
           textid = zcx_abak=>invalid_parameters.

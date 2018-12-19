@@ -55,8 +55,7 @@ CLASS ZCL_ABAK_CONTENT_SO10 IMPLEMENTATION.
 
   METHOD fetch_standard_text.
 
-    DATA: s_header TYPE thead,
-          t_line   TYPE tline_t.
+    DATA: t_line   TYPE tline_t.
 
     FIELD-SYMBOLS: <s_line> LIKE LINE OF t_line.
 
@@ -66,8 +65,6 @@ CLASS ZCL_ABAK_CONTENT_SO10 IMPLEMENTATION.
         language                = g_spras
         name                    = g_name
         object                  = 'TEXT'
-      IMPORTING
-        header                  = s_header
       TABLES
         lines                   = t_line
       EXCEPTIONS
@@ -101,11 +98,12 @@ CLASS ZCL_ABAK_CONTENT_SO10 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_content~invalidate.
-    g_text = fetch_standard_text( ).
-  ENDMETHOD.
-
   METHOD zif_abak_content~get_type.
     r_type = zif_abak_consts=>content_type-standard_text.
+  ENDMETHOD.
+
+
+  METHOD zif_abak_content~invalidate.
+    g_text = fetch_standard_text( ).
   ENDMETHOD.
 ENDCLASS.

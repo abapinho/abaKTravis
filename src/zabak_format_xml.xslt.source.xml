@@ -9,7 +9,7 @@
       </tt:cond>
       <tt:loop ref=".CONSTANTS">
         <k>
-          <tt:attribute name="ricef" value-ref="RICEF"/>
+          <tt:attribute name="scope" value-ref="SCOPE"/>
           <tt:attribute name="fieldname" value-ref="FIELDNAME"/>
           <tt:d-cond>
             <tt:attribute name="context" value-ref="CONTEXT"/>

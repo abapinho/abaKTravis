@@ -16,6 +16,15 @@ public section.
       attr3 type scx_attrname value '',
       attr4 type scx_attrname value '',
     end of INVALID_PARAMETERS .
+  constants:
+    begin of UNEXPECTED_ERROR,
+      msgid type symsgid value 'ZABAK',
+      msgno type symsgno value '008',
+      attr1 type scx_attrname value '',
+      attr2 type scx_attrname value '',
+      attr3 type scx_attrname value '',
+      attr4 type scx_attrname value '',
+    end of UNEXPECTED_ERROR .
   data PREVIOUS_FROM_SYST type FLAG .
 
   methods CONSTRUCTOR

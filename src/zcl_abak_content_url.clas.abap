@@ -31,7 +31,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_abak_content_url IMPLEMENTATION.
+CLASS ZCL_ABAK_CONTENT_URL IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -98,7 +98,9 @@ CLASS zcl_abak_content_url IMPLEMENTATION.
         http_invalid_state = 1
         OTHERS             = 2 ).
     IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE zcx_abak.
+      RAISE EXCEPTION TYPE zcx_abak
+        EXPORTING
+          previous_from_syst = abap_true.
     ENDIF.
 
   ENDMETHOD.
@@ -109,11 +111,12 @@ CLASS zcl_abak_content_url IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_abak_content~invalidate.
-    g_text = fetch_from_url( ).
-  ENDMETHOD.
-
   METHOD zif_abak_content~get_type.
     r_type = zif_abak_consts=>content_type-url.
+  ENDMETHOD.
+
+
+  METHOD zif_abak_content~invalidate.
+    g_text = fetch_from_url( ).
   ENDMETHOD.
 ENDCLASS.

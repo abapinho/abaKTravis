@@ -1,19 +1,19 @@
-class ZCL_ABAK definition
-  public
-  final
-  create private
+CLASS zcl_abak DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PRIVATE
 
-  global friends ZCL_ABAK_FACTORY .
+  GLOBAL FRIENDS zcl_abak_factory .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAK .
+    INTERFACES zif_abak .
 
-  methods CONSTRUCTOR
-    importing
-      !IO_DATA type ref to ZIF_ABAK_DATA
-    raising
-      ZCX_ABAK .
+    METHODS constructor
+      IMPORTING
+        !io_data TYPE REF TO zif_abak_data
+      RAISING
+        zcx_abak .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -21,7 +21,7 @@ public section.
 
     METHODS get_value_aux
       IMPORTING
-        value(i_ricef) TYPE zabak_ricef
+        value(i_scope) TYPE zabak_scope
         value(i_fieldname) TYPE name_feld
         value(i_context) TYPE any
       RETURNING
@@ -35,7 +35,7 @@ public section.
         value(r_context) TYPE zabak_context .
     METHODS check_value_aux
       IMPORTING
-        value(i_ricef) TYPE zabak_ricef
+        value(i_scope) TYPE zabak_scope
         value(i_fieldname) TYPE name_feld
         value(i_context) TYPE any
         value(i_value) TYPE any
@@ -45,7 +45,7 @@ public section.
         zcx_abak .
     METHODS get_range_aux
       IMPORTING
-        value(i_ricef) TYPE zabak_ricef
+        value(i_scope) TYPE zabak_scope
         value(i_fieldname) TYPE name_feld
         value(i_context) TYPE any
       RETURNING
@@ -63,7 +63,7 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
     DATA: r_range TYPE zabak_range_t.
 
-    r_range = get_range_aux( i_ricef     = i_ricef
+    r_range = get_range_aux( i_scope     = i_scope
                              i_fieldname = i_fieldname
                             i_context   = i_context ).
     IF r_range[] IS INITIAL.
@@ -105,7 +105,7 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
     context = convert_context( i_context ).
 
-    t_kv = go_data->read( i_ricef     = i_ricef
+    t_kv = go_data->read( i_scope     = i_scope
                          i_fieldname = i_fieldname
                          i_context   = context ).
 
@@ -119,13 +119,12 @@ CLASS ZCL_ABAK IMPLEMENTATION.
     ENDLOOP.
 
     IF rr_range[] IS INITIAL.
-
-      RAISE EXCEPTION TYPE zcx_abak. " TODO
-*      EXPORTING
-*        textid    = zcx_zs_consts=>value_not_found
-*        ricef     = i_ricef
-*        fieldname = i_fieldname
-*        context   = context.
+      RAISE EXCEPTION TYPE zcx_abak_engine
+        EXPORTING
+          textid    = zcx_abak_engine=>value_not_found
+          scope     = i_scope
+          fieldname = i_fieldname
+          context   = i_context.
     ENDIF.
 
   ENDMETHOD.
@@ -137,24 +136,22 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
     FIELD-SYMBOLS: <s_kv> LIKE LINE OF t_kv.
 
-    t_kv = go_data->read( i_ricef     = i_ricef
+    t_kv = go_data->read( i_scope     = i_scope
                           i_fieldname = i_fieldname
                           i_context   = convert_context( i_context ) ).
 
-    READ TABLE t_kv ASSIGNING <s_kv> index 1.
+    READ TABLE t_kv ASSIGNING <s_kv> INDEX 1.
 
     IF sy-subrc = 0.
       r_value = <s_kv>-low.
 
     ELSE.
-
-      RAISE EXCEPTION TYPE zcx_abak. " TODO
-*      EXPORTING
-*        textid    = zcx_zs_consts=>value_not_found
-*        ricef     = i_ricef
-*        fieldname = i_fieldname
-*        context   = context.
-
+      RAISE EXCEPTION TYPE zcx_abak_engine
+        EXPORTING
+          textid    = zcx_abak_engine=>value_not_found
+          scope     = i_scope
+          fieldname = i_fieldname
+          context   = i_context.
     ENDIF.
 
   ENDMETHOD.
@@ -162,9 +159,9 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
   METHOD zif_abak~check_value.
 
-    LOG-POINT ID zabak SUBKEY 'engine.check_value' FIELDS go_data->get_name( ) i_ricef i_fieldname i_context i_value.
+    LOG-POINT ID zabak SUBKEY 'engine.check_value' FIELDS go_data->get_name( ) i_scope i_fieldname i_context i_value.
 
-    r_result = check_value_aux( i_ricef     = i_ricef
+    r_result = check_value_aux( i_scope     = i_scope
                                 i_fieldname = i_fieldname
                                 i_context   = i_context
                                 i_value     = i_value ).
@@ -174,9 +171,9 @@ CLASS ZCL_ABAK IMPLEMENTATION.
   METHOD zif_abak~check_value_if_exists.
 
     TRY.
-        LOG-POINT ID zabak SUBKEY 'engine.check_value_if_exists' FIELDS go_data->get_name( ) i_ricef i_fieldname i_context i_value.
+        LOG-POINT ID zabak SUBKEY 'engine.check_value_if_exists' FIELDS go_data->get_name( ) i_scope i_fieldname i_context i_value.
 
-        r_result = check_value_aux( i_ricef     = i_ricef
+        r_result = check_value_aux( i_scope     = i_scope
                                     i_fieldname = i_fieldname
                                     i_context   = i_context
                                     i_value     = i_value ).
@@ -190,9 +187,9 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
   METHOD zif_abak~get_range.
 
-    LOG-POINT ID zabak SUBKEY 'engine.get_range' FIELDS go_data->get_name( ) i_ricef i_fieldname i_context.
+    LOG-POINT ID zabak SUBKEY 'engine.get_range' FIELDS go_data->get_name( ) i_scope i_fieldname i_context.
 
-    rr_range = get_range_aux( i_ricef     = i_ricef
+    rr_range = get_range_aux( i_scope     = i_scope
                               i_fieldname = i_fieldname
                               i_context   = i_context ).
 
@@ -203,9 +200,9 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
     TRY.
 
-        LOG-POINT ID zabak SUBKEY 'engine.get_range_if_exists' FIELDS go_data->get_name( ) i_ricef i_fieldname i_context.
+        LOG-POINT ID zabak SUBKEY 'engine.get_range_if_exists' FIELDS go_data->get_name( ) i_scope i_fieldname i_context.
 
-        rr_range = get_range_aux( i_ricef     = i_ricef
+        rr_range = get_range_aux( i_scope     = i_scope
                                   i_fieldname = i_fieldname
                                   i_context   = i_context ).
 
@@ -218,9 +215,9 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
   METHOD zif_abak~get_value.
 
-    LOG-POINT ID zabak SUBKEY 'engine.get_value' FIELDS go_data->get_name( ) i_ricef i_fieldname i_context.
+    LOG-POINT ID zabak SUBKEY 'engine.get_value' FIELDS go_data->get_name( ) i_scope i_fieldname i_context.
 
-    r_value = get_value_aux( i_ricef     = i_ricef
+    r_value = get_value_aux( i_scope     = i_scope
                              i_fieldname = i_fieldname
                              i_context   = i_context ).
 
@@ -231,9 +228,9 @@ CLASS ZCL_ABAK IMPLEMENTATION.
 
     TRY.
 
-        LOG-POINT ID zabak SUBKEY 'engine.get_value_if_exists' FIELDS go_data->get_name( ) i_ricef i_fieldname i_context.
+        LOG-POINT ID zabak SUBKEY 'engine.get_value_if_exists' FIELDS go_data->get_name( ) i_scope i_fieldname i_context.
 
-        r_value = get_value_aux( i_ricef     = i_ricef
+        r_value = get_value_aux( i_scope     = i_scope
                                  i_fieldname = i_fieldname
                                  i_context   = i_context ).
 
@@ -244,7 +241,7 @@ CLASS ZCL_ABAK IMPLEMENTATION.
   ENDMETHOD.
 
 
-METHOD zif_abak~invalidate.
-  go_data->invalidate( ).
-ENDMETHOD.
+  METHOD zif_abak~invalidate.
+    go_data->invalidate( ).
+  ENDMETHOD.
 ENDCLASS.
