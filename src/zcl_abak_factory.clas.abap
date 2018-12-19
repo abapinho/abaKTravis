@@ -10,6 +10,7 @@ public section.
       !I_FORMAT_TYPE type ZABAK_FORMAT_TYPE
       !I_CONTENT_TYPE type ZABAK_CONTENT_TYPE
       !I_CONTENT_PARAM type STRING
+      !I_BYPASS_CACHE type FLAG optional
     returning
       value(RO_INSTANCE) type ref to ZIF_ABAK
     raising
@@ -32,22 +33,13 @@ public section.
   class-methods GET_DB_INSTANCE
     importing
       !I_TABLENAME type TABNAME
+      !I_BYPASS_CACHE type FLAG optional
     returning
       value(RO_INSTANCE) type ref to ZIF_ABAK
     raising
       ZCX_ABAK .
   PROTECTED SECTION.
   PRIVATE SECTION.
-
-    TYPES:
-      BEGIN OF ty_s_instance,
-          id TYPE zabak_id,
-          o_instance TYPE REF TO zif_abak,
-        END OF ty_s_instance .
-    TYPES:
-      ty_t_instance TYPE SORTED TABLE OF ty_s_instance WITH UNIQUE KEY id .
-
-    CLASS-DATA gt_instance TYPE ty_t_instance . " TODO
 ENDCLASS.
 
 
@@ -80,7 +72,8 @@ METHOD get_db_instance.
   ro_instance = get_instance(
       i_format_type   = zif_abak_consts=>format_type-database
       i_content_type  = zif_abak_consts=>content_type-inline
-      i_content_param = content_param ).
+      i_content_param = content_param
+      i_bypass_cache  = i_bypass_cache ).
 ENDMETHOD.
 
 
@@ -93,11 +86,26 @@ ENDMETHOD.
           textid = zcx_abak=>invalid_parameters.
     ENDIF.
 
+    IF i_bypass_cache IS INITIAL.
+      ro_instance = lcl_cache=>get( i_format_type   = i_format_type
+                                    i_content_type  = i_content_type
+                                    i_content_param = i_content_param ).
+      IF ro_instance IS BOUND.
+        RETURN.
+      ENDIF.
+    ENDIF.
+
     CREATE OBJECT ro_instance TYPE zcl_abak
       EXPORTING
         io_data = zcl_abak_data_factory=>get_instance( i_format_type  = i_format_type
                                                   i_content_type  = i_content_type
                                                   i_content_param = i_content_param ).
+    IF i_bypass_cache IS INITIAL.
+      lcl_cache=>add( i_format_type   = i_format_type
+                      i_content_type  = i_content_type
+                      i_content_param = i_content_param
+                      io_instance     = ro_instance ).
+    ENDIF.
   ENDMETHOD.
 
 
